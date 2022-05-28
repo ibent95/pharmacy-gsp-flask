@@ -1,0 +1,25 @@
+{
+  "./css/app.css": "./css/app.css",
+  "app.css": "css/app.css",
+  "app.js": "js/app.js",
+  "entrypoints": {
+    "app": {
+      "assets": {
+        "js": [
+          "js/manifest.js",
+          "js/vendor.js",
+          "js/app.js"
+        ],
+        "css": [
+          "./css/app.css",
+          "css/app.css"
+        ]
+      }
+    }
+  },
+  "images/.gitkeep": "images/.gitkeep",
+  "images/sample.jpg": "images/sample.jpg",
+  "images/webpack.png": "images/webpack.png",
+  "manifest.js": "js/manifest.js",
+  "vendor.js": "js/vendor.js"
+}
