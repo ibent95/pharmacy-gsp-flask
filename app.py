@@ -1,9 +1,9 @@
+import os
 import platform
 import flask
 from flask import Flask
 from flask import render_template
 from markupsafe import escape
-import os
 
 app = Flask(__name__)
 
