@@ -1,0 +1,11 @@
+{% set content = data.content if (data.content) else 'home' %}
+
+{% if (os.path.exists('./templates/contents/' + content)) %}
+
+	{% include 'contents/' + content %}
+
+{% else %}
+
+	{% include 'contents/404-content.html' %}
+
+{% endif %}
