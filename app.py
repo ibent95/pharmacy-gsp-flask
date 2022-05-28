@@ -4,14 +4,8 @@ from flask import Flask
 from flask import render_template
 from markupsafe import escape
 import os
-import jinja2
-
 
 app = Flask(__name__)
-
-template_dir = 'templates'
-loader = jinja2.FileSystemLoader(template_dir)
-jinjaEnv = jinja2.Environment(loader = loader)
 
 @app.route("/")
 def index():
@@ -25,7 +19,7 @@ def index():
         "flask_app_version": flaskAppVersion,
     }
 
-    return render_template('index.jinja', data = data, os = os, jinjaEnv = jinjaEnv)
+    return render_template('index.jinja', data = data, os = os)
 
 @app.route("/hello")
 def hello_world():
