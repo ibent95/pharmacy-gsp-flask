@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+
+	<!-- font css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/feather.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/material.css') }}">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}" id="main-style-link">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" id="main-style-link">
+</head>
+<body style="background: #7267EF;">
+
+	<!-- [ Pre-loader ] start -->
+	<div class="loader-bg">
+		<div class="loader-track">
+			<div class="loader-fill"></div>
+		</div>
+	</div>
+	<!-- [ Pre-loader ] End -->
+
+	{% include 'content.jinja' %}
+
+	<div class="d-flex justify-content-center">
+
+		{% include 'footer.jinja' %}
+
+	</div>
+
+	<script>
+		if ("serviceWorker" in navigator) {
+			window.addEventListener("load", () => {
+				navigator.serviceWorker
+					.register("service-worker.js")
+					.then((registration) => {
+						console.log("Service Worker registered: ", registration);
+					})
+					.catch((registrationError) => {
+						console.error("Service Worker registration failed: ", registrationError);
+					});
+			});
+		}
+	</script>
+
+	<!-- Required Js -->
+    <script src="{{ url_for('static', filename='assets/js/vendor-all.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/plugins/feather.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/pcoded.min.js') }}"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js') }}"></script> -->
+    <!-- <script src="{{ url_for('static', filename='assets/js/plugins/clipboard.min.js') }}"></script> -->
+    <!-- <script src="{{ url_for('static', filename='assets/js/uikit.min.js') }}"></script> -->
+
+	<!-- Apex Chart -->
+	<script src="{{ url_for('static', filename='assets/js/plugins/apexcharts.min.js') }}"></script>
+	<script>
+		//$("body").append('<div class="fixed-button active"><a href="https://gumroad.com/dashboardkit" target="_blank" class="btn btn-md btn-success"><i class="material-icons-two-tone text-white">shopping_cart</i> Upgrade To Pro</a> </div>');
+	</script>
+
+	<!-- custom-chart js -->
+	<script src="{{ url_for('static', filename='assets/js/pages/dashboard-sale.js') }}"></script>
+
+	<!-- Javascript -->
+	<script src="{{ url_for('static', filename='js/vendor.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/manifest.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

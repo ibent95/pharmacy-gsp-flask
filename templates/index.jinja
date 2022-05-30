@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}" id="main-style-link">
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" id="main-style-link">
 </head>
 <body>
 	<!-- [ Pre-loader ] start -->
@@ -31,46 +31,6 @@
 	<div class="pc-container">
 
 		{% include 'content.jinja' %}
-
-		<div class="pcoded-content">
-			<!-- Button trigger modal -->
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bootstrapModal"
-				data-bs-whatever="@mdo" id="bootstrapModalButton">
-				Launch demo modal
-			</button>
-
-			<div class="modal fade" id="bootstrapModal" tabindex="-1" aria-labelledby="bootstrapModalLabel" aria-hidden="true"
-				role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="bootstrapModalLabel">New message</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<form>
-								<div class="mb-3">
-									<label for="recipient-name" class="col-form-label">Recipient:</label>
-									<input type="text" class="form-control" id="recipient-name">
-								</div>
-								<div class="mb-3">
-									<label for="message-text" class="col-form-label">Message:</label>
-									<textarea class="form-control" id="message-text"></textarea>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Send message</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<button type="button" class="btn btn-primary" id="sweetalertButton">
-				Launch demo SweetAlert2
-			</button>
-		</div>
 
 	</div>
 
@@ -109,7 +69,7 @@
 	<!-- Apex Chart -->
 	<script src="{{ url_for('static', filename='assets/js/plugins/apexcharts.min.js') }}"></script>
 	<script>
-		$("body").append('<div class="fixed-button active"><a href="https://gumroad.com/dashboardkit" target="_blank" class="btn btn-md btn-success"><i class="material-icons-two-tone text-white">shopping_cart</i> Upgrade To Pro</a> </div>');
+		//$("body").append('<div class="fixed-button active"><a href="https://gumroad.com/dashboardkit" target="_blank" class="btn btn-md btn-success"><i class="material-icons-two-tone text-white">shopping_cart</i> Upgrade To Pro</a> </div>');
 	</script>
 
 	<!-- custom-chart js -->

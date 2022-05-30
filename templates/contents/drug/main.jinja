@@ -10,12 +10,12 @@
 			<div class="row align-items-center">
 				<div class="col-md-6">
 					<div class="page-header-title">
-						<h5 class="m-b-10">{{ title }}</h5>
+						<h5 class="m-b-10">{{ data.title }}</h5>
 					</div>
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item"><a href="index.html">Home</a></li>
 						<li class="breadcrumb-item">Master data</li>
-						<li class="breadcrumb-item">{{ title }}</li>
+						<li class="breadcrumb-item">{{ data.title }}</li>
 					</ul>
 				</div>
 			</div>
@@ -29,23 +29,23 @@
 			<!--<h5>Header and Footer</h5>
 			<hr>-->
 			<div class="card">
-				<h5 class="card-header">{{ title }}</h5>
+				<h5 class="card-header">{{ data.title }}</h5>
 				<div class="card-body">
 
 					<!-- Action buttons -->
 					<div class="row mb-4">
 						<div class="col-md d-flex flex-row">
-							<div class="btn-group">
+							<!--<div class="btn-group">
 								<button class="btn btn-sm btn-shadow btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Expor</button>
 								<div class="dropdown-menu">
 									<a class="dropdown-item" href="#!">.pdf</a>
 									<a class="dropdown-item" href="#!">Another action</a>
-									<a class="dropdown-item" href="#!">Something else here</a>-->
+									<a class="dropdown-item" href="#!">Something else here</a>
 								</div>
-							</div>
+							</div>-->
 						</div>
 						<div class="col-md d-flex flex-row-reverse">
-							<button class="btn btn-sm btn-shadow btn-primary">Tambah</button>
+							<button class="btn btn-sm btn-shadow btn-primary" onclick="location.href = 'drug/create';">Tambah</button>
 						</div>
 					</div>
 
@@ -55,19 +55,94 @@
 							<div class="table-wrapper">
 								<table class="table table-striped table-condensed table-hover" id="table-list">
 									<thead>
-										<tr>
-											<th>#</th>
-											<th>Nama obat</th>
-											<th>Kode</th>
-											<th>Aksi</th>
-										</tr>
+										<tr> <th>No.</th> <th>Kode</th> <th>Nama obat</th> <!--<th>Aksi</th>--> </tr>
 									</thead>
 									<tbody>
+										<!-- Start list -->
 										<tr>
+											<td>1</td>
+											<td>AMB</td>
+											<td>Ambroxol</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>2</td>
+											<td>AMX</td>
+											<td>Amoxcillin</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>3</td>
+											<td>ETB</td>
+											<td>Etabion</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>4</td>
+											<td>IDL</td>
+											<td>Inj della</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>5</td>
+											<td>CTZ</td>
+											<td>Ceftrizin</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>6</td>
+											<td>PCM</td>
+											<td>PCM</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>7</td>
+											<td>CMX</td>
+											<td>Cotrimoxazole</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>8</td>
+											<td>LC</td>
+											<td>Lacbon</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>9</td>
+											<td>GCL</td>
+											<td>Glyceryl</td>
+										</tr>
+										<!-- End list -->
+
+										<!-- Start list -->
+										<tr>
+											<td>10</td>
+											<td>FTL</td>
+											<td>Flutamol</td>
+										</tr>
+										<!-- End list -->
+
+										<!--<tr>
 											<td colspan="4">
 												<div class="text-center">Belum ada data.</div>
 											</td>
-										</tr>
+										</tr>-->
 									</tbody>
 								</table>
 							</div>

@@ -1,0 +1,120 @@
+<script>
+	//let table = new DataTable('#table-list', {
+	//	// options
+	//});
+</script>
+<div class="pcoded-content">
+	<!-- [ breadcrumb ] start -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<div class="page-header-title">
+						<h5 class="m-b-10">{{ data.title }}</h5>
+					</div>
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+						<li class="breadcrumb-item">Master data</li>
+						<li class="breadcrumb-item">Transaksi</li>
+						<li class="breadcrumb-item">{{ data.title }}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- [ breadcrumb ] end -->
+
+	<!-- [ Main Content ] start -->
+	<div class="row">
+		<!-- support-section start -->
+		<div class="col-md-12 col-xl-12">
+			<!--<h5>Header and Footer</h5>
+			<hr>-->
+			<div class="card">
+				<h5 class="card-header">{{ data.title }}</h5>
+				<div class="card-body">
+
+					<!-- Action buttons -->
+					<div class="row mb-4">
+						<div class="col-md d-flex flex-row">
+							<!--<div class="btn-group">
+								<button class="btn btn-sm btn-shadow btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Expor</button>
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="#!">.pdf</a>
+									<a class="dropdown-item" href="#!">Another action</a>
+									<a class="dropdown-item" href="#!">Something else here</a>
+								</div>
+							</div>-->
+						</div>
+						<div class="col-md d-flex flex-row-reverse">
+							<!--<button class="btn btn-sm btn-shadow btn-primary">Tambah</button>-->
+						</div>
+					</div>
+
+					<!-- Form -->
+					<form class="row g-3">
+
+						<div class="col-2">
+							<label for="trunsactionNumber" class="form-label">Kode produk</label>
+							<input type="text" class="form-control" id="trunsactionNumber">
+						</div>
+
+						<div class="col-10">
+							<label for="transactionDate" class="form-label">Nama obat</label>
+							<input type="text" class="form-control" id="transactionDate">
+						</div>
+
+						<div class="col-12 d-flex justify-content-center mb-3">
+							<button type="button" class="btn btn-secondary">Batal</button>
+							<button type="submit" class="btn btn-primary ml-3">Simpan</button>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		<!-- customer-section end -->
+	</div>
+	<!-- [ Main Content ] end -->
+</div>
+
+<script>
+	let product = {};
+	let productQuantity = 1;
+	let cart = [];
+
+	let cartItemContainer = document.getElementById("cart-item");
+
+	function onProductSelectChange(event) {
+		product = {
+			id: event.target.value,
+			value: event.target.value,
+			text: event.target.options[event.target.options.selectedIndex].text
+		};
+
+		console.log(product);
+	}
+
+	function addProductItemToCart(event) {
+
+		if (product && (productQuantity !== 0)) {
+			let itemNode = document.createElement('tr');
+			itemNode.setAttribute("id", product.id);
+			itemNode.innerHTML = `<td>[${product.id}] ${product.text}</td><td>${productQuantity}</td>`;
+
+			if (cart.length > 0) {
+				cartItemContainer?.appendChild(itemNode);
+			} else {
+				cartItemContainer.innerHTML = "<tr>" + itemNode.innerHTML + "</tr>"
+			}
+
+			cart.push(product);
+		} else {
+			console.log('Error.');
+		}
+
+		product = null;
+		productQuantity = 1;
+
+	}
+</script>
