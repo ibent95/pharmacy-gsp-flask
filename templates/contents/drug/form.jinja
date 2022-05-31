@@ -13,9 +13,9 @@
 						<h5 class="m-b-10">{{ data.title }}</h5>
 					</div>
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+						<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ikhtisar</a></li>
 						<li class="breadcrumb-item">Master data</li>
-						<li class="breadcrumb-item">Transaksi</li>
+						<li class="breadcrumb-item"><a href="{{ url_for('drug') }}">Obat</a></li>
 						<li class="breadcrumb-item">{{ data.title }}</li>
 					</ul>
 				</div>

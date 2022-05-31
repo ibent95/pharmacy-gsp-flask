@@ -25051,7 +25051,7 @@ new-task label input[type=checkbox] {
     border-bottom: 1px solid #f1f1f1;
     font-size: 13px;
     color: #060606;
-    background: #f0f2f8;
+    background: #c5ccdf;
     text-transform: uppercase;
 }
 
@@ -25064,7 +25064,7 @@ new-task label input[type=checkbox] {
 }
 
 .table.dataTable[class*="table-"] thead th {
-    background: #f0f2f8;
+    background: #c5ccdf;
 }
 
 .table > :not(:last-child) > :last-child > * {

@@ -13,9 +13,9 @@
 						<h5 class="m-b-10">{{ data.title }}</h5>
 					</div>
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="index.html">Beranda</a></li>
+						<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ikhtisar</a></li>
 						<li class="breadcrumb-item">Master data</li>
-						<li class="breadcrumb-item">Transaksi</li>
+						<li class="breadcrumb-item"><a href="{{ url_for('transaction') }}">Transaksi</a></li>
 						<li class="breadcrumb-item">{{ data.title }}</li>
 					</ul>
 				</div>
@@ -93,7 +93,7 @@
 						<div class="col-md-5">
 							<div class="table-wrapper">
 								<label for="product-cart" class="form-label">Daftar produk</label>
-								<table class="table table-bordered m-b-0">
+								<table class="table table-secondary table-condensed table-bordered m-b-0">
 									<thead>
 										<tr><th>Produk obat</th> <th>Jumlah</th> </tr>
 									</thead>
