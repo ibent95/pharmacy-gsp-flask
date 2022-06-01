@@ -21,6 +21,7 @@
 	<!-- [ Main Content ] start -->
 	<div class="row">
 
+		<!-- Start transaction data (data sets) -->
 		<div class="col-xl-12 col-md-12">
 			<div class="card">
 				<div class="card-header">
@@ -29,9 +30,10 @@
 				<div class="pro-scroll" style="height: auto;">
 					<div class="card-body">
 
-						<div class="row row-cols-{{ ((data.transactions | length) | string) }}">
+						{# {{ ((data.transactions | length) | string) }} #}
+						<div class="row row-cols-12">
 							{% for transaction in data.transactions %}
-								<div class="col">
+								<div class="col col-md-4 col-sm-12 col-xs-12">
 
 									<!-- Start transaction table -->
 									<div class="table-responsive">
@@ -66,7 +68,9 @@
 				</div>
 			</div>
 		</div>
+		<!-- End transaction data (data sets) -->
 
+		<!-- Start frequency patterns data -->
 		<div class="col-xl-12 col-md-12">
 			<div class="card">
 				<div class="card-header">
@@ -75,11 +79,11 @@
 				<div class="pro-scroll" style="height: auto;">
 					<div class="card-body">
 
-						<div class="row row-cols-3">
+						<div class="row row-cols-12">
 
 							<!-- Start results -->
 							{% for frequency_patterns in data.result if frequency_patterns %}
-								<div class="col">
+								<div class="col-lg-3 col-xl-3 col-md-6 col-sm-12 col-xs-12"">
 
 									<div class="table-responsive">
 
@@ -144,6 +148,7 @@
 				</div>
 			</div>
 		</div>
+		<!-- End frequency patterns data -->
 
 	</div>
 	<!-- [ Main Content ] end -->
