@@ -7,4 +7,5 @@ Please install these python library:
 2. pip install Flask-WTF
 3. pip install python-dotenv
 4. pip install python-webpack-boilerplate
-5. pip install Flask-SQLAlchemy
+5. pip install PyMySQL
+6. pip install Flask-SQLAlchemy
