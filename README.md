@@ -10,7 +10,7 @@ Please install these python library:
 5. pip install PyMySQL
 6. pip install Flask-SQLAlchemy
 
-Don't forget to run MySQL Server.
+Don't forget to run MySQL Server and make database `pharmacy_gsp_app`.
 
 Then run 'flask database_init' and 'flask run' in terminal or command prompt.
 
