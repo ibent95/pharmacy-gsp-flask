@@ -43,7 +43,7 @@ def drug_manage(uuid = None):
     form = DrugForm()
 
     if (form.validate_on_submit() and (request.form['kode_produk'] == None or request.form['nama_produk'] == None)) :
-        flash("Masukan data valid.")
+        flash("Masukan data tidak valid.")
 
         if (uuid):
             return redirect(url_for('drug_form', uuid=uuid))

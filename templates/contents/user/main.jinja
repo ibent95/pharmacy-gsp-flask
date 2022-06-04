@@ -55,7 +55,7 @@
 							<div class="table-responsive">
 								<table class="table table-striped table-condensed table-hover" id="table-list">
 									<thead>
-										<tr> <th>No.</th> <th>Kode</th> <th>Nama pengguna</th> <th class="text-right">Aksi</th> </tr>
+										<tr> <th>No.</th> <th>Nama pelanggan</th> <th>Role</th> <th class="text-right">Aksi</th> </tr>
 									</thead>
 									<tbody>
 
@@ -63,8 +63,8 @@
 											<!-- Start list -->
 											<tr>
 												<td>{{ loop.index }}</td>
-												<td>{{ user.kode_pengguna }}</td>
 												<td>{{ user.nama_pengguna }}</td>
+												<td>{{ user.role }}</td>
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('user_form', uuid=user.uuid) }}`;">Ubah</button>
 

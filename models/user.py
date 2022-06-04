@@ -15,6 +15,8 @@ class UserModel(db.Model):
     password = db.Column(db.String(100), unique=True)
     uuid = db.Column(db.String(36), unique=True, default=uuid.uuid4)
 
-    def __init__(self, kode_produk, nama_produk):
-        self.kode_produk = kode_produk
-        self.nama_produk = nama_produk
+    def __init__(self, nama_pengguna, role, username, password):
+        self.nama_pengguna = nama_pengguna
+        self.role = role
+        self.username = username
+        self.password = password

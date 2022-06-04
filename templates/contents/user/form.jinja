@@ -70,14 +70,24 @@
 					<!-- Form -->
 					<form class="row g-3" action="{{ url_for('user_manage', uuid=data.user.uuid) if (data.user.uuid) else url_for('user_manage') }}" method="POST" enctype="multipart/form-data">
 						{{ data.form.csrf_token }}
-						<div class="col-2">
-							<label for="product_code" class="form-label">{{ data.form.kode_pengguna.label }}</label>
-							{{ data.form.kode_pengguna(class="form-control", id="product_code", value=data.user.kode_pengguna) }}
+						<div class="col-10">
+							<label for="product_name" class="form-label">{{ data.form.nama_pengguna.label }}</label>
+							{{ data.form.nama_pengguna(class="form-control", id="product_name", value=data.user.nama_pengguna) }}
 						</div>
 
-						<div class="col-10">
-							<label for="product_name" class="form-label">Nama pengguna</label>
-							{{ data.form.nama_pengguna(class="form-control", id="product_name", value=data.user.nama_pengguna) }}
+						<div class="col-2">
+							<label for="role" class="form-label">{{ data.form.role.label }}</label>
+							{{ data.form.role(class="form-control", id="role", value=data.user.role) }}
+						</div>
+
+						<div class="col-6">
+							<label for="username" class="form-label">{{ data.form.username.label }}</label>
+							{{ data.form.username(class="form-control", id="username", value=data.user.username) }}
+						</div>
+
+						<div class="col-6">
+							<label for="password" class="form-label">{{ data.form.password.label }}</label>
+							{{ data.form.password(class="form-control", id="password", value=data.user.password) }}
 						</div>
 
 						<div class="col-12 d-flex justify-content-center mb-3">

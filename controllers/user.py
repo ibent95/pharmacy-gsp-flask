@@ -42,8 +42,8 @@ def user_form(uuid = None):
 def user_manage(uuid = None):
     form = UserForm()
 
-    if (form.validate_on_submit() and (request.form['kode_produk'] == None or request.form['nama_produk'] == None)) :
-        flash("Masukan data valid.")
+    if (form.validate_on_submit() and (request.form['nama_pengguna'] == None or request.form['role'] == None or request.form['username'] == None or request.form['password'] == None)):
+        flash("Masukan data tidak valid.")
 
         if (uuid):
             return redirect(url_for('user_form', uuid=uuid))
@@ -51,16 +51,18 @@ def user_manage(uuid = None):
         else:
             return redirect(url_for('user_form'))
 
-    elif (form.validate_on_submit() and (request.form['kode_produk'] and request.form['nama_produk'])):
+    elif (form.validate_on_submit() and (request.form['nama_pengguna'] and request.form['role'] and request.form['username'] and request.form['password'])):
 
         if (uuid) :
             user = UserModel.query.filter_by(uuid=uuid).first()
 
-            user.kode_produk = request.form['kode_produk']
-            user.nama_produk = request.form['nama_produk']
+            user.nama_pengguna = request.form['nama_pengguna']
+            user.role = request.form['role']
+            user.username = request.form['username']
+            user.password = request.form['password']
 
         else:
-            user = UserModel(request.form['kode_produk'], request.form['nama_produk'])
+            user = UserModel(request.form['nama_pengguna'], request.form['role'], request.form['username'], request.form['password'])
 
             db.session.add(user)
 
