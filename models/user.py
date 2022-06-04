@@ -9,8 +9,10 @@ class UserModel(db.Model):
     __tablename__ = 'pengguna'
 
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
-    kode_produk = db.Column(db.String(100), unique=True)
-    nama_produk = db.Column(db.String(100))
+    nama_pengguna = db.Column(db.String(100))
+    role = db.Column(db.String(100))
+    username = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100), unique=True)
     uuid = db.Column(db.String(36), unique=True, default=uuid.uuid4)
 
     def __init__(self, kode_produk, nama_produk):

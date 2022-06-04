@@ -4,5 +4,7 @@ from wtforms.validators import InputRequired
 
 
 class UserForm(FlaskForm):
-    kode_produk = StringField('Kode produk', validators=[InputRequired()])
-    nama_produk = StringField('Nama obat', validators=[InputRequired()])
+    nama_pengguna = StringField('Nama pengguna', validators=[InputRequired()])
+    role = StringField('Peran (Role)', validators=[InputRequired()])
+    username = StringField('Username', validators=[InputRequired()])
+    password = StringField('Password', validators=[InputRequired()])
