@@ -4,18 +4,24 @@ $(document).ready(function() {
         floatchart()
     }, 700);
     // [ campaign-scroll ] start
-    var px = new PerfectScrollbar('.feed-scroll', {
-        wheelSpeed: .5,
-        swipeEasing: 0,
-        wheelPropagation: 1,
-        minScrollbarLength: 40,
-    });
-    var px = new PerfectScrollbar('.pro-scroll', {
-        wheelSpeed: .5,
-        swipeEasing: 0,
-        wheelPropagation: 1,
-        minScrollbarLength: 40,
-    });
+
+    if ($(".feed-scroll").length) {
+        var px = new PerfectScrollbar('.feed-scroll', {
+            wheelSpeed: .5,
+            swipeEasing: 0,
+            wheelPropagation: 1,
+            minScrollbarLength: 40,
+        });
+    }
+
+    if ($(".pro-scroll").length) {
+        var px = new PerfectScrollbar('.pro-scroll', {
+            wheelSpeed: .5,
+            swipeEasing: 0,
+            wheelPropagation: 1,
+            minScrollbarLength: 40,
+        });
+    }
     // [ campaign-scroll ] end
 });
 
@@ -57,7 +63,11 @@ function floatchart() {
                 }
             }
         }
-        new ApexCharts(document.querySelector("#support-chart"), options1).render();
+
+        if ($("#support-chart").length) {
+            new ApexCharts(document.querySelector("#support-chart"), options1).render();
+        }
+
         var options2 = {
             chart: {
                 type: 'bar',
@@ -99,9 +109,13 @@ function floatchart() {
                 }
             }
         }
-        new ApexCharts(document.querySelector("#support-chart1"), options2).render();
+
+        if ($("#support-chart1").length) {
+            new ApexCharts(document.querySelector("#support-chart1"), options2).render();
+        }
     });
     // [ support-chart ] end
+
     // [ account-chart ] start
     $(function() {
         $(function() {
@@ -172,14 +186,18 @@ function floatchart() {
                     }
                 }
             }
-            var chart = new ApexCharts(
-                document.querySelector("#account-chart"),
-                options
-            );
-            chart.render();
+
+            if ($("#account-chart").length) {
+                var chart = new ApexCharts(
+                    document.querySelector("#account-chart"),
+                    options
+                );
+                chart.render();
+            }
         });
     });
     // [ account-chart ] end
+
     // [ satisfaction-chart ] start
     $(function() {
         var options = {
@@ -219,8 +237,11 @@ function floatchart() {
                 }
             }]
         }
-        var chart = new ApexCharts(document.querySelector("#satisfaction-chart"), options);
-        chart.render();
+
+        if ($("#satisfaction-chart").length) {
+            var chart = new ApexCharts(document.querySelector("#satisfaction-chart"), options);
+            chart.render();
+        }
     });
     // [ satisfaction-chart ] end
 }

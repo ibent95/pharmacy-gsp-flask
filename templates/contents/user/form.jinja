@@ -15,7 +15,7 @@
 					<ul class="breadcrumb">
 						<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ikhtisar</a></li>
 						<li class="breadcrumb-item">Master data</li>
-						<li class="breadcrumb-item"><a href="{{ url_for('drug') }}">Obat</a></li>
+						<li class="breadcrumb-item"><a href="{{ url_for('user') }}">Pengguna</a></li>
 						<li class="breadcrumb-item">{{ data.title }}</li>
 					</ul>
 				</div>
@@ -68,16 +68,16 @@
 					</div>
 
 					<!-- Form -->
-					<form class="row g-3" action="{{ url_for('drug_manage', uuid=data.drug.uuid) if (data.drug.uuid) else url_for('drug_manage') }}" method="POST" enctype="multipart/form-data">
+					<form class="row g-3" action="{{ url_for('user_manage', uuid=data.user.uuid) if (data.user.uuid) else url_for('user_manage') }}" method="POST" enctype="multipart/form-data">
 						{{ data.form.csrf_token }}
 						<div class="col-2">
-							<label for="product_code" class="form-label">{{ data.form.kode_produk.label }}</label>
-							{{ data.form.kode_produk(class="form-control", id="product_code", value=data.drug.kode_produk) }}
+							<label for="product_code" class="form-label">{{ data.form.kode_pengguna.label }}</label>
+							{{ data.form.kode_pengguna(class="form-control", id="product_code", value=data.user.kode_pengguna) }}
 						</div>
 
 						<div class="col-10">
-							<label for="product_name" class="form-label">Nama obat</label>
-							{{ data.form.nama_produk(class="form-control", id="product_name", value=data.drug.nama_produk) }}
+							<label for="product_name" class="form-label">Nama pengguna</label>
+							{{ data.form.nama_pengguna(class="form-control", id="product_name", value=data.user.nama_pengguna) }}
 						</div>
 
 						<div class="col-12 d-flex justify-content-center mb-3">

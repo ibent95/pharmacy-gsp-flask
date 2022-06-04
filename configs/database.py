@@ -1,4 +1,10 @@
+import uuid
+
 from flask_sqlalchemy import SQLAlchemy
+
+from sqlalchemy.dialects.mysql import BINARY
+from sqlalchemy.types import TypeDecorator
+
 from app import app, environ
 
 DB_CONNECTION = str(environ.get('DB_CONNECTION'))
@@ -17,4 +23,28 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
 
-model = db.Model
+#model = db.Model
+
+class BinaryUUID(TypeDecorator):
+    '''Optimize UUID keys. Store as 16 bit binary, retrieve as uuid.
+    inspired by:
+        http://mysqlserverteam.com/storing-uuid-values-in-mysql-tables/
+    '''
+
+    impl = BINARY(16)
+
+    def process_bind_param(self, value, dialect):
+        try:
+            return value.bytes
+        except AttributeError:
+            try:
+                return uuid(value).bytes
+            except TypeError:
+                # for some reason we ended up with the bytestring
+                # ¯\_(ツ)_/¯
+                # I'm not sure why you would do that,
+                # but here you go anyway.
+                return value
+
+    def process_result_value(self, value, dialect):
+        return uuid(bytes=value)

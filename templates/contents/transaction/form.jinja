@@ -52,7 +52,7 @@
 					</div>
 
 					<!-- Form -->
-					<form class="row g-3">
+					<form class="row g-3" action="{{ url_for('transaction_manage') }}" method="{{ 'PUT' if (data.uuid) else 'POST' }}">
 
 						<div class="col-md-4">
 							<label for="trunsactionNumber" class="form-label">No. Transaksi</label>

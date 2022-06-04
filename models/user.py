@@ -4,9 +4,9 @@ from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
 
 
-class DrugModel(db.Model):
+class UserModel(db.Model):
 
-    __tablename__ = 'obat'
+    __tablename__ = 'pengguna'
 
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
     kode_produk = db.Column(db.String(100), unique=True)

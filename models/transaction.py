@@ -1,13 +1,18 @@
-from configs.database import db, model
+import uuid
+
+from configs.database import db, BinaryUUID
+from sqlalchemy.sql.expression import func
 
 
 class TransactionModel(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
-    kode = db.Column(db.String(100), unique=True)
-    nama = db.Column(db.String(100))
+    __tablename__ = 'transaksi'
 
-    def __init__(self, kode, nama):
-        print('Init transaction model')
-        self.kode = kode
-        self.nama = nama
+    id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
+    tanggal_transaksi = db.Column(db.DateTime())
+    nama_pelanggan = db.Column(db.String(100))
+    uuid = db.Column(db.String(36), unique=True, default=uuid.uuid4)
+
+    def __init__(self, tanggal_transaksi, nama_pelanggan):
+        self.tanggal_transaksi = tanggal_transaksi
+        self.nama_pelanggan = nama_pelanggan
