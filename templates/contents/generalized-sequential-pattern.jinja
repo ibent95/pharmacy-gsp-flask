@@ -99,7 +99,7 @@
 													<th style="width: 23%;">Frekuensi</th>
 												</tr>
 											</thead>
-											<tbody style="display: block; height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;">
+											<tbody style="display: block; height: {{ '479px' if ((frequency_patterns.items() | length) > 10) else 'fit-content' }} !important; overflow-y: auto !important; overflow-x: hidden !important;">
 
 												{% for data_set, frequency in (frequency_patterns.items() | sort(attribute=1, reverse=True))  %}
 													<!-- Start item -->
