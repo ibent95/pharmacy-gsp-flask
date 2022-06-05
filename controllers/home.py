@@ -1,7 +1,8 @@
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from app import app, platform, flask, render_template
+from app import app, request, platform, flask, render_template
+from traits.number import percentToFloat
 from gsp import GSP
 
 
@@ -24,7 +25,16 @@ def index():
 
 @app.route("/generalized-sequential-pattern-calculation-result", methods=['GET'])
 def generalized_sequential_pattern_calculation_result():
+
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
+
+    # Dates
+    startDate = request.args.get('tanggal_awal')
+    endDate = request.args.get('tanggal_akhir')
+
+    # Minimal support
+    minSupport = request.args.get('min_support') if (request.args.get('min_support')) else 10
+
     #transactions = [
     #    ["a", "b", "c", frozenset(["c", "d"]), "d"],
     #    ["a", "a", "b", frozenset(["c", "d"]), 'c'],
@@ -43,17 +53,19 @@ def generalized_sequential_pattern_calculation_result():
         ]
     ]
 
-    minSupport = 0.5
+    normalizedMinimalSupport = percentToFloat(minSupport)
 
-    alg = GSP(transactions = transactions, minsup = minSupport)
+    alg = GSP(transactions = transactions, minsup = normalizedMinimalSupport)
     result = alg.run_alg()
-    #print(result)
 
     data = {
         "content": "generalized-sequential-pattern.jinja",
         "title": title,
+        "tanggal_awal": startDate,
+        "tanggal_akhir": endDate,
         "transactions": transactions,
         "minimal_support": minSupport,
+        "normalized_minimal_support": normalizedMinimalSupport,
         "result": result
     }
 

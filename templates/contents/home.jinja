@@ -29,30 +29,30 @@
 					<div class="card-body">
 
 						<!-- Main table filter -->
-						<form class="row row-cols-12 justify-content-end gy-4 mb-4">
+						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('generalized_sequential_pattern_calculation_result') }}">
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="date" placeholder="Tanggal awal" id="floatingStartDate">
+									<input class="form-control" type="date" name="tanggal_awal" placeholder="Tanggal awal" id="floatingStartDate">
 									<label for="floatingStartDate">Tanggal awal</label>
 								</div>
 							</div>
 
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="date" placeholder="Tanggal akhir" id="floatingEndDate">
+									<input class="form-control" type="date" name="tanggal_akhir" placeholder="Tanggal akhir" id="floatingEndDate">
 									<label for="floatingEndDate">Tanggal akhir</label>
 								</div>
 							</div>
 
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="number" value="1.5" min="0" placeholder="Min. Suport" id="floatingMinSupportNumber">
+									<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">
 									<label for="floatingMinSupportNumber">Min. Suport</label>
 								</div>
 							</div>
 
 							<div class="col-auto col-md-auto col-sm-auto col-xs-auto text-right">
-								<button type="button" class="btn btn-primary" style="padding-top: 16px; padding-bottom: 16px;" onclick="location.href = 'generalized-sequential-pattern-calculation-result';">Hitung GSP</button>
+								<button type="submit" class="btn btn-primary" style="padding-top: 16px; padding-bottom: 16px;">Hitung GSP</button>
 							</div>
 						</form>
 

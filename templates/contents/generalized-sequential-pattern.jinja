@@ -30,7 +30,33 @@
 				<div class="pro-scroll" style="height: auto;">
 					<div class="card-body">
 
-						{# {{ ((data.transactions | length) | string) }} #}
+
+						<!-- Start date range of data info -->
+						<div class="row row-cols-12">
+							<div class="col mb-4">
+
+								<table> <tbody>
+
+									<tr>
+										<td>Tanggal awal</td>
+										<td> : </td>
+										<td>{{ data.tanggal_awal }}</td>
+									</tr>
+
+									<tr>
+										<td>Tanggal akhir</td>
+										<td> : </td>
+										<td>{{ data.tanggal_akhir }}</td>
+									</tr>
+
+								</tbody> </table>
+
+							</div>
+						</div>
+						<!-- End date range of data info -->
+
+
+						<!-- Start transaction data -->
 						<div class="row row-cols-12">
 							{% for transaction in data.transactions %}
 								<div class="col col-md-4 col-sm-12 col-xs-12">
@@ -63,6 +89,7 @@
 								</div>
 							{% endfor %}
 						</div>
+						<!-- End transaction data -->
 
 					</div>
 				</div>
@@ -80,6 +107,31 @@
 
 					<div class="card-body">
 
+						<!-- Start minimal support info -->
+						<div class="row row-cols-12">
+							<div class="col mb-4">
+
+								<table> <tbody>
+
+									<tr>
+										<td>Minimal support (percent)</td>
+										<td> : </td>
+										<td>{{ (data.minimal_support | string) + '%' }}</td>
+									</tr>
+
+									<tr>
+										<td>Normalized minimal support (float)</td>
+										<td> : </td>
+										<td>{{ data.normalized_minimal_support }}</td>
+									</tr>
+
+								</tbody> </table>
+
+							</div>
+						</div>
+						<!-- End minimal support info -->
+
+						<!-- Start result table -->
 						<div class="row row-cols-12">
 
 							<!-- Start results -->
@@ -127,23 +179,7 @@
 							<!-- End results -->
 
 						</div>
-						<!-- End main table -->
-
-						<!-- Start main table -->
-						<div class="row row-cols-auto">
-							<div class="col-7">
-
-								<div class="row row-cols-auto">
-									<!-- Empty -->
-								</div>
-
-							</div>
-
-							<div class="col-5">
-								<!-- Empty -->
-							</div>
-						</div>
-						<!-- End main table -->
+						<!-- End result table -->
 
 					</div>
 				</div>

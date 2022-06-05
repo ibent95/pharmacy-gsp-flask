@@ -24,9 +24,23 @@ from models.drug import DrugModel
 from models.transaction import TransactionModel
 from models.user import UserModel
 
+
+# Database intialization when first run
 @app.before_first_request
 def create_table():
     db.create_all()
+
+
+# Error page
+@app.errorhandler(404)
+def page_not_found(error):
+    data = {
+        "content": "404.jinja",
+        "title": "404",
+    }
+
+    return render_template('index.jinja', data=data, os=os), 404
+
 
 # Webpack initialization
 @app.cli.command("webpack_init")
@@ -35,6 +49,7 @@ def webpack_init():
     import webpack_boilerplate
     pkg_path = os.path.dirname(webpack_boilerplate.__file__)
     cookiecutter(pkg_path, directory = "frontend_template")
+
 
 # Database migration for initialization
 @app.cli.command("database_init")
