@@ -1,14 +1,21 @@
 import os
 import platform
 import flask
+import logging
+import logging.config
 
 from os import environ
 from flask import Flask, request, flash, url_for, render_template, redirect
-from dotenv import load_dotenv
 from markupsafe import escape
+from dotenv import load_dotenv
+from datetime import datetime
+
 
 # Load env and database configurations
 load_dotenv(".env")
+
+# Logger configuration to current date filename in logs folder
+logging.basicConfig(filename="logs/" + datetime.today().strftime('%Y-%m-%d') + ".log", filemode="w", format="[%(asctime)s] %(levelname)s | %(name)s | %(threadName)s : %(message)s")
 
 # Flask app initialization
 app = Flask(__name__)

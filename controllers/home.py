@@ -25,8 +25,8 @@ def index():
 
 @app.route("/generalized-sequential-pattern-calculation-result", methods=['GET'])
 def generalized_sequential_pattern_calculation_result():
-
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
+    app.logger.info('%s is the title.', title)
 
     # Dates
     startDate = request.args.get('tanggal_awal')
@@ -61,8 +61,8 @@ def generalized_sequential_pattern_calculation_result():
     data = {
         "content": "generalized-sequential-pattern.jinja",
         "title": title,
-        "tanggal_awal": startDate,
-        "tanggal_akhir": endDate,
+        "start_date": startDate,
+        "end_date": endDate,
         "transactions": transactions,
         "minimal_support": minSupport,
         "normalized_minimal_support": normalizedMinimalSupport,
