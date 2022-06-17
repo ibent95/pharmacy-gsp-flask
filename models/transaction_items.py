@@ -2,6 +2,7 @@ import uuid
 
 from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
+#from models.transaction import TransactionModel
 
 
 class TransactionItemsModel(db.Model):
@@ -9,7 +10,7 @@ class TransactionItemsModel(db.Model):
     __tablename__ = 'transaksi_item'
 
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
-    id_transaksi = db.Column(db.DateTime())
+    id_transaksi = db.Column(db.BigInteger, db.ForeignKey('transaksi.id'))
     id_produk = db.Column(db.String(100))
     kode_produk = db.Column(db.String(100))
     nama_produk = db.Column(db.String(100))

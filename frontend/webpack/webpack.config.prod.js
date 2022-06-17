@@ -8,16 +8,16 @@ module.exports = merge(common, {
   devtool: "source-map",
   bail: true,
   output: {
-    filename: "js/[name].[chunkhash:8].js",
-    chunkFilename: "js/[name].[chunkhash:8].chunk.js",
+    filename: "js/[name].js",
+    chunkFilename: "js/[name].chunk.js",
   },
   plugins: [
     new Webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
     new MiniCssExtractPlugin({
-      filename: "css/[name].[contenthash].css",
-      chunkFilename: "css/[id].[contenthash].css",
+      filename: "css/[name].css",
+      chunkFilename: "css/[id].css",
     }),
   ],
   module: {

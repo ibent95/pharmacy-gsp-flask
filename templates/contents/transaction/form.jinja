@@ -1,8 +1,10 @@
+{% import "contents/transaction/product-list.jinja" as productListMacros %}
 <script>
 	//let table = new DataTable('#table-list', {
 	//	// options
 	//});
 </script>
+<style>.is-hidden { display: none; }</style>
 <div class="pcoded-content">
 	<!-- [ breadcrumb ] start -->
 	<div class="page-header">
@@ -52,25 +54,45 @@
 					</div>
 
 					<!-- Form -->
-					<form class="row g-3" action="{{ url_for('transaction_manage') }}" method="{{ 'PUT' if (data.uuid) else 'POST' }}">
+					<form class="row g-3" action="{{ url_for('transaction_manage', uuid=data.transaction.uuid) if (data.transaction.uuid) else url_for('transaction_manage') }}" method="POST" enctype="multipart/form-data">
 
 						<div class="col-md-4">
-							<label for="trunsactionNumber" class="form-label">No. Transaksi</label>
-							<input type="text" class="form-control" id="trunsactionNumber">
+							<label for="trunsactionNumber" class="form-label">{{ data.form.nomor_transaksi.label }}</label>
+
+							{{ data.form.nomor_transaksi(class="form-control", id="trunsactionNumber", value=data.transaction.nomor_transaksi) }}
 						</div>
 
 						<div class="col-4">
-							<label for="transactionDate" class="form-label">Tanggal transaksi</label>
-							<input type="date" class="form-control" id="transactionDate">
+							<label for="transactionDate" class="form-label">{{ data.form.tanggal_transaksi.label }}</label>
+
+							{{ data.form.tanggal_transaksi(class="form-control", id="transactionDate", value=data.transaction.tanggal_transaksi) }}
 						</div>
 
 						<div class="col-md-4">
-							<label for="customerName" class="form-label">Nama Pasien</label>
-							<input type="text" class="form-control" id="customerName">
+							<label for="customerName" class="form-label">{{ data.form.nama_pelanggan.label }}</label>
+
+							{{ data.form.nama_pelanggan(class="form-control", id="customerName", value=data.transaction.nama_pelanggan) }}
 						</div>
 
-						<div class="col-md-4">
-							<label for="productSelect" class="form-label">Produk obat</label>
+						<div class="col-md-12">
+							<label for="productList" class="form-label">{{ data.form.daftar_produk.label }}</label>
+
+							<div class="row">
+								<div class="col-md-10" id="productList">
+									{% for produk in data.form.daftar_produk %}
+										{{ productListMacros.render_product_list_item(produk, loop.index0) }}
+									{% endfor %}
+								</div>
+
+								<div class="col-md" id="productList">
+									<button type="button" class="btn btn-primary" onclick="addForm();">Tambah</button>
+								</div>
+							</div>
+						</div>
+
+						{#<div class="col-md-4">
+
+							<label for="productSelect" class="form-label">{{ 'Produk' }}</label>
 							<select id="productSelect" class="form-select" onchange="onProductSelectChange(event);">
 								<option>-- Pilih produk obat --</option>
 								{% for item in data.drugs %}
@@ -102,7 +124,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div>#}
 
 						<div class="col-12 d-flex justify-content-center mb-3">
 							<button type="button" class="btn btn-secondary">Batal</button>
@@ -110,6 +132,7 @@
 						</div>
 					</form>
 
+					{{ productListMacros.render_product_list_item(_transactionProductListFormTemplate, '_') }}
 				</div>
 			</div>
 		</div>
@@ -118,43 +141,139 @@
 	<!-- [ Main Content ] end -->
 </div>
 
-<script>
-	let product = {};
-	let productQuantity = 1;
-	let cart = [];
+<script type="text/javascript">
+	const ID_RE = /(-)_(-)/;
+	// const ID_RE = /(-)_/;
 
-	let cartItemContainer = document.getElementById("cart-item");
-
-	function onProductSelectChange(event) {
-		product = {
-			id: event.target.value,
-			value: event.target.value,
-			text: event.target.options[event.target.options.selectedIndex].text
-		};
-
-		console.log(product);
+	/**
+	* Replace the template index of an element (-_-) with the
+	* given index.
+	*/
+	function replaceTemplateIndex(value, index) {
+		// value.replace(ID_RE, '$1' + index)
+		return value.replace(ID_RE, '$1' + index + '$2');
 	}
 
-	function addProductItemToCart(event) {
+	/**
+	* Adjust the indices of form fields when removing items.
+	*/
+	function adjustIndices(removedIndex) {
+		let forms = document.getElementsByClassName('productItem');
 
-		if (product && (productQuantity !== 0)) {
-			let itemNode = document.createElement('tr');
-			itemNode.setAttribute("id", product.id);
-			itemNode.innerHTML = `<td>[${product.id}] ${product.text}</td><td>${productQuantity}</td>`;
+		if (forms) Array.from(forms).forEach((childElement) => {
+			// let form = $(this);
+			let form = childElement;
+			let index = parseInt(form.dataset.index);
+			let newIndex = index - 1;
 
-			if (cart.length > 0) {
-				cartItemContainer?.appendChild(itemNode);
-			} else {
-				cartItemContainer.innerHTML = "<tr>" + itemNode.innerHTML + "</tr>"
+			if (index < removedIndex) {
+				// Skip
+				return true;
 			}
 
-			cart.push(product);
-		} else {
-			console.log('Error.');
+			// This will replace the original index with the new one
+			// only if it is found in the format -num-, preventing
+			// accidental replacing of fields that may have numbers
+			// intheir names.
+			// let regex = new RegExp('(-)'+index+'(-)');
+			// let repVal = '$1'+newIndex+'$2';
+			let regex = new RegExp('(-)' + index + '(-)');
+			let repVal = '$1' + newIndex + '$2';
+
+			// Change ID in form itself
+			form.setAttribute('id', form.getAttribute('id').replace(index, newIndex));
+			form.dataset.index = newIndex;
+
+			// Change IDs in form fields
+			Array.from(form.getElementsByTagName('label, input, select, textarea')).forEach((childElement) => {
+				// let item = $(this);
+				let item = document.querySelectorAll(childElement);
+
+				if (item.tagName == 'label') {
+					// Update labels
+					item.setAttribute('for', item.getAttribute('for').replace(regex, repVal));
+					return;
+				}
+
+				// Update other fields
+				item.setAttribute('id', item.getAttribute('id').replace(regex, repVal));
+				item.setAttribute('name', item.getAttribute('name').replace(regex, repVal));
+			});
+		});
+	}
+
+	/**
+	* Remove a form.
+	*/
+	function removeForm(productItemIndex) {
+		// let removedForm = $(this).closest('.subform');
+		let removedForm = document.getElementById('daftar_produk-' + productItemIndex + '-list');
+		let removedIndex = parseInt(removedForm.dataset.index);
+
+		removedForm.remove();
+
+		// Update indices
+		adjustIndices(removedIndex);
+	}
+
+	/**
+	* Add a new form.
+	*/
+	function addForm() {
+		let templateForm = document.getElementById('daftar_produk-_-list');
+
+		if (templateForm && templateForm.length == 0) {
+			console.log('[ERROR] Cannot find template');
+			return;
 		}
 
-		product = null;
-		productQuantity = 1;
+		// Get Last index
+		let lastForm = document.querySelectorAll('.productItem')[document.querySelectorAll('.productItem').length - 1];
 
+		let newIndex = 0;
+
+		if (lastForm) {
+			newIndex = parseInt(lastForm.dataset.index) + 1;
+		}
+
+		// Maximum of 100 subforms
+		if (newIndex >= 100) {
+			console.log('[WARNING] Reached maximum number of elements');
+			return;
+		}
+
+		// Add elements
+		let newForm = templateForm.cloneNode(true);
+
+		newForm.setAttribute('id', replaceTemplateIndex(newForm.getAttribute('id'), newIndex));
+		newForm.dataset.index = (newIndex);
+
+		Array.from(newForm.querySelectorAll('label, input, select, textarea')).forEach((childInNewItem) => {
+			// let item = $(this);
+			let item = childInNewItem;
+
+			if (item.tagName == 'label') {
+				// Update labels
+				item.setAttribute('for', replaceTemplateIndex(item.getAttribute('for'), newIndex));
+				return;
+			}
+
+			// Update other fields
+			if (item.getAttribute('id')) item.setAttribute('id', replaceTemplateIndex(item.getAttribute('id'), newIndex));
+			if (item.getAttribute('name')) item.setAttribute('name', replaceTemplateIndex(item.getAttribute('name'), newIndex));
+		});
+
+		// Reassign onclick event on remove button
+		newForm.querySelector('#productItemRemove').setAttribute('onclick', 'removeForm(' + newIndex + ')');
+
+		// Append
+		document.getElementById('productList').append(newForm);
+		newForm.className += " productItem"
+		newForm.className = newForm.className.replace(' is-hidden', '')
 	}
+
+	window.document.addEventListener("DOMContentLoaded", function () {
+		//document.getElementById('productItemAdd')?.click(addForm);
+		//document.getElementById('productItemRemove')?.click(removeForm);
+	});
 </script>

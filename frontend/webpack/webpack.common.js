@@ -11,10 +11,8 @@ const outputPath = "../../static";
 module.exports = {
   entry: {
     app: [
-      "./" + srcPath + "/css/app.css",
-      "./" + srcPath + "/scss/app.scss",
-      "./" + srcPath + "/js/app.js",
       "./" + srcPath + "/ts/app.ts",
+      "./" + srcPath + "/js/app.js",
     ]
   },
   output: {
@@ -31,30 +29,6 @@ module.exports = {
       // removed name and chunks from here
       chunks: 'all',
       name: 'vendor',
-      //cacheGroups: {
-      //  vendor: {
-      //    // moved name and chunks here
-      //    chunks: 'all',
-      //    name: 'vendor',
-      //    // you can pass a RegExp to test, but also a function
-      //    test(module/* , chunk */) {
-      //      if (module.context) {
-      //        // node_modules are needed
-      //        const isNodeModule = module.context.includes('node_modules');
-      //        // but only specific node_modules
-      //        const nodesToBundle = [
-      //          'vue',
-      //          'lodash',
-      //          'axios',
-      //        ].some(str => module.context.includes(str));
-      //        if (isNodeModule && nodesToBundle) {
-      //          return true;
-      //        }
-      //      }
-      //      return false;
-      //    },
-      //  }
-      //},
     },
   },
   plugins: [

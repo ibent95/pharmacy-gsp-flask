@@ -67,115 +67,41 @@
 										</tr>
 									</thead>
 									<tbody>
+										{{ data }}
+										{% for transaction in data.transactions %}
+											<!-- Start list -->
+											<tr class="table-primary">
+												<td>{{ loop.index }}</td>
+												<td>{{ '[' + (transaction.nomor_transaksi) + ' - ' + transaction.nama_pelanggan + '] pada tanggal ' + transaction.tanggal_transaksi }}</td>
+												<td class="text-right">
+													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('transaction_form', uuid=transaction.uuid) }}`;">Ubah</button>
+
+													<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('transaction_form') }}`;">Hapus</button>
+												</td>
+											</tr>
+
+											{% for item in transaction.transaksi_item %}
+												<tr>
+													<td></td>
+													<td>{{ item.kode_produk }}</td>
+													<td>{{ item.jumlah }}</td>
+												</tr>
+											{% endfor %}
+
+											<!-- End list -->
+										{% else %}
+											<tr>
+												<td colspan="3">
+													<div class="text-center">Belum ada data.</div>
+												</td>
+											</tr>
+										{% endfor %}
+
 										<!-- Start list -->
 										<tr class="table-primary">
 											<td>1</td>
 											<td colspan="2">[TRN-001 - Siti] pada tanggal 01/01/2019</td>
 										</tr>
-
-										<tr>
-											<td></td>
-											<td>Etabion</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Inj della</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Amoxcillin</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Ambroxol</td>
-											<td>1</td>
-										</tr>
-										<!-- End list -->
-
-										<!-- Start list -->
-										<tr class="table-primary">
-											<td>2</td>
-											<td colspan="2">[TRN-002 - Saparidah] pada tanggal 02/01/2019</td>
-										</tr>
-
-										<tr>
-											<td></td>
-											<td>Inj della</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>PCM</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Amoxcillin</td>
-											<td>1</td>
-										</tr>
-										<!-- End list -->
-
-										<!-- Start list -->
-										<tr class="table-primary">
-											<td>3</td>
-											<td colspan="2">[TRN-003 - Putri Ramadhani] pada tanggal 03/01/2019</td>
-										</tr>
-
-										<tr>
-											<td></td>
-											<td>Hiperdemia</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Ceftrizin</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Ambroxol</td>
-											<td>1</td>
-										</tr>
-										<!-- End list -->
-
-										<!-- Start list -->
-										<tr class="table-primary">
-											<td>4</td>
-											<td colspan="2">[TRN-004 - Siti] pada tanggal 04/01/2019</td>
-										</tr>
-
-										<tr>
-											<td></td>
-											<td>Amoxcillin</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Ambroxol</td>
-											<td>1</td>
-										</tr>
-										<!-- End list -->
-
-										<!-- Start list -->
-										<tr class="table-primary">
-											<td>5</td>
-											<td colspan="2">[TRN-005 - Fauziah Rafifah] pada tanggal 05/01/2019</td>
-										</tr>
-
-										<tr>
-											<td></td>
-											<td>Cotrimoxazole</td>
-											<td>1</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td>Lacbon</td>
-											<td>1</td>
-										</tr>
-										<!-- End list -->
 
 									</tbody>
 								</table>

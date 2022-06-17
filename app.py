@@ -27,14 +27,11 @@ from configs.database import db
 # Load router configurations and importer of controlers
 import configs.route
 
-from models.drug import DrugModel
-from models.transaction import TransactionModel
-from models.user import UserModel
-
 
 # Database intialization when first run
 @app.before_first_request
 def create_table():
+    import models
     db.create_all()
 
 
@@ -62,6 +59,7 @@ def webpack_init():
 @app.cli.command("database_init")
 def database_init():
     from flask_sqlalchemy import SQLAlchemy
+    import models
     from configs.database import db
     db.create_all()
 

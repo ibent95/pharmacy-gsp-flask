@@ -1,0 +1,25 @@
+{%- macro render_product_list_item(produk, index) %}
+	<div id="daftar_produk-{{ index }}-list" class="row {% if index != '_' %} productItem {% else %} is-hidden {% endif %}" data-index="{{ index }}">
+		{{ produk.uuid(id="producItemUuid",) }}
+
+		<div class="col-md-4">
+			<label for="productItemCode" class="form-label">{{ produk.kode_produk.label }}</label>
+
+			{{ produk.kode_produk(class="form-control") }}
+		</div>
+
+		<div class="col-md-3">
+			<label for="productItemQuantity" class="form-label">{{ produk.jumlah.label }}</label>
+
+			<div class="row">
+				<div class="col-md-10">
+					{{ produk.jumlah(class="form-control", value=1) }}
+				</div>
+
+				<div class="col-md-2">
+					<button type="button" class="btn btn-danger" id="productItemRemove" onclick="removeForm({{ index }});">Hapus</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{%- endmacro %}

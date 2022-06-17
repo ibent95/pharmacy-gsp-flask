@@ -131,7 +131,6 @@
       "assets": {
         "js": [
           "js/manifest.js",
-          "js/vendor.js",
           "js/app.js"
         ],
         "css": [
@@ -144,6 +143,5 @@
   "images/.gitkeep": "images/.gitkeep",
   "images/sample.jpg": "images/sample.jpg",
   "images/webpack.png": "images/webpack.png",
-  "manifest.js": "js/manifest.js",
-  "vendor.js": "js/vendor.js"
+  "manifest.js": "js/manifest.js"
 }
