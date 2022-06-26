@@ -1,4 +1,5 @@
-{%- macro render_product_list_item(produk, index) %}
+{%- macro render_product_list_item(produk, index, productLength) %}
+
 	<div id="daftar_produk-{{ index }}-list" class="row {% if index != '_' %} productItem {% else %} is-hidden {% endif %}" data-index="{{ index }}">
 		{{ produk.uuid(id="producItemUuid",) }}
 
@@ -16,9 +17,11 @@
 					{{ produk.jumlah(class="form-control", value=1) }}
 				</div>
 
-				<div class="col-md-2">
-					<button type="button" class="btn btn-danger" id="productItemRemove" onclick="removeForm({{ index }});">Hapus</button>
-				</div>
+				{% if ((index != 0) and (((productLength | int) > 1) or (index == '_'))) %}
+					<div class="col-md-2">
+						<button type="button" class="btn btn-danger" id="productItemRemove" onclick="removeForm({{ index }});">Hapus</button>
+					</div>
+				{% endif %}
 			</div>
 		</div>
 	</div>

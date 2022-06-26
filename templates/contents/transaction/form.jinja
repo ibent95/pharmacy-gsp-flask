@@ -80,7 +80,7 @@
 							<div class="row">
 								<div class="col-md-10" id="productList">
 									{% for produk in data.form.daftar_produk %}
-										{{ productListMacros.render_product_list_item(produk, loop.index0) }}
+										{{ productListMacros.render_product_list_item(produk, loop.index0, data.form.daftar_produk | length) }}
 									{% endfor %}
 								</div>
 
@@ -132,7 +132,7 @@
 						</div>
 					</form>
 
-					{{ productListMacros.render_product_list_item(_transactionProductListFormTemplate, '_') }}
+					{{ productListMacros.render_product_list_item(_transactionProductListFormTemplate, '_', 1) }}
 				</div>
 			</div>
 		</div>
@@ -160,16 +160,16 @@
 	function adjustIndices(removedIndex) {
 		let forms = document.getElementsByClassName('productItem');
 
-		if (forms) Array.from(forms).forEach((childElement) => {
+		if (forms) Array.from(forms).forEach((item, itemIndex) => {
 			// let form = $(this);
-			let form = childElement;
+			let form = item;
 			let index = parseInt(form.dataset.index);
-			let newIndex = index - 1;
+			let newIndex = itemIndex;
 
-			if (index < removedIndex) {
-				// Skip
-				return true;
-			}
+			//if (index < removedIndex) {
+			//	// Skip
+			//	return true;
+			//}
 
 			// This will replace the original index with the new one
 			// only if it is found in the format -num-, preventing
@@ -185,19 +185,27 @@
 			form.dataset.index = newIndex;
 
 			// Change IDs in form fields
-			Array.from(form.getElementsByTagName('label, input, select, textarea')).forEach((childElement) => {
+			Array.from(form.querySelectorAll('label, input, select, textarea, button')).forEach((childElement, childElementIndex) => {
 				// let item = $(this);
-				let item = document.querySelectorAll(childElement);
+				let item = childElement;
 
-				if (item.tagName == 'label') {
+				if (item.tagName == 'LABEL') {
 					// Update labels
 					item.setAttribute('for', item.getAttribute('for').replace(regex, repVal));
 					return;
 				}
 
+				if (item.tagName == 'BUTTON') {
+					if (item.getAttribute('id') == 'productItemRemove') {
+						item.setAttribute('onclick', 'removeForm(' + newIndex + ')');
+
+						if (itemIndex == 0) item.remove();
+					}
+				}
+
 				// Update other fields
-				item.setAttribute('id', item.getAttribute('id').replace(regex, repVal));
-				item.setAttribute('name', item.getAttribute('name').replace(regex, repVal));
+				if (item.getAttribute('id')) item.setAttribute('id', item.getAttribute('id').replace(regex, repVal));
+				if (item.getAttribute('name')) item.setAttribute('name', item.getAttribute('name').replace(regex, repVal));
 			});
 		});
 	}
@@ -252,7 +260,7 @@
 			// let item = $(this);
 			let item = childInNewItem;
 
-			if (item.tagName == 'label') {
+			if (item.tagName == 'LABEL') {
 				// Update labels
 				item.setAttribute('for', replaceTemplateIndex(item.getAttribute('for'), newIndex));
 				return;
