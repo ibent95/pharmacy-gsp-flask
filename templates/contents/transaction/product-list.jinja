@@ -1,20 +1,26 @@
-{%- macro render_product_list_item(produk, index, productLength) %}
+{%- macro render_product_list_item(produk, index, productLength, csrfToken) %}
 
-	<div id="daftar_produk-{{ index }}-list" class="row {% if index != '_' %} productItem {% else %} is-hidden {% endif %}" data-index="{{ index }}">
+	{% set classProperties = 'productItem' if (index != '_') else 'is-hidden' %}
+
+	<div id="daftar_produk-{{ index }}-list" class="col-md-12 row {{classProperties}}" data-index="{{ index }}">
+
+		{# product`s uuid #}
 		{{ produk.uuid(id="producItemUuid",) }}
 
+		{# product`s code #}
 		<div class="col-md-4">
 			<label for="productItemCode" class="form-label">{{ produk.kode_produk.label }}</label>
 
 			{{ produk.kode_produk(class="form-control") }}
 		</div>
 
+		{# product`s quantity #}
 		<div class="col-md-3">
-			<label for="productItemQuantity" class="form-label">{{ produk.jumlah.label }}</label>
+			<label for="productItemQuantity" class="form-label">{{ produk.jumlah_produk.label }}</label>
 
 			<div class="row">
 				<div class="col-md-10">
-					{{ produk.jumlah(class="form-control", value=1) }}
+					{{ produk.jumlah_produk(class="form-control", value=1) }}
 				</div>
 
 				{% if ((index != 0) and (((productLength | int) > 1) or (index == '_'))) %}

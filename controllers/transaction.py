@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask_sqlalchemy import SQLAlchemy
 from app import app, request, render_template, redirect, flash, url_for
@@ -7,6 +8,7 @@ from forms.transaction import TransactionForm
 from forms.transaction_product_list import TransactionProductListForm
 from models.drug import DrugModel
 from models.transaction import TransactionModel
+from models.transaction_items import TransactionItemsModel
 
 
 # Transaction
@@ -39,12 +41,19 @@ def transaction_form(uuid=None):
         "form": TransactionForm(),
         "transaction": None
     }
-    #data['form']['daftar_produk']['kode_produk']['coerce'] = int
-    data['form'].daftar_produk[0].kode_produk.choices = transactionProductListForm.kode_produk.choices = drugs
+
+    transactionProductListForm.kode_produk.choices = drugs
+
+    for produk in data['form'].daftar_produk:
+        #data['form']['daftar_produk']['kode_produk']['coerce'] = int
+        produk.kode_produk.choices = drugs
 
     if (uuid):
         data['transaction'] = TransactionModel.query.filter_by(uuid=uuid).first()
-        #data['transaction'].transaction
+        print(data['transaction']['transaksi_item'])
+
+
+        data['form'] = TransactionForm(data=data['transaction'])
 
     return render_template('index.jinja', data=data, os=os, _transactionProductListFormTemplate=transactionProductListForm)
 
@@ -54,46 +63,80 @@ def transaction_form(uuid=None):
 def transaction_manage(uuid=None):
     drugs = [(drug.kode_produk, drug.nama_produk) for drug in DrugModel.query.all()]
     form = TransactionForm()
-    form.daftar_produk[0].kode_produk.choices = drugs
 
-    print(request.form.getlist("daftar_produk"))
+    for produk in form.daftar_produk:
+        produk.kode_produk.choices = drugs
 
-    if (form.validate_on_submit()):
+    #print(['form.validate_on_submit()', form.validate_on_submit()])
 
-        if (uuid):
-            transaction = TransactionModel.query.filter_by(uuid=uuid).first()
+    if (form.validate_on_submit() == False):
 
-            transaction.nomor_transaksi = request.form['nomor_transaksi']
-            transaction.tanggal_transaksi = request.form['tanggal_transaksi']
-            transaction.nomor_transaksi = request.form['nomor_transaksi']
-
-            transaksi_item = []
-            for produk in form.daftar_produk:
-                transaksi_item = produk.kode_produk.data
-
-            transaction.transaksi_item = transaksi_item
-
-        else:
-            print(request.form.getlist("daftar_produk"))
-            transaction = TransactionModel(
-                request.form['nomor_transaksi'],
-                request.form['tanggal_transaksi'],
-                request.form['nomor_transaksi'],
-                request.form.getlist("daftar_produk")
-            )
-
-            db.session.add(transaction)
-
-        db.session.commit()
-
-    else:
-        flash("Masukan data tidak valid.")
+        for fieldName, errorMessages in form.errors.items():
+            #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
 
         if (uuid):
             return redirect(url_for('transaction_form', uuid=uuid))
 
         else:
             return redirect(url_for('transaction_form'))
+
+    else:
+
+        if (uuid):
+            transaction = TransactionModel.query.filter_by(uuid=uuid).first()
+
+            transaction.nomor_transaksi = request.form['nomor_transaksi']
+            transaction.tanggal_transaksi = request.form['tanggal_transaksi']
+            transaction.nama_pelanggan = request.form['nama_pelanggan']
+
+            #print(json.dumps(transaction.transaksi_item))
+            for index, produk in enumerate(form.daftar_produk):
+                drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
+
+                if (produk.uuid.data):
+                    print(index)
+                    transaction.transaksi_item[index]['id_produk'] = drug.id
+                    transaction.transaksi_item[index]['kode_produk'] = drug.kode_produk
+                    transaction.transaksi_item[index]['nama_produk'] = drug.nama_produk
+                    transaction.transaksi_item[index]['jumlah_produk'] = produk.jumlah_produk.data
+
+                else:
+                    transaction.transaksi_item.append(
+                        TransactionItemsModel(
+                            transaction.id,
+                            drug.id,
+                            drug.kode_produk,
+                            drug.nama_produk,
+                            produk.jumlah_produk.data
+                        )
+                    )
+
+        else:
+
+            transaction = TransactionModel(
+                request.form['nomor_transaksi'],
+                request.form['tanggal_transaksi'],
+                request.form['nama_pelanggan']
+            )
+
+            for produk in form.daftar_produk:
+                drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
+
+                transaction.transaksi_item.append(
+                    TransactionItemsModel(
+                        transaction.id,
+                        drug.id,
+                        drug.kode_produk,
+                        drug.nama_produk,
+                        produk.jumlah_produk.data
+                    )
+                )
+
+            db.session.add(transaction)
+
+        db.session.commit()
 
     return redirect(url_for('transaction'))
 

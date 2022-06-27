@@ -3,6 +3,7 @@ import platform
 import flask
 import logging
 import logging.config
+import locale
 
 from os import environ
 from flask import Flask, request, flash, url_for, render_template, redirect
@@ -10,6 +11,7 @@ from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
 
+locale.setlocale(locale.LC_ALL, '')
 
 # Load env and database configurations
 load_dotenv(".env")

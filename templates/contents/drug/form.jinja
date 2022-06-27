@@ -75,9 +75,14 @@
 							{{ data.form.kode_produk(class="form-control", id="product_code", value=data.drug.kode_produk) }}
 						</div>
 
-						<div class="col-10">
+						<div class="col-8">
 							<label for="product_name" class="form-label">Nama obat</label>
 							{{ data.form.nama_produk(class="form-control", id="product_name", value=data.drug.nama_produk) }}
+						</div>
+
+						<div class="col-2">
+							<label for="product_quantity" class="form-label">Jumlah</label>
+							{{ data.form.jumlah(class="form-control", id="product_quantity", value=data.drug.jumlah) }}
 						</div>
 
 						<div class="col-12 d-flex justify-content-center mb-3">

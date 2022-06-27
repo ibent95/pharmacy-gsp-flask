@@ -42,8 +42,13 @@ def user_form(uuid = None):
 def user_manage(uuid = None):
     form = UserForm()
 
-    if (form.validate_on_submit() and (request.form['nama_pengguna'] == None or request.form['role'] == None or request.form['username'] == None or request.form['password'] == None)):
+    if (form.validate_on_submit() == False):
         flash("Masukan data tidak valid.")
+
+        for fieldName, errorMessages in form.errors.items():
+            #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
 
         if (uuid):
             return redirect(url_for('user_form', uuid=uuid))
@@ -51,7 +56,7 @@ def user_manage(uuid = None):
         else:
             return redirect(url_for('user_form'))
 
-    elif (form.validate_on_submit() and (request.form['nama_pengguna'] and request.form['role'] and request.form['username'] and request.form['password'])):
+    else:
 
         if (uuid) :
             user = UserModel.query.filter_by(uuid=uuid).first()

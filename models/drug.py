@@ -11,8 +11,10 @@ class DrugModel(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
     kode_produk = db.Column(db.String(100), unique=True)
     nama_produk = db.Column(db.String(100))
+    jumlah = db.Column(db.Integer())
     uuid = db.Column(db.String(36), unique=True, default=uuid.uuid4)
 
-    def __init__(self, kode_produk, nama_produk):
+    def __init__(self, kode_produk, nama_produk, jumlah):
         self.kode_produk = kode_produk
         self.nama_produk = nama_produk
+        self.jumlah = jumlah

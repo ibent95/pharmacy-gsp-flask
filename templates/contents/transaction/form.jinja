@@ -36,6 +36,21 @@
 				<h5 class="card-header">{{ data.title }}</h5>
 				<div class="card-body">
 
+					{# Start flash messages #}
+					{% with messages = get_flashed_messages() %}
+						{% if messages %}
+							{% for message in messages %}
+
+								<div class="alert alert-danger alert-dismissible fade show" role="alert">
+									{{ message }}
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+								</div>
+
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+					{# End flash messages #}
+
 					<!-- Action buttons -->
 					<div class="row mb-4">
 						<div class="col-md d-flex flex-row">
@@ -55,6 +70,7 @@
 
 					<!-- Form -->
 					<form class="row g-3" action="{{ url_for('transaction_manage', uuid=data.transaction.uuid) if (data.transaction.uuid) else url_for('transaction_manage') }}" method="POST" enctype="multipart/form-data">
+						{{ data.form.csrf_token }}
 
 						<div class="col-md-4">
 							<label for="trunsactionNumber" class="form-label">{{ data.form.nomor_transaksi.label }}</label>
@@ -65,7 +81,7 @@
 						<div class="col-4">
 							<label for="transactionDate" class="form-label">{{ data.form.tanggal_transaksi.label }}</label>
 
-							{{ data.form.tanggal_transaksi(class="form-control", id="transactionDate", value=data.transaction.tanggal_transaksi) }}
+							{{ data.form.tanggal_transaksi(class="form-control DateTimeField", id="transactionDate", value=data.transaction.tanggal_transaksi) }}
 						</div>
 
 						<div class="col-md-4">
@@ -78,9 +94,9 @@
 							<label for="productList" class="form-label">{{ data.form.daftar_produk.label }}</label>
 
 							<div class="row">
-								<div class="col-md-10" id="productList">
+								<div class="col-md-10 row" id="productList">
 									{% for produk in data.form.daftar_produk %}
-										{{ productListMacros.render_product_list_item(produk, loop.index0, data.form.daftar_produk | length) }}
+										{{ productListMacros.render_product_list_item(produk, loop.index0, data.form.daftar_produk | length, data.form.csrf_token) }}
 									{% endfor %}
 								</div>
 
@@ -132,7 +148,7 @@
 						</div>
 					</form>
 
-					{{ productListMacros.render_product_list_item(_transactionProductListFormTemplate, '_', 1) }}
+					{{ productListMacros.render_product_list_item(_transactionProductListFormTemplate, '_', 1, data.form.csrf_token) }}
 				</div>
 			</div>
 		</div>

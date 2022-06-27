@@ -42,8 +42,13 @@ def drug_form(uuid = None):
 def drug_manage(uuid = None):
     form = DrugForm()
 
-    if (form.validate_on_submit() and (request.form['kode_produk'] == None or request.form['nama_produk'] == None)) :
+    if (form.validate_on_submit() == False) :
         flash("Masukan data tidak valid.")
+
+        for fieldName, errorMessages in form.errors.items():
+            #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
 
         if (uuid):
             return redirect(url_for('drug_form', uuid=uuid))
@@ -51,16 +56,17 @@ def drug_manage(uuid = None):
         else:
             return redirect(url_for('drug_form'))
 
-    elif (form.validate_on_submit() and (request.form['kode_produk'] and request.form['nama_produk'])):
+    else:
 
         if (uuid) :
             drug = DrugModel.query.filter_by(uuid=uuid).first()
 
             drug.kode_produk = request.form['kode_produk']
             drug.nama_produk = request.form['nama_produk']
+            drug.jumlah = request.form['jumlah']
 
         else:
-            drug = DrugModel(request.form['kode_produk'], request.form['nama_produk'])
+            drug = DrugModel(request.form['kode_produk'], request.form['nama_produk'], request.form['jumlah'])
 
             db.session.add(drug)
 

@@ -58,7 +58,7 @@
 					<div class="row mb-3">
 						<div class="col-md">
 							<div class="table-responsive">
-								<table class="table table-bordered m-b-0">
+								<table class="table table-bordered table-striped m-b-0">
 									<thead>
 										<tr>
 											<th style="width: 1%;">No</th>
@@ -67,12 +67,11 @@
 										</tr>
 									</thead>
 									<tbody>
-										{{ data }}
 										{% for transaction in data.transactions %}
 											<!-- Start list -->
 											<tr class="table-primary">
 												<td>{{ loop.index }}</td>
-												<td>{{ '[' + (transaction.nomor_transaksi) + ' - ' + transaction.nama_pelanggan + '] pada tanggal ' + transaction.tanggal_transaksi }}</td>
+												<td>{{ 'Transaksi [' + transaction.nomor_transaksi + ' - ' + transaction.nama_pelanggan + '] pada ' + transaction.tanggal_transaksi.strftime('%A, %d %B %Y') }}</td>
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('transaction_form', uuid=transaction.uuid) }}`;">Ubah</button>
 
@@ -82,9 +81,9 @@
 
 											{% for item in transaction.transaksi_item %}
 												<tr>
-													<td></td>
+													<td>{{ item }}</td>
 													<td>{{ item.kode_produk }}</td>
-													<td>{{ item.jumlah }}</td>
+													<td>{{ item.jumlah_produk }}</td>
 												</tr>
 											{% endfor %}
 
@@ -96,12 +95,6 @@
 												</td>
 											</tr>
 										{% endfor %}
-
-										<!-- Start list -->
-										<tr class="table-primary">
-											<td>1</td>
-											<td colspan="2">[TRN-001 - Siti] pada tanggal 01/01/2019</td>
-										</tr>
 
 									</tbody>
 								</table>

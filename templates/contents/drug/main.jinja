@@ -55,7 +55,7 @@
 							<div class="table-responsive">
 								<table class="table table-striped table-condensed table-hover" id="table-list">
 									<thead>
-										<tr> <th>No.</th> <th>Kode</th> <th>Nama obat</th> <th class="text-right">Aksi</th> </tr>
+										<tr> <th>No.</th> <th>Kode</th> <th>Nama obat</th> <th>Jumlah</th> <th class="text-right">Aksi</th> </tr>
 									</thead>
 									<tbody>
 
@@ -65,6 +65,7 @@
 												<td>{{ loop.index }}</td>
 												<td>{{ drug.kode_produk }}</td>
 												<td>{{ drug.nama_produk }}</td>
+												<td>{{ drug.jumlah }}</td>
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('drug_form', uuid=drug.uuid) }}`;">Ubah</button>
 
@@ -74,7 +75,7 @@
 											<!-- End list -->
 										{% else %}
 											<tr>
-												<td colspan="4">
+												<td colspan="5">
 													<div class="text-center">Belum ada data.</div>
 												</td>
 											</tr>

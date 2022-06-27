@@ -16,8 +16,8 @@ class TransactionModel(db.Model):
     transaksi_item = db.relationship('TransactionItemsModel', backref='transaksi')
     uuid = db.Column(db.String(36), unique=True, default=uuid.uuid4)
 
-    def __init__(self, nomor_transaksi, tanggal_transaksi, nama_pelanggan, transaksi_item):
+    def __init__(self, nomor_transaksi, tanggal_transaksi, nama_pelanggan):
         self.nomor_transaksi = nomor_transaksi
         self.tanggal_transaksi = tanggal_transaksi
         self.nama_pelanggan = nama_pelanggan
-        self.transaksi_item = transaksi_item
+        #self.transaksi_item = transaksi_item
