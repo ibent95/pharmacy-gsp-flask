@@ -34,15 +34,28 @@
 		<div class="navbar-content">
 			<ul class="pc-navbar">
 
+				<!-- Navigation -->
 				<li class="pc-item pc-caption">
 					<label>Navigasi</label>
 				</li>
+
+				<!-- Navigation : home -->
 				<li class="pc-item">
 					<a href="{{ url_for('index') }}" class="pc-link ">
 						<span class="pc-micon">
 							<i class="material-icons-two-tone">home</i>
 						</span>
-						<spanclass="pc-mtext">Ikhtisar</span>
+						<span class="pc-mtext">Ikhtisar</span>
+					</a>
+				</li>
+
+				<!-- Navigation : drug -->
+				<li class="pc-item">
+					<a href="{{ url_for('index') }}" class="pc-link ">
+						<span class="pc-micon">
+							<i class="material-icons-two-tone">calculate</i>
+						</span>
+						<span class="pc-mtext">Perhitungan (GSP)</span>
 					</a>
 				</li>
 
@@ -56,7 +69,7 @@
 				<li class="pc-item">
 					<a href="{{ url_for('drug') }}" class="pc-link ">
 						<span class="pc-micon">
-							<i class="material-icons-two-tone">history_edu</i>
+							<i class="material-icons-two-tone">class</i>
 						</span>
 						<span class="pc-mtext">Obat</span>
 					</a>
@@ -76,7 +89,7 @@
 				<li class="pc-item">
 					<a href="{{ url_for('user') }}" class="pc-link ">
 						<span class="pc-micon">
-							<i class="material-icons-two-tone">history_edu</i>
+							<i class="material-icons-two-tone">people</i>
 						</span>
 						<span class="pc-mtext">Pengguna</span>
 					</a>

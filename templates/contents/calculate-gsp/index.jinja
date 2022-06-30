@@ -1,0 +1,229 @@
+<div class="pcoded-content">
+	<!-- [ breadcrumb ] start -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<div class="page-header-title">
+						<h5 class="m-b-10">{{ data.title }}</h5>
+					</div>
+					<ul class="breadcrumb">
+						<!--<li class="breadcrumb-item"><a href="index.html">Beranda</a></li>-->
+						<li class="breadcrumb-item">{{ data.title }}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- [ breadcrumb ] end -->
+
+	<!-- [ Main Content ] start -->
+	<div class="row">
+
+		<div class="col-xl-12 col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5>Data uji</h5>
+				</div>
+				<div class="pro-scroll" style="height: auto;">
+					<div class="card-body">
+
+						<!-- Main table filter -->
+						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('generalized_sequential_pattern_calculation_result') }}">
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="date" name="tanggal_awal" placeholder="Tanggal awal" id="floatingStartDate">
+									<label for="floatingStartDate">Tanggal awal</label>
+								</div>
+							</div>
+
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="date" name="tanggal_akhir" placeholder="Tanggal akhir" id="floatingEndDate">
+									<label for="floatingEndDate">Tanggal akhir</label>
+								</div>
+							</div>
+
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">
+									<label for="floatingMinSupportNumber">Min. Suport</label>
+								</div>
+							</div>
+
+							<div class="col-auto col-md-auto col-sm-auto col-xs-auto text-right">
+								<button type="submit" class="btn btn-primary" style="padding-top: 16px; padding-bottom: 16px;">Hitung GSP</button>
+							</div>
+						</form>
+
+						<!-- Main table -->
+						{#<div class="table-responsive">
+							<table class="table table-bordered m-b-0">
+								<thead>
+									<tr>
+										<th style="width: 1%;">No</th>
+										<th>Transaksi</th>
+										<th>Jumlah produk</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>1</td>
+										<td colspan="2">[TRN-001 - Siti] pada tanggal 01/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Etabion</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Inj della</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>2</td>
+										<td colspan="2">[TRN-002 - Saparidah] pada tanggal 02/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Inj della</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>PCM</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>3</td>
+										<td colspan="2">[TRN-003 - Putri Ramadhani] pada tanggal 03/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Hiperdemia</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ceftrizin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>4</td>
+										<td colspan="2">[TRN-004 - Siti] pada tanggal 04/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>5</td>
+										<td colspan="2">[TRN-005 - Fauziah Rafifah] pada tanggal 05/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Cotrimoxazole</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Lacbon</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+								</tbody>
+							</table>
+						</div>#}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- [ Main Content ] end -->
+</div>
+
+<div class="pcoded-content">
+	<!-- Button trigger modal -->
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bootstrapModal" data-bs-whatever="@mdo" id="bootstrapModalButton">
+		Launch demo modal
+	</button>
+
+	<div class="modal fade" id="bootstrapModal" tabindex="-1" aria-labelledby="bootstrapModalLabel" aria-hidden="true"
+		role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="bootstrapModalLabel">New message</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="recipient-name" class="col-form-label">Recipient:</label>
+							<input type="text" class="form-control" id="recipient-name">
+						</div>
+						<div class="mb-3">
+							<label for="message-text" class="col-form-label">Message:</label>
+							<textarea class="form-control" id="message-text"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Send message</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button type="button" class="btn btn-primary" id="sweetalertButton">
+		Launch demo SweetAlert2
+	</button>
+</div>

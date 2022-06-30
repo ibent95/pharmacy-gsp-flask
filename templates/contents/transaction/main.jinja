@@ -64,6 +64,7 @@
 											<th style="width: 1%;">No</th>
 											<th>Transaksi</th>
 											<th>Jumlah produk</th>
+											<th>Aksi</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -72,6 +73,7 @@
 											<tr class="table-primary">
 												<td>{{ loop.index }}</td>
 												<td>{{ 'Transaksi [' + transaction.nomor_transaksi + ' - ' + transaction.nama_pelanggan + '] pada ' + transaction.tanggal_transaksi.strftime('%A, %d %B %Y') }}</td>
+												<td></td>
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('transaction_form', uuid=transaction.uuid) }}`;">Ubah</button>
 
@@ -82,15 +84,15 @@
 											{% for item in transaction.transaksi_item %}
 												<tr>
 													<td>{{ item }}</td>
-													<td>{{ item.kode_produk }}</td>
-													<td>{{ item.jumlah_produk }}</td>
+													<td>{{ '[' + item.kode_produk + '] ' + item.nama_produk }}</td>
+													<td colspan="2">{{ item.jumlah_produk }}</td>
 												</tr>
 											{% endfor %}
 
 											<!-- End list -->
 										{% else %}
 											<tr>
-												<td colspan="3">
+												<td colspan="4">
 													<div class="text-center">Belum ada data.</div>
 												</td>
 											</tr>
