@@ -69,7 +69,7 @@
 					</div>
 
 					<!-- Form -->
-					<form class="row g-3" action="{{ url_for('transaction_manage', uuid=data.transaction.uuid) if (data.transaction.uuid) else url_for('transaction_manage') }}" method="POST" enctype="multipart/form-data">
+					<form class="row g-3" action="{{ url_for('transaction_update', uuid=data.transaction.uuid) if (data.transaction.uuid) else url_for('transaction_create') }}" method="POST" enctype="multipart/form-data">
 						{{ data.form.csrf_token }}
 
 						<div class="col-md-4">
@@ -81,7 +81,7 @@
 						<div class="col-4">
 							<label for="transactionDate" class="form-label">{{ data.form.tanggal_transaksi.label }}</label>
 
-							{{ data.form.tanggal_transaksi(class="form-control DateTimeField", id="transactionDate", value=data.transaction.tanggal_transaksi) }}
+							{{ data.form.tanggal_transaksi(class="form-control DateTimeField", id="transactionDate") }}
 						</div>
 
 						<div class="col-md-4">

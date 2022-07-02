@@ -69,7 +69,7 @@
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('drug_form', uuid=drug.uuid) }}`;">Ubah</button>
 
-													<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('drug_form') }}`;">Hapus</button>
+													<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('drug_delete', uuid=drug.uuid) }}`;">Hapus</button>
 												</td>
 											</tr>
 											<!-- End list -->

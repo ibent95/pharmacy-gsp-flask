@@ -1,9 +1,11 @@
+from collections import namedtuple
+from datetime import datetime
 import os
-import json
 
 from flask_sqlalchemy import SQLAlchemy
 from app import app, request, render_template, redirect, flash, url_for
 from configs.database import db
+from pprint import pprint
 from forms.transaction import TransactionForm
 from forms.transaction_product_list import TransactionProductListForm
 from models.drug import DrugModel
@@ -27,7 +29,6 @@ def transaction():
 
     return render_template('index.jinja', data=data, os=os)
 
-
 @app.route("/transaction/create", methods=['GET'])
 @app.route("/transaction/update/<uuid>", methods=['GET'])
 def transaction_form(uuid=None):
@@ -44,35 +45,90 @@ def transaction_form(uuid=None):
 
     transactionProductListForm.kode_produk.choices = drugs
 
-    for produk in data['form'].daftar_produk:
-        #data['form']['daftar_produk']['kode_produk']['coerce'] = int
-        produk.kode_produk.choices = drugs
-
     if (uuid):
         data['transaction'] = TransactionModel.query.filter_by(uuid=uuid).first()
-        print(data['transaction']['transaksi_item'])
 
+        transactionItemsFormDataGroup = namedtuple('transaksi_item', ['kode_produk', 'jumlah_produk', 'uuid'])
+        transactionFormData = {
+            'tanggal_transaksi': data['transaction'].tanggal_transaksi,
+            'daftar_produk': []
+        }
 
-        data['form'] = TransactionForm(data=data['transaction'])
+        for index, produk in enumerate(data['transaction'].transaksi_item):
+            print(produk.kode_produk)
+            transactionFormData['daftar_produk'].append(
+                transactionItemsFormDataGroup(produk.kode_produk, produk.jumlah_produk, produk.uuid)
+            )
+
+        data['form'] = TransactionForm(data=transactionFormData)
+
+    for produk in data['form'].daftar_produk:
+        produk.kode_produk.choices = drugs
 
     return render_template('index.jinja', data=data, os=os, _transactionProductListFormTemplate=transactionProductListForm)
 
-
 @app.route("/transaction/manage", methods=['GET', 'POST'])
-@app.route("/transaction/manage/<uuid>", methods=['GET', 'POST'])
-def transaction_manage(uuid=None):
+def transaction_create(uuid=None):
+
     drugs = [(drug.kode_produk, drug.nama_produk) for drug in DrugModel.query.all()]
     form = TransactionForm()
 
     for produk in form.daftar_produk:
         produk.kode_produk.choices = drugs
 
-    #print(['form.validate_on_submit()', form.validate_on_submit()])
-
     if (form.validate_on_submit() == False):
 
         for fieldName, errorMessages in form.errors.items():
             #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
+
+        if (uuid):
+            return redirect(url_for('transaction_form', uuid=uuid))
+
+        else:
+            return redirect(url_for('transaction_form'))
+
+    else:
+
+        transaction = TransactionModel(
+            request.form['nomor_transaksi'],
+            request.form['tanggal_transaksi'],
+            request.form['nama_pelanggan']
+        )
+
+        for produk in form.daftar_produk:
+            drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
+
+            transaction.transaksi_item.append(
+                TransactionItemsModel(
+                    transaction.id,
+                    drug.id,
+                    drug.kode_produk,
+                    drug.nama_produk,
+                    produk.jumlah_produk.data
+                )
+            )
+
+        db.session.add(transaction)
+
+        db.session.commit()
+
+    return redirect(url_for('transaction'))
+
+@app.route("/transaction/manage/<uuid>", methods=['GET', 'POST'])
+def transaction_update(uuid=None):
+
+    drugs = [(drug.kode_produk, drug.nama_produk) for drug in DrugModel.query.all()]
+    form = TransactionForm()
+
+    for produk in form.daftar_produk:
+        produk.kode_produk.choices = drugs
+
+    if (form.validate_on_submit() == False):
+
+        for fieldName, errorMessages in form.errors.items():
+
             for err in errorMessages:
                 flash(err)
 
@@ -91,12 +147,12 @@ def transaction_manage(uuid=None):
             transaction.tanggal_transaksi = request.form['tanggal_transaksi']
             transaction.nama_pelanggan = request.form['nama_pelanggan']
 
-            #print(json.dumps(transaction.transaksi_item))
+            print(transaction.transaksi_item)
+
             for index, produk in enumerate(form.daftar_produk):
                 drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
-
                 if (produk.uuid.data):
-                    print(index)
+
                     transaction.transaksi_item[index]['id_produk'] = drug.id
                     transaction.transaksi_item[index]['kode_produk'] = drug.kode_produk
                     transaction.transaksi_item[index]['nama_produk'] = drug.nama_produk
@@ -113,31 +169,29 @@ def transaction_manage(uuid=None):
                         )
                     )
 
+            db.session.commit()
+
         else:
 
-            transaction = TransactionModel(
-                request.form['nomor_transaksi'],
-                request.form['tanggal_transaksi'],
-                request.form['nama_pelanggan']
-            )
+            flash('There is no id.')
+            return redirect(url_for('drug'))
 
-            for produk in form.daftar_produk:
-                drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
-
-                transaction.transaksi_item.append(
-                    TransactionItemsModel(
-                        transaction.id,
-                        drug.id,
-                        drug.kode_produk,
-                        drug.nama_produk,
-                        produk.jumlah_produk.data
-                    )
-                )
-
-            db.session.add(transaction)
-
-        db.session.commit()
 
     return redirect(url_for('transaction'))
 
-    #render_template('index.jinja', data=data, os=os)
+@app.route("/transaction/manage/<uuid>/delete", methods=['GET', 'POST'])
+def transaction_delete(uuid=None):
+
+    if (uuid):
+
+        drug = DrugModel.query.filter_by(uuid=uuid).first()
+
+        db.session.delete(drug)
+
+        db.session.commit()
+
+    else:
+
+        flash('There is no id.')
+
+    return redirect(url_for('transaction'))

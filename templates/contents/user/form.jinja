@@ -68,7 +68,7 @@
 					</div>
 
 					<!-- Form -->
-					<form class="row g-3" action="{{ url_for('user_manage', uuid=data.user.uuid) if (data.user.uuid) else url_for('user_manage') }}" method="POST" enctype="multipart/form-data">
+					<form class="row g-3" action="{{ url_for('user_update', uuid=data.user.uuid) if (data.user.uuid) else url_for('user_create') }}" method="POST" enctype="multipart/form-data">
 						{{ data.form.csrf_token }}
 						<div class="col-10">
 							<label for="product_name" class="form-label">{{ data.form.nama_pengguna.label }}</label>

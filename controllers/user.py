@@ -38,8 +38,35 @@ def user_form(uuid = None):
     return render_template('index.jinja', data=data, os=os)
 
 @app.route("/user/manage", methods=['GET', 'POST'])
+def user_create(uuid = None):
+    form = UserForm()
+
+    if (form.validate_on_submit() == False):
+        flash("Masukan data tidak valid.")
+
+        for fieldName, errorMessages in form.errors.items():
+            #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
+
+        if (uuid):
+            return redirect(url_for('user_form', uuid=uuid))
+
+        else:
+            return redirect(url_for('user_form'))
+
+    else:
+
+        user = UserModel(request.form['nama_pengguna'], request.form['role'], request.form['username'], request.form['password'])
+
+        db.session.add(user)
+
+        db.session.commit()
+
+    return redirect(url_for('user'))
+
 @app.route("/user/manage/<uuid>", methods=['GET', 'POST'])
-def user_manage(uuid = None):
+def user_update(uuid = None):
     form = UserForm()
 
     if (form.validate_on_submit() == False):
@@ -66,13 +93,24 @@ def user_manage(uuid = None):
             user.username = request.form['username']
             user.password = request.form['password']
 
-        else:
-            user = UserModel(request.form['nama_pengguna'], request.form['role'], request.form['username'], request.form['password'])
-
-            db.session.add(user)
-
         db.session.commit()
 
     return redirect(url_for('user'))
 
-    #render_template('index.jinja', data=data, os=os)
+@app.route("/user/manage/<uuid>/delete", methods=['GET', 'POST'])
+def user_delete(uuid = None):
+
+    # Delete
+    if (uuid):
+
+        user = UserModel.query.filter_by(uuid=uuid).first()
+
+        db.session.delete(user)
+
+        db.session.commit()
+
+    else:
+
+        flash('There is no id.')
+
+    return redirect(url_for('user'))

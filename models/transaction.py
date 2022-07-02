@@ -1,10 +1,15 @@
 import uuid
 
+from itsdangerous import Serializer
+from sqlalchemy import inspect
+
 from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
+from sqlalchemy.ext.declarative import as_declarative
 from models.transaction_items import TransactionItemsModel
 
 
+#@as_declarative()
 class TransactionModel(db.Model):
 
     __tablename__ = 'transaksi'
@@ -21,3 +26,6 @@ class TransactionModel(db.Model):
         self.tanggal_transaksi = tanggal_transaksi
         self.nama_pelanggan = nama_pelanggan
         #self.transaksi_item = transaksi_item
+
+    #def __getitem__(self, field):
+    #    return self.__dict__[field]

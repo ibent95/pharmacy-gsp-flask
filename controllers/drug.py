@@ -36,13 +36,13 @@ def drug_form(uuid = None):
 
     return render_template('index.jinja', data=data, os=os)
 
-
 @app.route("/drug/manage", methods=['GET', 'POST'])
-@app.route("/drug/manage/<uuid>", methods=['GET', 'POST'])
-def drug_manage(uuid = None):
+def drug_create(uuid = None):
+
     form = DrugForm()
 
-    if (form.validate_on_submit() == False) :
+    # If form data is not valid
+    if (form.validate_on_submit() == False):
         flash("Masukan data tidak valid.")
 
         for fieldName, errorMessages in form.errors.items():
@@ -56,22 +56,72 @@ def drug_manage(uuid = None):
         else:
             return redirect(url_for('drug_form'))
 
+    # If form data is valid
     else:
 
-        if (uuid) :
+        drug = DrugModel(request.form['kode_produk'], request.form['nama_produk'], request.form['jumlah'])
+
+        db.session.add(drug)
+
+        db.session.commit()
+
+    return redirect(url_for('drug'))
+
+@app.route("/drug/manage/<uuid>", methods=['GET', 'POST'])
+def drug_update(uuid = None):
+
+    form = DrugForm()
+
+    # If form data is not valid
+    if (form.validate_on_submit() == False):
+        flash("Masukan data tidak valid.")
+
+        for fieldName, errorMessages in form.errors.items():
+            #flash(fieldName)
+            for err in errorMessages:
+                flash(err)
+
+        if (uuid):
+            return redirect(url_for('drug_form', uuid=uuid))
+
+        else:
+            return redirect(url_for('drug_form'))
+
+    # If form data is valid
+    else:
+
+        # Update (PUT)
+        if (uuid):
+
             drug = DrugModel.query.filter_by(uuid=uuid).first()
 
             drug.kode_produk = request.form['kode_produk']
             drug.nama_produk = request.form['nama_produk']
             drug.jumlah = request.form['jumlah']
 
+            db.session.commit()
+
         else:
-            drug = DrugModel(request.form['kode_produk'], request.form['nama_produk'], request.form['jumlah'])
+            flash('There is no id.')
+            return redirect(url_for('drug'))
 
-            db.session.add(drug)
-
-        db.session.commit()
 
     return redirect(url_for('drug'))
 
-    #render_template('index.jinja', data=data, os=os)
+@app.route("/drug/manage/<uuid>/delete", methods=['GET', 'POST'])
+def drug_delete(uuid = None):
+
+    # Delete
+    if (uuid):
+
+        drug = DrugModel.query.filter_by(uuid=uuid).first()
+
+        db.session.delete(drug)
+
+        db.session.commit()
+
+    else:
+
+        flash('There is no id.');
+
+    return redirect(url_for('drug'))
