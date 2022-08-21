@@ -1,0 +1,194 @@
+<div class="pcoded-content">
+	<!-- [ breadcrumb ] start -->
+	<div class="page-header">
+		<div class="page-block">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<div class="page-header-title">
+						<h5 class="m-b-10">{{ data.title }}</h5>
+					</div>
+					<ul class="breadcrumb">
+						<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ikhtisar</a></li>
+						{#<li class="breadcrumb-item">Ikhtisar</li>#}
+						<li class="breadcrumb-item">{{ data.title }}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- [ breadcrumb ] end -->
+
+	<!-- [ Main Content ] start -->
+	<div class="row">
+
+		<!-- Start transaction data (data sets) -->
+		<div class="col-xl-12 col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5>Data uji (Daftar transaksi)</h5>
+				</div>
+				<div class="pro-scroll" style="height: auto;">
+					<div class="card-body">
+
+						<!-- Main table filter -->
+						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('gsp_calculation_result') }}">
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="date" name="tanggal_awal" placeholder="Tanggal awal" id="floatingStartDate">
+									<label for="floatingStartDate">Tanggal awal</label>
+								</div>
+							</div>
+
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="date" name="tanggal_akhir" placeholder="Tanggal akhir" id="floatingEndDate">
+									<label for="floatingEndDate">Tanggal akhir</label>
+								</div>
+							</div>
+
+							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
+								<div class="form-floating">
+									<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">
+									<label for="floatingMinSupportNumber">Min. Suport</label>
+								</div>
+							</div>
+
+							<div class="col-auto col-md-auto col-sm-auto col-xs-auto text-right">
+								<button type="submit" class="btn btn-primary" style="padding-top: 16px; padding-bottom: 16px;">Hitung GSP</button>
+							</div>
+						</form>
+
+						<!-- Main table -->
+						{#<div class="table-responsive">
+							<table class="table table-bordered m-b-0">
+								<thead>
+									<tr>
+										<th style="width: 1%;">No</th>
+										<th>Transaksi</th>
+										<th>Jumlah produk</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>1</td>
+										<td colspan="2">[TRN-001 - Siti] pada tanggal 01/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Etabion</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Inj della</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>2</td>
+										<td colspan="2">[TRN-002 - Saparidah] pada tanggal 02/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Inj della</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>PCM</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>3</td>
+										<td colspan="2">[TRN-003 - Putri Ramadhani] pada tanggal 03/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Hiperdemia</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ceftrizin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>4</td>
+										<td colspan="2">[TRN-004 - Siti] pada tanggal 04/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Amoxcillin</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Ambroxol</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+									<!-- Start list -->
+									<tr class="table-primary">
+										<td>5</td>
+										<td colspan="2">[TRN-005 - Fauziah Rafifah] pada tanggal 05/01/2019</td>
+									</tr>
+
+									<tr>
+										<td></td>
+										<td>Cotrimoxazole</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Lacbon</td>
+										<td>1</td>
+									</tr>
+									<!-- End list -->
+
+								</tbody>
+							</table>
+						</div>#}
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End transaction data (data sets) -->
+
+	</div>
+	<!-- [ Main Content ] end -->
+</div>

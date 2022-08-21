@@ -23,163 +23,38 @@
 		<div class="col-xl-12 col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<h5>Data uji</h5>
+					<h5>Profil apotek rumah sakit Ivan Husada</h5>
 				</div>
 				<div class="pro-scroll" style="height: auto;">
 					<div class="card-body">
 
-						<!-- Main table filter -->
-						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('generalized_sequential_pattern_calculation_result') }}">
-							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
-								<div class="form-floating">
-									<input class="form-control" type="date" name="tanggal_awal" placeholder="Tanggal awal" id="floatingStartDate">
-									<label for="floatingStartDate">Tanggal awal</label>
-								</div>
-							</div>
+						<div id="company-description">
+							<p>
+								Apotek Rumah Sakit Ivan Husada merupakan sarana pelayanan kefarmasian di kota asahan yang tergabung dalam sarana kesehatan Rumah Sakit Ivan Husada. Didirikan oleh bapak Martuah Sinurat, Bse, S.K.M.M.Kes dengan motto “Amanah, Professional, dan Melayani dengan Telitih”. Apotek Rumah Sakit Ivan Husada beralamat di jl. Gatot Subroto No. 243 Kel. Sentang Kec. Kota Kisaran Timur Kab. Asahan.
+							</p>
+						</div>
 
-							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
-								<div class="form-floating">
-									<input class="form-control" type="date" name="tanggal_akhir" placeholder="Tanggal akhir" id="floatingEndDate">
-									<label for="floatingEndDate">Tanggal akhir</label>
-								</div>
-							</div>
+						<div id="company-vision">
+							<h3>Visi</h3>
 
-							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
-								<div class="form-floating">
-									<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">
-									<label for="floatingMinSupportNumber">Min. Suport</label>
-								</div>
-							</div>
+							<p>
+								“Meningkatkan Kualitas hidup masyarakat dan menjadi lembaga pelayanan kesehatan masyarakat yang terpercaya”
+							</p>
+						</div>
 
-							<div class="col-auto col-md-auto col-sm-auto col-xs-auto text-right">
-								<button type="submit" class="btn btn-primary" style="padding-top: 16px; padding-bottom: 16px;">Hitung GSP</button>
-							</div>
-						</form>
+						<div id="company-mission">
+							<h3>Misi</h3>
 
-						<!-- Main table -->
-						{#<div class="table-responsive">
-							<table class="table table-bordered m-b-0">
-								<thead>
-									<tr>
-										<th style="width: 1%;">No</th>
-										<th>Transaksi</th>
-										<th>Jumlah produk</th>
-									</tr>
-								</thead>
-								<tbody>
-									<!-- Start list -->
-									<tr class="table-primary">
-										<td>1</td>
-										<td colspan="2">[TRN-001 - Siti] pada tanggal 01/01/2019</td>
-									</tr>
+							<ol>
+								<li>Memelihara dan meningkatkan pelayanan kesehatan individu keluarga dan masyarakat beserta lingkungannya.</li>
+								<li>Menyediakan pelayanan kesehatan yang efektif dan efisien dengan mengutamakan prinsip kesehatan.</li>
+								<li>Meningatkan dan mengembangkan mutu pelayanan.</li>
+								<li>Peningkatan keilmuan (Knowledge, Skill, Attitude) dan memberikan kenyamanan kerja kepada para SDM dengan program yang terarah dan terintegrasi.</li>
+								<li>Peningkatan kesetaraan dan kerjasama professional dalam sistem pelayanan medis.</li>
+								<li>Menjadi mitra bisnis yang menunjang azas kepercayaan demi tercapainya hasil investasi yang optimal.</li>
+							</ol>
+						</div>
 
-									<tr>
-										<td></td>
-										<td>Etabion</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Inj della</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Amoxcillin</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Ambroxol</td>
-										<td>1</td>
-									</tr>
-									<!-- End list -->
-
-									<!-- Start list -->
-									<tr class="table-primary">
-										<td>2</td>
-										<td colspan="2">[TRN-002 - Saparidah] pada tanggal 02/01/2019</td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>Inj della</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>PCM</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Amoxcillin</td>
-										<td>1</td>
-									</tr>
-									<!-- End list -->
-
-									<!-- Start list -->
-									<tr class="table-primary">
-										<td>3</td>
-										<td colspan="2">[TRN-003 - Putri Ramadhani] pada tanggal 03/01/2019</td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>Hiperdemia</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Ceftrizin</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Ambroxol</td>
-										<td>1</td>
-									</tr>
-									<!-- End list -->
-
-									<!-- Start list -->
-									<tr class="table-primary">
-										<td>4</td>
-										<td colspan="2">[TRN-004 - Siti] pada tanggal 04/01/2019</td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>Amoxcillin</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Ambroxol</td>
-										<td>1</td>
-									</tr>
-									<!-- End list -->
-
-									<!-- Start list -->
-									<tr class="table-primary">
-										<td>5</td>
-										<td colspan="2">[TRN-005 - Fauziah Rafifah] pada tanggal 05/01/2019</td>
-									</tr>
-
-									<tr>
-										<td></td>
-										<td>Cotrimoxazole</td>
-										<td>1</td>
-									</tr>
-									<tr>
-										<td></td>
-										<td>Lacbon</td>
-										<td>1</td>
-									</tr>
-									<!-- End list -->
-
-								</tbody>
-							</table>
-						</div>#}
 					</div>
 				</div>
 			</div>
@@ -187,8 +62,38 @@
 
 	</div>
 	<!-- [ Main Content ] end -->
+
+	<!-- [ Gallery Content ] start -->
+	<div class="row">
+
+		<div class="col-xl-12 col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5>Galeri</h5>
+				</div>
+				<div class="pro-scroll" style="height: auto;">
+					<div class="card-body">
+
+						<div class="image-container">
+							<img class="image-content" style="width: 300px;" src="{{ url_for('static', filename='images/picture1.jpg') }}">
+
+							<img class="image-content" style="width: 300px;" src="{{ url_for('static', filename='images/picture2.jpg') }}">
+
+							<img class="image-content" style="width: 300px;" src="{{ url_for('static', filename='images/picture3.jpg') }}">
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- [ Gallery Content ] end -->
+
+
 </div>
 
+{#
 <div class="pcoded-content">
 	<!-- Button trigger modal -->
 	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bootstrapModal" data-bs-whatever="@mdo" id="bootstrapModalButton">
@@ -226,4 +131,4 @@
 	<button type="button" class="btn btn-primary" id="sweetalertButton">
 		Launch demo SweetAlert2
 	</button>
-</div>
+</div>#}
