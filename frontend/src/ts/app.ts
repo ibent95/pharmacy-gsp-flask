@@ -1,31 +1,40 @@
-// ES6 Modules or TypeScript
-import Swal from 'sweetalert2'
+export { }
+
+declare global {
+	interface Window {
+		onDeleteData: any; // (data: any, url?: string) => void
+		onDeleteDrug: any; // (data: any, url?: string) => void
+		onDeleteTransaction: any; // (data: any, url?: string) => void
+		onDeleteUser: any; // (data: any, url?: string) => void
+	}
+};
 
 window.document.addEventListener("DOMContentLoaded", function () {
 
-	window.console.log("typescript dom ready 2");
+	//var vex = require('vex-js')
+	//vex.registerPlugin(require('vex-dialog'))
+	//vex.defaultOptions.className = 'vex-theme-os'
 
-	// Dashboard page`s functions
-	// GSP page`s functions
+	//vex.dialog.alert('I was made by a plugin!');
+	window.onDeleteData = function(data: any, url: string): void {
+		if (window.confirm("Yakin ingin menghapus data ini?")) window.location.href = url;
+	}
 
-	// Drug page`s functions
-	// Transaction page`s functions
-	//function onDeleteTransaction(data: any, url: string): void {
-	//	console.log('onDeleteTransaction', data);
-	//}
+	/** Dashboard page`s functions */
+	/** GSP page`s functions */
+	/** Drug page`s functions */
+	window.onDeleteDrug = function(data: any, url: string): void {
+		if (window.confirm("Yakin ingin menghapus data obat " + data + "?")) window.location.href = url;
+	}
 
-	// User page`s functions
+	/** Transaction page`s functions */
+	window.onDeleteTransaction = function(data: any, url: string): void {
+		if (window.confirm("Yakin ingin menghapus data transaksi " + data + "?")) window.location.href = url;
+	}
+
+	/** User page`s functions */
+	window.onDeleteUser = function(data: any, url: string): void {
+		if (window.confirm("Yakin ingin menghapus data pengguna " + data + "?")) window.location.href = url;
+	}
 
 });
-
-
-// Dashboard page`s functions
-// GSP page`s functions
-
-// Drug page`s functions
-// Transaction page`s functions
-export function onDeleteTransaction(data: any, url: string): void {
-	console.log('onDeleteTransaction', data);
-}
-
-	// User page`s functions

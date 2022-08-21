@@ -68,7 +68,9 @@
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('user_form', uuid=user.uuid) }}`;">Ubah</button>
 
-													<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('user_delete', uuid=user.uuid) }}`;">Hapus</button>
+													{#<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('user_delete', uuid=user.uuid) }}`;">Hapus</button>#}
+
+													<button class="btn btn-sm btn-shadow btn-danger" onclick="onDeleteUser(`{{ user.nama_produk }}`, `{{ url_for('user_delete', uuid=user.uuid) }}`)">Hapus</button>
 												</td>
 											</tr>
 											<!-- End list -->

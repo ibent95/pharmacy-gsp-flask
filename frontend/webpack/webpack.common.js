@@ -53,7 +53,7 @@ module.exports = {
     alias: {
       "~": Path.resolve(__dirname, "../src"),
     },
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.js', '.tsx', '.jsx'],
   },
   module: {
     rules: [

@@ -14,6 +14,9 @@
 	<!-- vendor css -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}" id="main-style-link">
 
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex-theme-os.css') }}" />
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" id="main-style-link">
 </head>
@@ -71,6 +74,9 @@
 	<script>
 		//$("body").append('<div class="fixed-button active"><a href="https://gumroad.com/dashboardkit" target="_blank" class="btn btn-md btn-success"><i class="material-icons-two-tone text-white">shopping_cart</i> Upgrade To Pro</a> </div>');
 	</script>
+
+	{#<script src="{{ url_for('static', filename='assets/js/plugins/vex.combined.min.js') }}"></script>
+	<script>vex.defaultOptions.className = 'vex-theme-os'</script>#}
 
 	<!-- custom-chart js -->
 	<script src="{{ url_for('static', filename='assets/js/pages/dashboard-sale.js') }}"></script>

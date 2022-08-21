@@ -1,7 +1,14 @@
 <script>
-	//let table = new DataTable('#table-list', {
-	//	// options
-	//});
+
+	//function onDeleteTransaction(data, url) {
+	//	Swal.fire(
+	//		'Good job!',
+	//		'You clicked the button!',
+	//		'success'
+	//	);
+	//	console.log('onDeleteTransaction', data, url);
+	//}
+
 </script>
 <div class="pcoded-content">
 	<!-- [ breadcrumb ] start -->
@@ -69,6 +76,10 @@
 									</thead>
 									<tbody>
 										{% for transaction in data.transactions %}
+											{# Template START #}
+											{% set temp = transaction %}
+											{# Template END #}
+
 											<!-- Start list -->
 											<tr class="table-primary">
 												<td>{{ loop.index }}</td>
@@ -77,7 +88,9 @@
 												<td class="text-right">
 													<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('transaction_form', uuid=transaction.uuid) }}`;">Ubah</button>
 
-													<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('transaction_delete', uuid=transaction.uuid) }}`;">Hapus</button>
+													{#<button class="btn btn-sm btn-shadow btn-danger" onclick="location.href = `{{ url_for('transaction_delete', uuid=transaction.uuid) }}`;">Hapus</button>#}
+
+													<button class="btn btn-sm btn-shadow btn-danger" onclick="onDeleteTransaction(`{{ transaction.nomor_transaksi }}`, `{{ url_for('transaction_delete', uuid=transaction.uuid) }}`)">Hapus</button>
 												</td>
 											</tr>
 
