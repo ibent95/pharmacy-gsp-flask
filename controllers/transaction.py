@@ -147,27 +147,50 @@ def transaction_update(uuid=None):
             transaction.tanggal_transaksi = request.form['tanggal_transaksi']
             transaction.nama_pelanggan = request.form['nama_pelanggan']
 
-            print(transaction.transaksi_item)
+            # Remove old data (Not good, but used for development speed)
+            oldTransactionItem = TransactionItemsModel.query.filter_by(id_transaksi = transaction.id).delete()
 
+            # Next improve is to change from old way (delete all old data and add all new dat) to new and proper way (update all old data and add new data)
             for index, produk in enumerate(form.daftar_produk):
-                drug = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
-                if (produk.uuid.data):
 
-                    transaction.transaksi_item[index]['id_produk'] = drug.id
-                    transaction.transaksi_item[index]['kode_produk'] = drug.kode_produk
-                    transaction.transaksi_item[index]['nama_produk'] = drug.nama_produk
-                    transaction.transaksi_item[index]['jumlah_produk'] = produk.jumlah_produk.data
+                newDrugItem = DrugModel.query.filter_by(kode_produk = produk.kode_produk.data).first()
 
-                else:
-                    transaction.transaksi_item.append(
-                        TransactionItemsModel(
-                            transaction.id,
-                            drug.id,
-                            drug.kode_produk,
-                            drug.nama_produk,
-                            produk.jumlah_produk.data
-                        )
+                #transactionItem = TransactionItemsModel.query.filter_by(kode_produk = produk.kode_produk.data, id_transaksi = transaction.id).first()
+
+                #transactionItem['id_produk'] = newDrugItem.id
+                #transactionItem['kode_produk'] = newDrugItem.kode_produk
+                #transactionItem['nama_produk'] = newDrugItem.nama_produk
+                #transactionItem['jumlah_produk'] = produk.jumlah_produk.data
+
+                transaction.transaksi_item.append(
+                    TransactionItemsModel(
+                        transaction.id,
+                        newDrugItem.id,
+                        newDrugItem.kode_produk,
+                        newDrugItem.nama_produk,
+                        produk.jumlah_produk.data
                     )
+                )
+
+                # =====================================================================================================================================
+
+                #if (produk.uuid.data):
+
+                #    transaction.transaksi_item[index]['id_produk'] = drug.id
+                #    transaction.transaksi_item[index]['kode_produk'] = drug.kode_produk
+                #    transaction.transaksi_item[index]['nama_produk'] = drug.nama_produk
+                #    transaction.transaksi_item[index]['jumlah_produk'] = produk.jumlah_produk.data
+
+                #else:
+                #    transaction.transaksi_item.append(
+                #        TransactionItemsModel(
+                #            transaction.id,
+                #            drug.id,
+                #            drug.kode_produk,
+                #            drug.nama_produk,
+                #            produk.jumlah_produk.data
+                #        )
+                #    )
 
             db.session.commit()
 
@@ -184,9 +207,10 @@ def transaction_delete(uuid=None):
 
     if (uuid):
 
-        drug = DrugModel.query.filter_by(uuid=uuid).first()
+        transaction = TransactionModel.query.filter_by(uuid=uuid).first()
+        transactionItems = TransactionItemsModel.query.filter_by(id_transaksi = transaction.id).delete()
 
-        db.session.delete(drug)
+        db.session.delete(transaction)
 
         db.session.commit()
 
