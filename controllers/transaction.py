@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from collections import namedtuple
 from datetime import datetime
 import os
@@ -50,15 +51,15 @@ def transaction_form(uuid=None):
 
         transactionItemsFormDataGroup = namedtuple('transaksi_item', ['kode_produk', 'jumlah_produk', 'uuid'])
         transactionFormData = {
-            'tanggal_transaksi': data['transaction'].tanggal_transaksi,
+            'tanggal_transaksi': data['transaction'].tanggal_transaksi if data['transaction'] else None,
             'daftar_produk': []
         }
 
-        for index, produk in enumerate(data['transaction'].transaksi_item):
-            print(produk.kode_produk)
-            transactionFormData['daftar_produk'].append(
-                transactionItemsFormDataGroup(produk.kode_produk, produk.jumlah_produk, produk.uuid)
-            )
+        if (data['transaction']):
+            for index, produk in enumerate(data['transaction'].transaksi_item):
+                transactionFormData['daftar_produk'].append(
+                    transactionItemsFormDataGroup(produk.kode_produk, produk.jumlah_produk, produk.uuid)
+                )
 
         data['form'] = TransactionForm(data=transactionFormData)
 
