@@ -7,18 +7,20 @@
 	<title>Document</title>
 
 	<!-- font css -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/feather.css') }}">
+	{#<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/feather.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontawesome.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/material.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/material.css') }}">#}
 
 	<!-- vendor css -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}" id="main-style-link">
+	{#<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}" id="main-style-link">#}
 
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex.css') }}" />
-	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex-theme-os.css') }}" />
+	{#<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex.css') }}" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/plugins/vex-theme-os.css') }}" />#}
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" id="main-style-link">
+	{#<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" id="main-style-link">#}
+
+	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </head>
 <body>
 	<!-- [ Pre-loader ] start -->
@@ -61,16 +63,16 @@
 	</script>
 
 	<!-- Required Js -->
-    <script src="{{ url_for('static', filename='assets/js/vendor-all.min.js') }}"></script>
+    {#<script src="{{ url_for('static', filename='assets/js/vendor-all.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/plugins/feather.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/pcoded.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/pcoded.min.js') }}"></script>#}
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js') }}"></script> -->
     <!-- <script src="{{ url_for('static', filename='assets/js/plugins/clipboard.min.js') }}"></script> -->
     <!-- <script src="{{ url_for('static', filename='assets/js/uikit.min.js') }}"></script> -->
 
 	<!-- Apex Chart -->
-	<script src="{{ url_for('static', filename='assets/js/plugins/apexcharts.min.js') }}"></script>
+	{#<script src="{{ url_for('static', filename='assets/js/plugins/apexcharts.min.js') }}"></script>#}
 	<script>
 		//$("body").append('<div class="fixed-button active"><a href="https://gumroad.com/dashboardkit" target="_blank" class="btn btn-md btn-success"><i class="material-icons-two-tone text-white">shopping_cart</i> Upgrade To Pro</a> </div>');
 	</script>
@@ -79,11 +81,11 @@
 	<script>vex.defaultOptions.className = 'vex-theme-os'</script>#}
 
 	<!-- custom-chart js -->
-	<script src="{{ url_for('static', filename='assets/js/pages/dashboard-sale.js') }}"></script>
+	{#<script src="{{ url_for('static', filename='assets/js/pages/dashboard-sale.js') }}"></script>#}
 
 	<!-- Javascript -->
 	{#<script src="{{ url_for('static', filename='js/vendor.js') }}"></script>#}
-	<script src="{{ url_for('static', filename='js/manifest.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+	{#<script src="{{ url_for('static', filename='js/manifest.js') }}"></script>#}
+	{#<script src="{{ url_for('static', filename='js/app.js') }}"></script>#}
 </body>
 </html>

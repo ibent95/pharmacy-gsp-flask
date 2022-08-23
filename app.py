@@ -11,7 +11,7 @@ from flask import Flask, request, flash, url_for, render_template, redirect
 from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
-from webpack_boilerplate.config import setup_jinja2_ext
+#from webpack_boilerplate.config import setup_jinja2_ext
 
 
 locale.setlocale(locale.LC_ALL, '')
@@ -31,7 +31,7 @@ app.config.update({
     }
 })
 app.config['SECRET_KEY'] = "pharmacyapp"
-setup_jinja2_ext(app)
+#setup_jinja2_ext(app)
 
 # Load db variable for cli command database_init()
 from configs.database import db
@@ -58,12 +58,12 @@ def page_not_found(error):
 
 
 # Webpack initialization
-@app.cli.command("webpack_init")
-def webpack_init():
-    from cookiecutter.main import cookiecutter
-    import webpack_boilerplate
-    pkg_path = os.path.dirname(webpack_boilerplate.__file__)
-    cookiecutter(pkg_path, directory = "frontend_template")
+#@app.cli.command("webpack_init")
+#def webpack_init():
+#    from cookiecutter.main import cookiecutter
+#    import webpack_boilerplate
+#    pkg_path = os.path.dirname(webpack_boilerplate.__file__)
+#    cookiecutter(pkg_path, directory = "frontend_template")
 
 
 # Database migration for initialization
