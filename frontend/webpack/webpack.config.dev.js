@@ -13,18 +13,22 @@ module.exports = merge(common, {
   devtool: "inline-source-map",
   output: {
     chunkFilename: "js/[name].chunk.js",
-    publicPath: "http://localhost:9091/",
+    publicPath: "http://localhost:9111/",
   },
   devServer: {
-    hot: true,
+    //hot: true,
     host: "0.0.0.0",
-    port: 9091,
+    port: 9111,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
     devMiddleware: {
       writeToDisk: true,
     },
+    watchFiles: [
+      Path.join(__dirname, '../../pharmacy-gsp-flask/**/*.py'),
+      Path.join(__dirname, '../../pharmacy-gsp-flask/**/*.html'),
+    ],
   },
   plugins: [
     new Webpack.DefinePlugin({
@@ -52,7 +56,10 @@ module.exports = merge(common, {
       {
         test: /\.js$/,
         include: Path.resolve(__dirname, "../src"),
-        loader: "babel-loader",
+        loader: "esbuild-loader", // babel-loader
+        options: {
+          target: ['es2015']
+        }
       },
       {
         test: /\.s?css$/i,

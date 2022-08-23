@@ -40,7 +40,10 @@ module.exports = merge(common, {
       {
         test: /\.js$/,
         include: Path.resolve(__dirname, "../src"),
-        loader: "babel-loader",
+        loader: "esbuild-loader", // babel-loader
+        options: {
+          target: ['es2015']
+        }
       },
       {
         test: /\.s?css$/i,

@@ -71,7 +71,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.mjs$/,
+        test: /\.js$/,
         include: /node_modules/,
         type: "javascript/auto",
       },

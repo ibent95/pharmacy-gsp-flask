@@ -6,10 +6,13 @@ import logging.config
 import locale
 
 from os import environ
+from pathlib import Path
 from flask import Flask, request, flash, url_for, render_template, redirect
 from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
+from webpack_boilerplate.config import setup_jinja2_ext
+
 
 locale.setlocale(locale.LC_ALL, '')
 
@@ -19,16 +22,22 @@ load_dotenv(".env")
 # Logger configuration to current date filename in logs folder
 logging.basicConfig(filename="logs/" + datetime.today().strftime('%Y-%m-%d') + ".log", filemode="w", format="[%(asctime)s] %(levelname)s | %(name)s | %(threadName)s : %(message)s")
 
-# Flask app initialization
-app = Flask(__name__)
+# Flask app initialization and webpack bolerplate configuration
+BASE_DIR = Path(__file__).parent
+app = Flask(__name__, static_folder="static", static_url_path="/static/") # static_folder="frontend/build"
+app.config.update({
+    'WEBPACK_LOADER': {
+        'MANIFEST_FILE': BASE_DIR / "static/manifest.json", # BASE_DIR / "frontend/build/manifest.json"
+    }
+})
 app.config['SECRET_KEY'] = "pharmacyapp"
+setup_jinja2_ext(app)
 
 # Load db variable for cli command database_init()
 from configs.database import db
 
 # Load router configurations and importer of controlers
 import configs.route
-
 
 # Database intialization when first run
 @app.before_first_request

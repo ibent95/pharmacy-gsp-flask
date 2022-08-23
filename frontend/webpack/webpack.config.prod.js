@@ -25,7 +25,11 @@ module.exports = merge(common, {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: "babel-loader",
+        //use: "babel-loader",
+        loader: "esbuild-loader", // babel-loader
+        options: {
+          target: ['es2015']
+        }
       },
       {
         test: /\.s?css/i,

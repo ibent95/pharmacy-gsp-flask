@@ -1,1 +1,1 @@
-window.console.log("sidebar is loaded");
+//window.console.log("sidebar is loaded");

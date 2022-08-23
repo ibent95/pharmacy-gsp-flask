@@ -9,7 +9,11 @@ declare global {
 	}
 };
 
+import Swal from 'sweetalert2';
+
 window.document.addEventListener("DOMContentLoaded", function () {
+
+	//Swal.fire('Hi from webpack!');
 
 	//var vex = require('vex-js')
 	//vex.registerPlugin(require('vex-dialog'))
