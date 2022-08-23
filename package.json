@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cross-env NODE_ENV=production webpack --config frontend/webpack/webpack.config.js"
+    "build:dev": "cross-env NODE_ENV=development webpack --config frontend/webpack/webpack.config.dev.js",
+    "build:prod": "cross-env NODE_ENV=production webpack --config frontend/webpack/webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,16 @@
   },
   "homepage": "https://github.com/ibent95/pharmacy-gsp-flask#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.184",
     "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "postcss": "^8.4.16",
+    "postcss-loader": "^7.0.1",
+    "sass": "^1.54.5",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },

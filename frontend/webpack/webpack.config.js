@@ -5,4 +5,5 @@ const commonWebpackSettings = require('./webpack.config.common.js');
 
 module.exports = merge(commonWebpackSettings, {
 	mode: 'production',
+	devtool: "source-map",
 });
