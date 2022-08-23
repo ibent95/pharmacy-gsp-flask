@@ -1,6 +1,4 @@
 {
-  "./css/app.css": "./css/app.css",
-  "app.css": "css/app.css",
   "app.js": "js/app.js",
   "assets/css/landing.css": "assets/css/landing.css",
   "assets/css/plugins/animate.min.css": "assets/css/plugins/animate.min.css",
@@ -144,10 +142,6 @@
         "js": [
           "js/manifest.js",
           "js/app.js"
-        ],
-        "css": [
-          "./css/app.css",
-          "css/app.css"
         ]
       }
     }
