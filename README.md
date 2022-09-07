@@ -1,6 +1,14 @@
 # pharmacy-gsp-flask
 Implementation of Generalized Sequential Pattern (GSP) on Pharmacy App in Flask framework
 
+Pre-action :
+1. Create virtual environtment
+	- macOS/Linux => "python3 -m venv venv"
+	- Windows => "py -3 -m venv venv"
+2. Activate the virtual environtment
+	- macOS/Linux => ". venv/bin/activate"
+	- Windows => "venv\Scripts\activate"
+
 Please install these python library:
 
 1. pip install Flask
