@@ -110,6 +110,15 @@ def gsp_calculation_result():
             transactions.append(transaction)
             dataSets.append(transaction_items)
 
+        normalizedMinimalSupport = percentToFloat(minSupport)
+
+        if (transactions):
+            gsp = GSP(transactions = dataSets, minsup = normalizedMinimalSupport)
+            result = gsp.run_alg()
+            Common.setPPrint('GSP calculation initial result', result)
+            Common.setLogger('info', 'GSP calculation result', result)
+
+        ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
         #    'start_date': startDate,
         #    'end_date': endDate,
@@ -124,14 +133,6 @@ def gsp_calculation_result():
             'transaction': transactions,
             'data_sets': dataSets
         })
-
-        normalizedMinimalSupport = percentToFloat(minSupport)
-
-        if (transactions):
-            gsp = GSP(transactions = dataSets, minsup = normalizedMinimalSupport)
-            result = gsp.run_alg()
-            Common.setPPrint('GSP calculation initial result', result)
-            Common.setLogger('info', 'GSP calculation result', result)
 
     data = {
         "content": "gsp-contents/gsp-results.jinja",
