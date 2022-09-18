@@ -4,9 +4,9 @@ from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
 
 
-class UserModel(db.Model):
+class GSPHistoryItemsModel(db.Model):
 
-    __tablename__ = 'pengguna'
+    __tablename__ = 'gsp_riwayat_item'
 
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
     nama_pengguna = db.Column(db.String(100))
@@ -20,13 +20,3 @@ class UserModel(db.Model):
         self.role = role
         self.username = username
         self.password = password
-
-    def setObjectToDict(self):
-        return {
-            "id": self.id,
-            "nama_pengguna": self.nama_pengguna,
-            "role": self.role,
-            "username": self.username,
-            "password": self.password,
-            "uuid": self.uuid,
-        }

@@ -27,5 +27,12 @@ class TransactionModel(db.Model):
         self.nama_pelanggan = nama_pelanggan
         #self.transaksi_item = transaksi_item
 
-    #def __getitem__(self, field):
-    #    return self.__dict__[field]
+    def setObjectToDict(self):
+        return {
+            "id": self.id,
+            "nomor_transaksi": self.nomor_transaksi,
+            "tanggal_transaksi": self.tanggal_transaksi,
+            "nama_pelanggan": self.nama_pelanggan,
+            "transaksi_item": self.transaksi_item,
+            "uuid": self.uuid
+        }

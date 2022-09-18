@@ -18,3 +18,12 @@ class DrugModel(db.Model):
         self.kode_produk = kode_produk
         self.nama_produk = nama_produk
         self.jumlah = jumlah
+
+    def setObjectToDict(self):
+        return {
+            "id": self.id,
+            "kode_produk": self.kode_produk,
+            "nama_produk": self.nama_produk,
+            "jumlah": self.jumlah,
+            "uuid": self.uuid
+        }

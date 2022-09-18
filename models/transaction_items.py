@@ -23,3 +23,14 @@ class TransactionItemsModel(db.Model):
         self.kode_produk = kode_produk
         self.nama_produk = nama_produk
         self.jumlah_produk = jumlah_produk
+
+    def setObjectToDict(self):
+        return {
+            "id": self.id,
+            "id_transaksi": self.id_transaksi,
+            "id_produk": self.id_produk,
+            "kode_produk": self.kode_produk,
+            "nama_produk": self.nama_produk,
+            "jumlah_produk": self.jumlah_produk,
+            "uuid": self.uuid
+        }
