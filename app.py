@@ -7,7 +7,7 @@ import locale
 
 from os import environ
 from pathlib import Path
-from flask import Flask, request, flash, url_for, render_template, redirect
+from flask import Flask, request, flash, url_for, render_template, redirect, jsonify
 from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
@@ -36,6 +36,8 @@ setup_jinja2_ext(app)
 # Load db variable for cli command database_init()
 from configs.database import db
 
+from services.common import Common
+
 # Load router configurations and importer of controlers
 import configs.route
 
@@ -53,6 +55,8 @@ def page_not_found(error):
         "content": "404.jinja",
         "title": "404",
     }
+
+    Common.setLogger('error', 'Not found.', [])
 
     return render_template('index.jinja', data=data, os=os), 404
 

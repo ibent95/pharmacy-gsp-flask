@@ -3,7 +3,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from app import app, request, platform, flask, render_template
 from traits.number import percentToFloat
-from gsp import GSP
+from services.gsp import GSP
 
 
 # Home

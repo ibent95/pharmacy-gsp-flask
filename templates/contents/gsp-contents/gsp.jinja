@@ -32,24 +32,29 @@
 
 						<!-- Main table filter -->
 						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('gsp_calculation_result') }}">
+							{{ data.form.csrf_token }}
+
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="date" name="tanggal_awal" placeholder="Tanggal awal" id="floatingStartDate">
-									<label for="floatingStartDate">Tanggal awal</label>
+									{#<input class="form-control" type="date" name="tanggal_mulai" placeholder="Tanggal awal" id="floatingStartDate">#}
+									{{ data.form.tanggal_mulai(class="form-control", id="floatingStartDate") }}
+									<label for="floatingStartDate">{{ data.form.tanggal_mulai.label }}</label>
 								</div>
 							</div>
 
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="date" name="tanggal_akhir" placeholder="Tanggal akhir" id="floatingEndDate">
-									<label for="floatingEndDate">Tanggal akhir</label>
+									{#<input class="form-control" type="date" name="tanggal_selesai" placeholder="Tanggal akhir" id="floatingEndDate">#}
+									{{ data.form.tanggal_selesai(class="form-control", id="floatingEndDate") }}
+									<label for="floatingEndDate">{{ data.form.tanggal_selesai.label }}</label>
 								</div>
 							</div>
 
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
 								<div class="form-floating">
-									<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">
-									<label for="floatingMinSupportNumber">Min. Suport</label>
+									{#<input class="form-control" type="number" name="min_support" value="10" placeholder="Min. Suport" id="floatingMinSupportNumber">#}
+									{{ data.form.min_support(class="form-control", id="floatingMinSupportNumber") }}
+									<label for="floatingMinSupportNumber">{{ data.form.min_support.label }}</label>
 								</div>
 							</div>
 

@@ -37,13 +37,13 @@
 
 	</div>
 
-	<div class="pc-container">
+	{#<div class="pc-container">
 		<div class="pcoded-content">
 
 			{% include 'footer.jinja' %}
 
 		</div>
-	</div>
+	</div>#}
 
 	<script>
 		if ("serviceWorker" in navigator) {
@@ -51,10 +51,10 @@
 				navigator.serviceWorker
 					.register("service-worker.js")
 					.then((registration) => {
-						console.log("Service Worker registered: ", registration);
+						{#console.log("Service Worker registered: ", registration);#}
 					})
 					.catch((registrationError) => {
-						console.error("Service Worker registration failed: ", registrationError);
+						{#console.error("Service Worker registration failed: ", registrationError);#}
 					});
 			});
 		}

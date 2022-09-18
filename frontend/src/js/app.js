@@ -9,6 +9,5 @@ import "../scss/app.scss";
 import "../components/sidebar";
 
 window.document.addEventListener("DOMContentLoaded", function () {
-  window.console.log("dom ready 1");
-
+	window.console.log("dom ready 1");
 });

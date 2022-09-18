@@ -27,8 +27,8 @@
 		<div class="m-header">
 			<a href="{{ url_for('index') }}" class="b-brand">
 				<!-- ========   change your logo hear   ============ -->
-				<img src="{{ url_for('static', filename='assets/images/logo.svg') }}" alt="" class="logo logo-lg">
-				<img src="{{ url_for('static', filename='assets/images/logo-sm.svg') }}" alt="" class="logo logo-sm">
+				{#<img src="{{ url_for('static', filename='assets/images/logo.svg') }}" alt="" class="logo logo-lg">
+				<img src="{{ url_for('static', filename='assets/images/logo-sm.svg') }}" alt="" class="logo logo-sm">#}
 			</a>
 		</div>
 		<div class="navbar-content">
@@ -282,12 +282,14 @@
 					</div>
 				</li>-->
 				<li class="dropdown pc-h-item">
-					<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="false" aria-expanded="false">
-						<img src="{{ url_for('static', filename='assets/images/user/avatar-2.jpg') }}" alt="user-image" class="user-avtar">
+					<a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+						{#<img src="{{ url_for('static', filename='assets/images/user/avatar-2.jpg') }}" alt="user-image" class="user-avtar">#}
 						<span>
-							<span class="user-name">Petugas 1</span>
-							<span class="user-desc">Administrator</span>
+							{#<span class="user-name">Petugas 1</span>#}
+							<span class="user-desc" style="font-size: 16px;">
+								<i class="fa fa-user"></i>
+								Administrator
+							</span>
 						</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right pc-h-dropdown">

@@ -1,24 +1,49 @@
+from json import dump
+from operator import and_
+from pprint import pprint
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from app import app, request, platform, flask, render_template
+from app import app, request, platform, flask, render_template, jsonify
+from configs.database import db
+from services.common import Common
 from traits.number import percentToFloat
-from gsp import GSP
+from services.gsp import GSP
+from forms.gsp import GSPForm
+from sqlalchemy_querybuilder import Filter
+from models.transaction import TransactionModel
+from marshmallow import Schema, fields
 
 
-# Home
+## Schemas
+class ProductSchema(Schema):
+    id = fields.Str()
+    id_transaksi = fields.Str()
+    id_produk = fields.Str()
+    kode_produk = fields.Str()
+    nama_produk = fields.Str()
+    jumlah_produk = fields.Str()
+    uuid = fields.Str()
+
+class TransactionSchema(Schema):
+    id = fields.Str()
+    nomor_transaksi = fields.Str()
+    tanggal_transaksi = fields.Str()
+    nama_pelanggan = fields.Str()
+    transaksi_item = fields.Nested(ProductSchema())
+    uuid = fields.Str()
+
+
+# GSP Controllers
 @app.route("/gsp", methods=['GET'])
 def gsp():
     title = "Perhitungan (GSP)"
-    greeting = "Wellcome to my first project to learn Flask in Python."
-    pythonSystemVersion = platform.python_version()
-    flaskAppVersion = flask.__version__
     data = {
         "content": "gsp-contents/gsp.jinja",
         "title": title,
-        "greeting": greeting,
-        "python_system_version": pythonSystemVersion,
-        "flask_app_version": flaskAppVersion,
+        "form": GSPForm(),
+        "gsp_init_value": None,
+
     }
 
     return render_template('index.jinja', data = data, os = os)
@@ -26,40 +51,90 @@ def gsp():
 @app.route("/gsp-calculation-result", methods=['GET'])
 def gsp_calculation_result():
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
-    app.logger.info('%s is the title.', title)
+
+    transactions = []
+    dataSets = []
+    result = []
 
     # Dates
-    startDate = request.args.get('tanggal_awal')
-    endDate = request.args.get('tanggal_akhir')
+    startDate = request.args.get('tanggal_mulai') + " 00:00:00"
+    endDate = request.args.get('tanggal_selesai') + " 23:59:59"
 
     # Minimal support
     minSupport = request.args.get('min_support') if (request.args.get('min_support')) else 10
 
-    #transactions = [
-    #    ["a", "b", "c", frozenset(["c", "d"]), "d"],
-    #    ["a", "a", "b", frozenset(["c", "d"]), 'c'],
-    #    ["a", "a"]
-    #]
+    if (startDate and endDate and minSupport):
 
-    transactions = [
-        [
-            frozenset({'sv'}), frozenset({'x'}), frozenset({'+', 'qo', 'sv'}), frozenset({'sv'}), frozenset({'x'}), frozenset({'sd', 'sv'}), frozenset({'%', 'sd', 'sv'}), frozenset({'b'}), frozenset({'+', 'sd'}), frozenset({'sv'}), frozenset({'+'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'%', 'aa'}), frozenset({'+', 'sv'}), frozenset({'b'}), frozenset({'sv'}), frozenset({'b'}), frozenset({'+', 'sv(^q)'}), frozenset({'aa'}), frozenset({'+', '^q', 'qh'}), frozenset({'aa'}), frozenset({'sv'}), frozenset({'sv'}), frozenset({'+', 'sv'}), frozenset({'%', 'sd', 'sv', 'sv^r'}), frozenset({'^q', 'qh', 'sd', 'sv', 'sv(^q)'}), frozenset({'aa'}), frozenset({'+'}), frozenset({'aa', 'sv'}), frozenset({'sd'}), frozenset({'bf'}), frozenset({'aa', 'sd'}), frozenset({'b^m'}), frozenset({'+'}), frozenset({'b'}), frozenset({'%', 'o', 'qy'}), frozenset({'qr'}), frozenset({'b', 'sd'}), frozenset({'%'}), frozenset({'+'}), frozenset({'x'}), frozenset({'+', 'sd'}), frozenset({'^2'}), frozenset({'sd'}), frozenset({'%'}), frozenset({'+', 'sd'}), frozenset({'b'}), frozenset({'+'}), frozenset({'aa', 'sd', 'sv'}), frozenset({'aa', 'sd'}), frozenset({'b'}), frozenset({'^q', 'sd(^q)'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'b', 'qw'}), frozenset({'sd'}), frozenset({'b', 'ba'}), frozenset({'aa', 'sd^t'}), frozenset({'x'}), frozenset({'+'}), frozenset({'x'}), frozenset({'+'}), frozenset({'b'}), frozenset({'+', 'sd^t'}), frozenset({'b'}), frozenset({'sd^t'}), frozenset({'bk'})
-        ],
-        [
-            frozenset({'sd', 'sd^t'}), frozenset({'ba'}), frozenset({'b', 'sd^t'}), frozenset({'ba'}), frozenset({'sv^t'}), frozenset({'aa'}), frozenset({'ad'}), frozenset({'^h', 'aa'}), frozenset({'x'}), frozenset({'sd'}), frozenset({'aa', 'sv'}), frozenset({'sd'}), frozenset({'+'}), frozenset({'aa', 'sd'}), frozenset({'%'}), frozenset({'^h', 'sd'}), frozenset({'aa'}), frozenset({'+', '^h', 'sd', 't1'}), frozenset({'b'}), frozenset({'%'}), frozenset({'qy'}), frozenset({'sd'}), frozenset({'b', 'bf'}), frozenset({'qw', 'sd'}), frozenset({'sd'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'b', 'b^r', 'sd'}), frozenset({'x'}), frozenset({'+'}), frozenset({'b'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'sv'}), frozenset({'sd'}), frozenset({'sv'}), frozenset({'+'}), frozenset({'b', 'sd'}), frozenset({'sd'}), frozenset({'aa', 'aa^r', 'sv'}), frozenset({'sv'}), frozenset({'b', 'b^r'}), frozenset({'%', 'sd'}), frozenset({'ba', 'sv'}), frozenset({'%', 'b'}), frozenset({'%', 'qy'}), frozenset({'sd'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'sd'}), frozenset({'sv'}), frozenset({'ba'}), frozenset({'+'}), frozenset({'qw'}), frozenset({'sd'}), frozenset({'%', 'b^m', 'bk', 'sd'}), frozenset({'b'}), frozenset({'%', '+'}), frozenset({'ad', 'b'}), frozenset({'aa', 'sd'}), frozenset({'sd', 'sv'}), frozenset({'+'}), frozenset({'+'}), frozenset({'b', 'b^r'}), frozenset({'sd'}), frozenset({'%', 'qy'}), frozenset({'%', 'sd'}), frozenset({'b', 'b^r', 'qo', 'sd'}), frozenset({'sd'}), frozenset({'%'}), frozenset({'sd', 'sv'}), frozenset({'%'}), frozenset({'sv'}), frozenset({'sd'}), frozenset({'sd'}), frozenset({'b', 'b^r'}), frozenset({'sd'}), frozenset({'b'}), frozenset({'sd'}), frozenset({'b', 'b^r'}), frozenset({'sd'}), frozenset({'sd'}), frozenset({'%'}), frozenset({'+', 'sd'}), frozenset({'b'}), frozenset({'+'}), frozenset({'b', 'sd'}), frozenset({'+'}), frozenset({'qy'}), frozenset({'+'}), frozenset({'+'}), frozenset({'sd'}), frozenset({'bh'}), frozenset({'sd'}), frozenset({'b', 'b^r'}), frozenset({'%', '+'}), frozenset({'b', 'qy^g'}), frozenset({'ny', 'ny^r'}), frozenset({'sv'}), frozenset({'qh', 'sv'}), frozenset({'aa', 'sv'}), frozenset({'%', 'b', 'b^r'}), frozenset({'sv'}), frozenset({'aa'}), frozenset({'sd'}), frozenset({'%', 'aa', 'sd'}), frozenset({'sv'}), frozenset({'aa'}), frozenset({'sv'}), frozenset({'sd'}), frozenset({'aa', 'qh', 'sv'}), frozenset({'aa'}), frozenset({'+'}), frozenset({'sd(^q)'}), frozenset({'+'}), frozenset({'+'}), frozenset({'%'}), frozenset({'sd'}), frozenset({'aa', 'sd', 'sv'}), frozenset({'b'}), frozenset({'+'}), frozenset({'ba'}), frozenset({'sd'}), frozenset({'x'}), frozenset({'%', 'sd'}), frozenset({'fe', 'qy'}), frozenset({'sd'}), frozenset({'%', '+'}), frozenset({'nn', 'sd^e'}), frozenset({'%', 'sd', 'x'}), frozenset({'sd'}), frozenset({'b'}), frozenset({'sd', 'sv'}), frozenset({'aa', 'sd'})
-        ],
-        [
-            frozenset({'o', 'qrr', 'qw', 'sd', 'sv'}), frozenset({'sd'}), frozenset({'b'}), frozenset({'+'}), frozenset({'aa'}), frozenset({'sd'}), frozenset({'b', 'sd'}), frozenset({'b'}), frozenset({'sd', 'sd(^q)'}), frozenset({'x'}), frozenset({'%', 'sd'}), frozenset({'sv'}), frozenset({'aa', 'sd'}), frozenset({'b'}), frozenset({'h', 'sd'})
-        ]
-    ]
+        ## 1
+        #transactionsRawData = TransactionModel.query.filter(
+        #    and_(
+        #        TransactionModel.tanggal_transaksi >= startDate,
+        #        TransactionModel.tanggal_transaksi <= startDate
+        #    )
+        #).all()
 
-    normalizedMinimalSupport = percentToFloat(minSupport)
+        ## 2
+        #rule = {
+        #    "condition": "AND",
+        #    "rules": [
+        #        {
+        #            "field": "transaksi.tanggal_transaksi",
+        #            "type": "date",
+        #            "operator": "greater_or_equal",
+        #            "value": startDate
+        #        },
+        #        {
+        #            "field": "transaksi.tanggal_transaksi",
+        #            "type": "date",
+        #            "operator": "less_or_equal",
+        #            "value": endDate
+        #        },
+        #    ],
+        #}
+        #filter = Filter({ "transaksi": TransactionModel}, db.session.query())
+        #print(filter.querybuilder(rule))
 
-    alg = GSP(transactions = transactions, minsup = normalizedMinimalSupport)
-    result = alg.run_alg()
+        #transactions = TransactionModel.query(
+        #    filter.querybuilder(rule)
+        #).all()
+
+        ## 3
+        transactionsRawData = TransactionModel.query.all()
+
+        for transactionRawDataIndex, transactionRawData in enumerate(transactionsRawData) :
+
+            transaction = TransactionSchema().dump(transactionRawData)
+            transaction["transaksi_item"] = ProductSchema(many=True).dump(transactionRawData.transaksi_item) # => dict
+            transaction_items = [(frozenset([transactionItem["kode_produk"]])) for transactionItem in transaction["transaksi_item"]]  # => tuple
+
+            transactions.append(transaction)
+            dataSets.append(transaction_items)
+
+        #Common.setPPrint('GSP calculation initial state', {
+        #    'start_date': startDate,
+        #    'end_date': endDate,
+        #    'minimal_support': minSupport,
+        #    'transaction': transactions,
+        #    'data_sets': dataSets
+        #})
+        Common.setLogger('info', 'GSP calculation initial state', {
+            'start_date': startDate,
+            'end_date': endDate,
+            'minimal_support': minSupport,
+            'transaction': transactions,
+            'data_sets': dataSets
+        })
+
+        normalizedMinimalSupport = percentToFloat(minSupport)
+
+        if (transactions):
+            gsp = GSP(transactions = dataSets, minsup = normalizedMinimalSupport)
+            result = gsp.run_alg()
+            Common.setPPrint('GSP calculation initial result', result)
+            Common.setLogger('info', 'GSP calculation result', result)
 
     data = {
-        "content": "generalized-sequential-pattern.jinja",
+        "content": "gsp-contents/gsp-results.jinja",
         "title": title,
         "start_date": startDate,
         "end_date": endDate,
@@ -68,5 +143,22 @@ def gsp_calculation_result():
         "normalized_minimal_support": normalizedMinimalSupport,
         "result": result
     }
+
+    a = [
+        [frozenset({'A001'}), frozenset({'A003'})],
+        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})],
+        [frozenset({'A002'}), frozenset({'A003'})],
+        [frozenset({'A003'}), frozenset({'A003'}), frozenset({'A002'}), frozenset({'A001'})],
+        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})],
+        [frozenset({'A001'}), frozenset({'A001'}), frozenset({'A002'}), frozenset({'A002'}), frozenset({'A003'}), frozenset({'A003'})],
+        [frozenset({'A002'}), frozenset({'A003'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'})],
+        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})]
+    ]
 
     return render_template('index.jinja', data = data, os = os)
