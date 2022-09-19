@@ -2,9 +2,10 @@ import uuid
 
 from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
+from sqlalchemy_serializer import SerializerMixin
 
 
-class UserModel(db.Model):
+class UserModel(db.Model, SerializerMixin):
 
     __tablename__ = 'pengguna'
 

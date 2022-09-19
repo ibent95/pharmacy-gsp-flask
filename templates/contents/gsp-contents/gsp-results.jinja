@@ -8,7 +8,7 @@
 						<h5 class="m-b-10">{{ data.title }}</h5>
 					</div>
 					<ul class="breadcrumb">
-						<li class="breadcrumb-item"><a href="{{ url_for('index') }}">Ikhtisar</a></li>
+						<li class="breadcrumb-item"><a href="{{ url_for('gsp') }}">Perhitungan (GSP)</a></li>
 						{#<li class="breadcrumb-item">Ikhtisar</li>#}
 						<li class="breadcrumb-item">{{ data.title }}</li>
 					</ul>
@@ -27,7 +27,7 @@
 				<div class="card-header">
 					<h5>Data uji (Daftar transaksi)</h5>
 				</div>
-				<div class="pro-scroll" style="height: auto;">
+				<div> {#class="pro-scroll" style="max-height: 300px;"#}
 					<div class="card-body">
 
 						<!-- Start date range of data info -->
@@ -55,45 +55,47 @@
 						<!-- End date range of data info -->
 
 						<!-- Start transaction data -->
-						<div class="row row-cols-12">
-							{% for transaction in data.transactions %}
-								<div class="col col-md-4 col-sm-12 col-xs-12">
+						<div style="padding-right: 24px; display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;">
+							<div class="row row-cols-12">
+								{% for transaction in data.transactions %}
+									<div class="col col-md-4 col-sm-12 col-xs-12">
 
-									<!-- Start transaction table -->
-									<div class="table-responsive">
-										<h5>{{ "Transaksi " + (loop.index | string) + ' (Total: ' + ((transaction | length) | string) + ')' }}</h5>
+										<!-- Start transaction table -->
+										<div class="table-responsive">
+											<h5>{{ "Transaksi " + (loop.index | string) + ' (Total: ' + ((transaction | length) | string) + ')' }}</h5>
 
-										<table class="table table-secondary table-striped table-condensed">
-											<thead style="display: block;">
-												<tr>
-													<th style="width: 1%;">No</th>
-													<th style="width: auto;">Kode obat</th>
-													<th style="width: auto;">Nama obat</th>
-													<th style="width: auto;">Jumlah</th>
-												</tr>
-											</thead>
-											<tbody style="display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;">
-												{% for data_set in transaction.transaksi_item %}
+											<table class="table table-secondary table-striped table-condensed">
+												<thead style="display: block;">
 													<tr>
-														<td style="width: 1%;">{{ loop.index }}</td>
-														<td style="width: auto;">
-															{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.kode_produk + '</div>' }}
-														</td>
-														<td style="width: auto;">
-															{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.nama_produk + '</div>' }}
-														</td>
-														<td style="width: auto;">
-															{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.jumlah_produk + '</div>' }}
-														</td>
+														<th style="width: 1%;">No</th>
+														<th style="width: auto;">Kode obat</th>
+														<th style="width: auto;">Nama obat</th>
+														<th style="width: auto;">Jumlah</th>
 													</tr>
-												{% endfor %}
-											</tbody>
-										</table>
-									</div>
-									<!-- End transaction table -->
+												</thead>
+												<tbody style="display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;">
+													{% for data_set in transaction.transaksi_item %}
+														<tr>
+															<td style="width: 1%;">{{ loop.index }}</td>
+															<td style="width: auto;">
+																{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.kode_produk + '</div>' }}
+															</td>
+															<td style="width: auto;">
+																{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.nama_produk + '</div>' }}
+															</td>
+															<td style="width: auto;">
+																{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + data_set.jumlah_produk + '</div>' }}
+															</td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</div>
+										<!-- End transaction table -->
 
-								</div>
-							{% endfor %}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 						<!-- End transaction data -->
 

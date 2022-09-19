@@ -73,9 +73,9 @@ def webpack_init():
 # Database migration for initialization
 @app.cli.command("database_init")
 def database_init():
-    from flask_sqlalchemy import SQLAlchemy
+    #from flask_sqlalchemy import SQLAlchemy
+    #from configs.database import db
     import models
-    from configs.database import db
     db.create_all()
 
 

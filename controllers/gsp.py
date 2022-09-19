@@ -6,8 +6,9 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from app import app, request, platform, flask, render_template, jsonify
 from configs.database import db
+from models.gsp_history import GSPHistoryModel
 from services.common import Common
-from traits.number import percentToFloat
+from services.number import Number
 from services.gsp import GSP
 from forms.gsp import GSPForm
 from sqlalchemy_querybuilder import Filter
@@ -66,14 +67,6 @@ def gsp_calculation_result():
     if (startDate and endDate and minSupport):
 
         ## 1
-        #transactionsRawData = TransactionModel.query.filter(
-        #    and_(
-        #        TransactionModel.tanggal_transaksi >= startDate,
-        #        TransactionModel.tanggal_transaksi <= startDate
-        #    )
-        #).all()
-
-        ## 2
         #rule = {
         #    "condition": "AND",
         #    "rules": [
@@ -98,25 +91,39 @@ def gsp_calculation_result():
         #    filter.querybuilder(rule)
         #).all()
 
-        ## 3
-        transactionsRawData = TransactionModel.query.all()
+        ## 2
+        transactionsRawData = TransactionModel.query.filter(
+            and_(
+                TransactionModel.tanggal_transaksi >= startDate,
+                TransactionModel.tanggal_transaksi <= endDate
+            )
+        ).all()
+
+        transactionsSerializeData = Common.listOfDictHelper(transactionRawData)
+        transactionsJsonData = transactionsSerializeData
 
         for transactionRawDataIndex, transactionRawData in enumerate(transactionsRawData) :
 
             transaction = TransactionSchema().dump(transactionRawData)
             transaction["transaksi_item"] = ProductSchema(many=True).dump(transactionRawData.transaksi_item) # => dict
-            transaction_items = [(frozenset([transactionItem["kode_produk"]])) for transactionItem in transaction["transaksi_item"]]  # => tuple
+            transaction_items = [(frozenset([transactionItem["kode_produk"]])) for transactionItem in transaction["transaksi_item"]] # => tuple
 
             transactions.append(transaction)
             dataSets.append(transaction_items)
 
-        normalizedMinimalSupport = percentToFloat(minSupport)
+        ## Normalize minimal support to float
+        normalizedMinimalSupport = Number.percentToFloat(minSupport)
 
+        ## GSP calculation
         if (transactions):
             gsp = GSP(transactions = dataSets, minsup = normalizedMinimalSupport)
             result = gsp.run_alg()
             Common.setPPrint('GSP calculation initial result', result)
             Common.setLogger('info', 'GSP calculation result', result)
+
+            gspModel = GSPHistoryModel('1', '2', '3', '4', '5', '6')
+            #db.session.add(gspModel)
+            #db.session.commit()
 
         ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
@@ -163,3 +170,7 @@ def gsp_calculation_result():
     ]
 
     return render_template('index.jinja', data = data, os = os)
+
+@app.route("/gsp-report", methods=['GET'])
+def gsp_report():
+    return None

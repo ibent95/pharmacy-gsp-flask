@@ -6,11 +6,12 @@ from sqlalchemy import inspect
 from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
 from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy_serializer import SerializerMixin
 from models.transaction_items import TransactionItemsModel
 
 
 #@as_declarative()
-class TransactionModel(db.Model):
+class TransactionModel(db.Model, SerializerMixin):
 
     __tablename__ = 'transaksi'
 

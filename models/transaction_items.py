@@ -2,10 +2,11 @@ import uuid
 
 from configs.database import db, BinaryUUID
 from sqlalchemy.sql.expression import func
+from sqlalchemy_serializer import SerializerMixin
 #from models.transaction import TransactionModel
 
 
-class TransactionItemsModel(db.Model):
+class TransactionItemsModel(db.Model, SerializerMixin):
 
     __tablename__ = 'transaksi_item'
 

@@ -24,6 +24,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 #model = db.Model
 
+
 class BinaryUUID(TypeDecorator):
     '''Optimize UUID keys. Store as 16 bit binary, retrieve as uuid.
     inspired by:
