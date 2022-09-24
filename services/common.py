@@ -39,5 +39,5 @@ class Common:
 		pp([message, data])
 
 	def listOfDictHelper(objlist):
-		result = [item.obj_to_dict() for item in objlist]
+		result = [item.setObjectToDict() for item in objlist]
 		return result

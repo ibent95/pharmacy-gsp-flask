@@ -1,13 +1,14 @@
-from json import dump
+from datetime import datetime
 from operator import and_
 from pprint import pprint
-import os
+import os, json, time
 
 from flask_sqlalchemy import SQLAlchemy
 from app import app, request, platform, flask, render_template, jsonify
 from configs.database import db
 from models.gsp_history import GSPHistoryModel
 from services.common import Common
+#from services.json import DTEncoder
 from services.number import Number
 from services.gsp import GSP
 from forms.gsp import GSPForm
@@ -34,6 +35,16 @@ class TransactionSchema(Schema):
     transaksi_item = fields.Nested(ProductSchema())
     uuid = fields.Str()
 
+class DTEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        # 👇️ if passed in object is datetime object
+        # convert it to a string
+        if isinstance(obj, datetime):
+            return str(obj)
+        # 👇️ otherwise use the default behavior
+        return json.JSONEncoder.default(self, obj)
+
 
 # GSP Controllers
 @app.route("/gsp", methods=['GET'])
@@ -52,6 +63,7 @@ def gsp():
 @app.route("/gsp-calculation-result", methods=['GET'])
 def gsp_calculation_result():
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
+    data = []
 
     transactions = []
     dataSets = []
@@ -99,17 +111,29 @@ def gsp_calculation_result():
             )
         ).all()
 
-        transactionsSerializeData = Common.listOfDictHelper(transactionRawData)
-        transactionsJsonData = transactionsSerializeData
+        transactionsSerializeData = Common.listOfDictHelper(transactionsRawData)
+        transactionsJsonData = json.dumps(transactionsSerializeData, default=str)
 
-        for transactionRawDataIndex, transactionRawData in enumerate(transactionsRawData) :
-
+        serializeData = []
+        for transactionRawDataIndex, transactionRawData in enumerate(transactionsRawData):
             transaction = TransactionSchema().dump(transactionRawData)
             transaction["transaksi_item"] = ProductSchema(many=True).dump(transactionRawData.transaksi_item) # => dict
-            transaction_items = [(frozenset([transactionItem["kode_produk"]])) for transactionItem in transaction["transaksi_item"]] # => tuple
 
-            transactions.append(transaction)
-            dataSets.append(transaction_items)
+            serializeData.append(transaction)
+
+        dataGroup = [[y for y in serializeData if y['tanggal_transaksi'] == x['tanggal_transaksi']] for x in serializeData]
+
+        for transactionGroup in dataGroup :
+            transactionsGroupData = []
+            for transaction in list(transactionGroup):
+                if (len(transaction["transaksi_item"]) == 1):
+                    transaction_items = transaction["transaksi_item"][0]["kode_produk"]
+                else:
+                    transaction_items = frozenset([transactionItem["kode_produk"] for transactionItem in transaction["transaksi_item"]])
+
+                transactionsGroupData.append(transaction_items)
+                transactions.append(transaction)
+            dataSets.append(transactionsGroupData)
 
         ## Normalize minimal support to float
         normalizedMinimalSupport = Number.percentToFloat(minSupport)
@@ -118,12 +142,18 @@ def gsp_calculation_result():
         if (transactions):
             gsp = GSP(transactions = dataSets, minsup = normalizedMinimalSupport)
             result = gsp.run_alg()
-            Common.setPPrint('GSP calculation initial result', result)
-            Common.setLogger('info', 'GSP calculation result', result)
 
-            gspModel = GSPHistoryModel('1', '2', '3', '4', '5', '6')
-            #db.session.add(gspModel)
-            #db.session.commit()
+            ## For GSP`s` history
+            if (result):
+                resultJsonData = []
+                for frequency_patterns in result:
+                    resultJsonData.append(json.dumps([ { "data_set": data_set, "frequency": frequency } for data_set, frequency in frequency_patterns.items()]))
+                #Common.setPPrint('GSP calculation initial result', result)
+                Common.setLogger('info', 'GSP calculation result', result)
+
+                gspModel = GSPHistoryModel('Aku', 'Aku', startDate, endDate, minSupport, time.strftime('%Y-%m-%d %H:%M:%S'), transactionsJsonData, resultJsonData)
+                db.session.add(gspModel)
+                db.session.commit()
 
         ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
@@ -133,12 +163,13 @@ def gsp_calculation_result():
         #    'transaction': transactions,
         #    'data_sets': dataSets
         #})
+
         Common.setLogger('info', 'GSP calculation initial state', {
             'start_date': startDate,
             'end_date': endDate,
             'minimal_support': minSupport,
-            'transaction': transactions,
-            'data_sets': dataSets
+            #'transaction': transactions,
+            #'data_sets': dataSets
         })
 
     data = {
@@ -151,23 +182,6 @@ def gsp_calculation_result():
         "normalized_minimal_support": normalizedMinimalSupport,
         "result": result
     }
-
-    a = [
-        [frozenset({'A001'}), frozenset({'A003'})],
-        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})],
-        [frozenset({'A002'}), frozenset({'A003'})],
-        [frozenset({'A003'}), frozenset({'A003'}), frozenset({'A002'}), frozenset({'A001'})],
-        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})],
-        [frozenset({'A001'}), frozenset({'A001'}), frozenset({'A002'}), frozenset({'A002'}), frozenset({'A003'}), frozenset({'A003'})],
-        [frozenset({'A002'}), frozenset({'A003'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'})],
-        [frozenset({'A001'}), frozenset({'A002'}), frozenset({'A003'})]
-    ]
 
     return render_template('index.jinja', data = data, os = os)
 

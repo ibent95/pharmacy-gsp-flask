@@ -11,7 +11,7 @@ class GSPHistoryTransactionsModel(db.Model, SerializerMixin):
     __tablename__ = 'gsp_riwayat_transaksi'
 
     id = db.Column(db.BigInteger, primary_key=True, default=func.uuid_short())
-    id_gsp_riwayat = db.Column(db.BigInteger)
+    id_gsp_riwayat = db.Column(db.BigInteger, db.ForeignKey('gsp_riwayat.id'))
     id_transaksi = db.Column(db.BigInteger)
     tanggal_transaksi = db.Column(db.DateTime())
     gsp_history_transaction_items = db.relationship('GSPHistoryTransactionItemsModel', backref='gsp_riwayat_transaksi')
