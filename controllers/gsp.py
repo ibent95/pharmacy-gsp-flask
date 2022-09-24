@@ -1,20 +1,17 @@
 from datetime import datetime
 from operator import and_
-from pprint import pprint
 import os, json, time
 
-from flask_sqlalchemy import SQLAlchemy
-from app import app, request, platform, flask, render_template, jsonify
+from app import app, request, render_template, make_response
 from configs.database import db
 from models.gsp_history import GSPHistoryModel
 from services.common import Common
-#from services.json import DTEncoder
 from services.number import Number
 from services.gsp import GSP
 from forms.gsp import GSPForm
-from sqlalchemy_querybuilder import Filter
 from models.transaction import TransactionModel
 from marshmallow import Schema, fields
+from fpdf import FPDF
 
 
 ## Schemas
@@ -177,7 +174,7 @@ def gsp_calculation_result():
         "title": title,
         "start_date": startDate,
         "end_date": endDate,
-        "transactions": transactions,
+        "transactions": [],
         "minimal_support": minSupport,
         "normalized_minimal_support": normalizedMinimalSupport,
         "result": result
@@ -187,4 +184,30 @@ def gsp_calculation_result():
 
 @app.route("/gsp-report", methods=['GET'])
 def gsp_report():
-    return None
+    fileName = "Coba"
+    # save FPDF() class into a
+    # variable pdf
+    pdf = FPDF()
+
+    # Add a page
+    pdf.add_page()
+
+    # set style and size of font
+    # that you want in the pdf
+    pdf.set_font("Arial", size=15)
+
+    # create a cell
+    pdf.cell(200, 10, txt="GeeksforGeeks",
+            ln=1, align='C')
+
+    # add another cell
+    pdf.cell(200, 10, txt="A Computer Science portal for geeks.", ln=2, align='C')
+
+    # save the pdf with name .pdf
+    #pdf.output(fileName + ".pdf")
+
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers.set('Content-Disposition', 'attachment', filename=fileName + '.pdf')
+    response.headers.set('Content-Type', 'application/pdf')
+
+    return response

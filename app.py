@@ -7,7 +7,7 @@ import locale
 
 from os import environ
 from pathlib import Path
-from flask import Flask, request, flash, url_for, render_template, redirect, jsonify
+from flask import Flask, request, flash, url_for, render_template, redirect, jsonify, make_response
 from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
