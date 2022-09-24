@@ -1,17 +1,17 @@
-from datetime import datetime
-from operator import and_
 import os, json, time
 
 from app import app, request, render_template, make_response
 from configs.database import db
+from models.transaction import TransactionModel
 from models.gsp_history import GSPHistoryModel
+from marshmallow import Schema, fields
+from forms.gsp import GSPForm
+from operator import and_
 from services.common import Common
 from services.number import Number
 from services.gsp import GSP
-from forms.gsp import GSPForm
-from models.transaction import TransactionModel
-from marshmallow import Schema, fields
-from fpdf import FPDF
+from fpdf import FPDF, XPos, YPos
+from datetime import date, datetime
 
 
 ## Schemas
@@ -32,17 +32,6 @@ class TransactionSchema(Schema):
     transaksi_item = fields.Nested(ProductSchema())
     uuid = fields.Str()
 
-class DTEncoder(json.JSONEncoder):
-
-    def default(self, obj):
-        # 👇️ if passed in object is datetime object
-        # convert it to a string
-        if isinstance(obj, datetime):
-            return str(obj)
-        # 👇️ otherwise use the default behavior
-        return json.JSONEncoder.default(self, obj)
-
-
 # GSP Controllers
 @app.route("/gsp", methods=['GET'])
 def gsp():
@@ -51,9 +40,13 @@ def gsp():
         "content": "gsp-contents/gsp.jinja",
         "title": title,
         "form": GSPForm(),
+        "histories": [],
         "gsp_init_value": None,
-
     }
+
+    histories = GSPHistoryModel.query.all()
+
+    data['histories'] = histories
 
     return render_template('index.jinja', data = data, os = os)
 
@@ -61,6 +54,7 @@ def gsp():
 def gsp_calculation_result():
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
     data = []
+    historyUuid = None
 
     transactions = []
     dataSets = []
@@ -152,6 +146,8 @@ def gsp_calculation_result():
                 db.session.add(gspModel)
                 db.session.commit()
 
+                historyUuid = gspModel.uuid
+
         ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
         #    'start_date': startDate,
@@ -177,37 +173,83 @@ def gsp_calculation_result():
         "transactions": [],
         "minimal_support": minSupport,
         "normalized_minimal_support": normalizedMinimalSupport,
+        "history_uuid": historyUuid,
         "result": result
     }
 
     return render_template('index.jinja', data = data, os = os)
 
-@app.route("/gsp-report", methods=['GET'])
-def gsp_report():
-    fileName = "Coba"
-    # save FPDF() class into a
-    # variable pdf
-    pdf = FPDF()
+@app.route("/gsp-report/<uuid>", methods=['GET'])
+def gsp_report(uuid=None):
+
+    # Initial values
+    dateTimeNow = datetime.now()
+    dateTimeNowFormated = dateTimeNow.strftime("%Y-%m-%d-%H-%M-%S")
+    fileName = "[" + dateTimeNowFormated + "] GSP-Report"
+    fileExtention = "pdf"
+    fileNameExtention = fileName + "." + fileExtention
+
+    # GSP data
+    history = GSPHistoryModel.query.filter_by(uuid=uuid).first()
+
+    # save FPDF() class
+    pdf = FPDF(format="A4")
 
     # Add a page
     pdf.add_page()
 
     # set style and size of font
-    # that you want in the pdf
-    pdf.set_font("Arial", size=15)
+    pdf.set_font("Arial", size=11)
 
     # create a cell
-    pdf.cell(200, 10, txt="GeeksforGeeks",
-            ln=1, align='C')
+    pdf.cell(0, 7, "Hasil Perhitungan GSP (Generalized Sequential Pattern)", align='C', new_x="LEFT", new_y="NEXT")
+    pdf.cell(0, 7, "Tanggal " + dateTimeNow.strftime("%Y-%m-%d"), align='C', new_x="LEFT", new_y="NEXT")
 
-    # add another cell
-    pdf.cell(200, 10, txt="A Computer Science portal for geeks.", ln=2, align='C')
+    resultTable = [
+        ["No", "Pola", "Frekuensi"],
+    ]
 
-    # save the pdf with name .pdf
-    #pdf.output(fileName + ".pdf")
+    for item in history.items:
+        i = 1
+        for resultItem in json.loads(item):
+            resultTable.append([
+                i,
+                resultItem["data_set"],
+                resultItem["frequency"],
+            ])
+            i = i + 1
 
-    response = make_response(pdf.output(dest='S').encode('latin-1'))
-    response.headers.set('Content-Disposition', 'attachment', filename=fileName + '.pdf')
+    #i = 0
+    #for result in resultTable :
+    #    if (i == 0):
+    #        for item in result:
+    #            pdf.cell(0, 7, str(item), 1, new_x="END", new_y="TOP")
+    #        pdf.ln(7)
+    #    else:
+    #        y = 0
+    #        for item in result :
+    #            if (y == 1):
+    #                pdf.cell(0, 7, ", ".join(item), 1, new_x="END", new_y="TOP")
+    #            else:
+    #                pdf.cell(0, 7, str(item), 1, new_x="END", new_y="TOP")
+    #            y = y + 1
+    #        pdf.ln(7)
+    #    i = i + 1
+
+    line_height = pdf.font_size * 3.0
+    col_width = pdf.epw / 5  # distribute content evenly
+    for row in resultTable:
+        y = 0
+        for datum in row:
+            if (y == 1):
+                pdf.multi_cell(20, line_height, ", ".join(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
+            else:
+                pdf.multi_cell(20, line_height, str(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
+        pdf.ln(line_height)
+
+    # save the pdf with fileName .pdf
+    response = make_response(pdf.output())
+    response.headers.set('Content-Disposition', 'attachment', filename=fileNameExtention)
     response.headers.set('Content-Type', 'application/pdf')
 
     return response

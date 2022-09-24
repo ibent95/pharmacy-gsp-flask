@@ -196,4 +196,58 @@
 
 	</div>
 	<!-- [ Main Content ] end -->
+
+	<!-- [ History Content ] start -->
+	<div class="row">
+
+		<!-- Start transaction data (data sets) -->
+		<div class="col-xl-12 col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h5>Riwayat perhitungan GSP</h5>
+				</div>
+				<div class="pro-scroll" style="height: auto;">
+					<div class="card-body">
+
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped m-b-0">
+								<thead>
+									<tr>
+										<th style="width: 1%;">No</th>
+										<th>Tanggal perhitungan</th>
+										<th>Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for history in data.histories %}
+
+										<!-- Start list -->
+										<tr class="">
+											<td>{{ loop.index }}</td>
+											<td>{{ history.tanggal_masuk.strftime('%A, %d %B %Y') }}</td>
+											<td class="text-right">
+												<button class="btn btn-sm btn-shadow btn-warning" onclick="location.href = `{{ url_for('gsp_report', uuid=history.uuid) }}`;">Cetak PDF</button>
+											</td>
+										</tr>
+										<!-- End list -->
+									{% else %}
+										<tr>
+											<td colspan="4">
+												<div class="text-center">Belum ada data.</div>
+											</td>
+										</tr>
+									{% endfor %}
+
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End transaction data (data sets) -->
+
+	</div>
+	<!-- [ History Content ] end -->
 </div>

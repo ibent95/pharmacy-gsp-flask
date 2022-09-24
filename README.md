@@ -18,7 +18,7 @@ Please install these python library:
  5. pip install PyMySQL
  6. pip install Flask-SQLAlchemy
  7. pip install marshmallow
- 8. pip install fpdf
+ 8. pip install fpdf2
 
 [Opsional]
  9. pip install sqlalchemy-querybuilder
