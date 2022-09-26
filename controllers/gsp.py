@@ -10,7 +10,7 @@ from operator import and_
 from services.common import Common
 from services.number import Number
 from services.gsp import GSP
-from fpdf import FPDF, XPos, YPos
+from fpdf import FPDF
 from datetime import date, datetime
 
 
@@ -36,6 +36,7 @@ class TransactionSchema(Schema):
 @app.route("/gsp", methods=['GET'])
 def gsp():
     title = "Perhitungan (GSP)"
+    page = request.args.get('page', 1, type=int)
     data = {
         "content": "gsp-contents/gsp.jinja",
         "title": title,
@@ -44,7 +45,7 @@ def gsp():
         "gsp_init_value": None,
     }
 
-    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).all()
+    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
 
     data['histories'] = histories
 

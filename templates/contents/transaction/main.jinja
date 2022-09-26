@@ -64,6 +64,11 @@
 					<!-- Table -->
 					<div class="row mb-3">
 						<div class="col-md">
+
+							{# Page info #}
+							<span>(Hal. {{ data.transactions.page }})</span>
+
+							{# Table of result #}
 							<div class="table-responsive">
 								<table class="table table-bordered table-striped m-b-0">
 									<thead>
@@ -75,7 +80,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										{% for transaction in data.transactions %}
+										{% for transaction in data.transactions.items %}
 											{# Template START #}
 											{% set temp = transaction %}
 											{# Template END #}
@@ -113,6 +118,50 @@
 
 									</tbody>
 								</table>
+
+								{# Pagination #}
+								<nav aria-label="Page pagination" style="margin-top: 16px;">
+									<ul class="pagination justify-content-center">
+
+										{% if data.transactions.has_prev %}
+											<li class="page-item">
+												<a class="page-link" href="{{ url_for('transaction', page=data.transactions.prev_num) }}">
+													<span aria-hidden="true">&laquo;</span>
+												</a>
+											</li>
+										{% endif %}
+
+										{% for number in data.transactions.iter_pages() %}
+
+											{% if (data.transactions.page != number) %}
+													{% if (number != None) %}
+														<li class="page-item">
+															<a class="page-link" href="{{ url_for('transaction', page=number) }}">{{ number }}</a>
+														</li>
+													{% else %}
+														<li class="page-item disabled">
+															<span class="page-link">...</span>
+														</li>
+													{% endif %}
+											{% else %}
+												<li class="page-item active" aria-current="page">
+													<span class="page-link">{{ number }}</span>
+												</li>
+											{% endif %}
+
+										{% endfor %}
+
+										{% if data.transactions.has_next %}
+											<li class="page-item">
+												<a class="page-link" href="{{ url_for('transaction', page=data.transactions.next_num) }}">
+													<span aria-hidden="true">&raquo;</span>
+												</a>
+											</li>
+										{% endif %}
+
+									</ul>
+								</nav>
+
 							</div>
 						</div>
 					</div>

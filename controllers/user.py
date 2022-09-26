@@ -10,12 +10,13 @@ from models.user import UserModel
 @app.route("/user", methods=['GET'])
 def user():
     title = "Pengguna"
+    page = request.args.get('page', 1, type=int)
     data = {
         "content": "user/main.jinja",
         "title": title,
     }
 
-    users = UserModel.query.order_by(UserModel.id.desc()).all()
+    users = UserModel.query.order_by(UserModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
 
     data['users'] = users
 

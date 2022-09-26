@@ -209,7 +209,12 @@
 				<div class="pro-scroll" style="height: auto;">
 					<div class="card-body">
 
+						{# Page info #}
+						<span>(Hal. {{ data.histories.page }})</span>
+
+						{# Table of result #}
 						<div class="table-responsive">
+
 							<table class="table table-bordered table-striped m-b-0">
 								<thead>
 									<tr>
@@ -219,7 +224,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for history in data.histories %}
+									{% for history in data.histories.items %}
 
 										<!-- Start list -->
 										<tr class="">
@@ -240,6 +245,50 @@
 
 								</tbody>
 							</table>
+
+							{# Pagination #}
+							<nav aria-label="Page pagination">
+								<ul class="pagination justify-content-center">
+
+									{% if data.histories.has_prev %}
+										<li class="page-item">
+											<a class="page-link" href="{{ url_for('gsp', page=data.histories.prev_num) }}">
+												<span aria-hidden="true">&laquo;</span>
+											</a>
+										</li>
+									{% endif %}
+
+									{% for number in data.histories.iter_pages() %}
+
+										{% if (data.histories.page != number) %}
+												{% if (number != None) %}
+													<li class="page-item">
+														<a class="page-link" href="{{ url_for('gsp', page=number) }}">{{ number }}</a>
+													</li>
+												{% else %}
+													<li class="page-item disabled">
+														<span class="page-link">...</span>
+													</li>
+												{% endif %}
+										{% else %}
+											<li class="page-item active" aria-current="page">
+												<span class="page-link">{{ number }}</span>
+											</li>
+										{% endif %}
+
+									{% endfor %}
+
+									{% if data.histories.has_next %}
+										<li class="page-item">
+											<a class="page-link" href="{{ url_for('gsp', page=data.histories.next_num) }}">
+												<span aria-hidden="true">&raquo;</span>
+											</a>
+										</li>
+									{% endif %}
+
+								</ul>
+							</nav>
+
 						</div>
 
 					</div>

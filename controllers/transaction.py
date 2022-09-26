@@ -18,13 +18,14 @@ from models.transaction_items import TransactionItemsModel
 @app.route("/transaction", methods=['GET'])
 def transaction():
     title = "Transaksi"
+    page = request.args.get('page', 1, type=int)
     data = {
         "content": "transaction/main.jinja",
         "title": title,
         "transactions": [],
     }
 
-    transactions = TransactionModel.query.order_by(TransactionModel.id.desc()).all()
+    transactions = TransactionModel.query.order_by(TransactionModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
 
     data['transactions'] = transactions
 
