@@ -15,7 +15,10 @@ def drug():
         "title": title,
     }
 
-    drugs = DrugModel.query.order_by(DrugModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False).items
+    drugs = DrugModel.query.order_by(DrugModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+
+    #next_url = url_for('drug', page=drugs.next_num) if drugs.has_next else None
+    #prev_url = url_for('drug', page=drugs.prev_num) if drugs.has_prev else None
 
     data['drugs'] = drugs
 
