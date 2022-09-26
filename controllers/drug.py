@@ -15,7 +15,7 @@ def drug():
         "title": title,
     }
 
-    drugs = DrugModel.query.order_by(DrugModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+    drugs = DrugModel.query.order_by(DrugModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False).items
 
     data['drugs'] = drugs
 
