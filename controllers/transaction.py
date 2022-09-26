@@ -24,7 +24,7 @@ def transaction():
         "transactions": [],
     }
 
-    transactions = TransactionModel.query.all()
+    transactions = TransactionModel.query.order_by(TransactionModel.id.desc()).all()
 
     data['transactions'] = transactions
 

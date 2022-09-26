@@ -9,12 +9,13 @@ from models.drug import DrugModel
 @app.route("/drug", methods=['GET'])
 def drug():
     title = "Obat"
+    page = request.args.get('page', 1, type=int)
     data = {
         "content": "drug/main.jinja",
         "title": title,
     }
 
-    drugs = DrugModel.query.all()
+    drugs = DrugModel.query.order_by(DrugModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
 
     data['drugs'] = drugs
 

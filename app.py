@@ -30,7 +30,8 @@ app.config.update({
         'MANIFEST_FILE': BASE_DIR / "static/manifest.json", # BASE_DIR / "frontend/build/manifest.json"
     }
 })
-app.config['SECRET_KEY'] = "pharmacyapp"
+app.config['SECRET_KEY']        = "pharmacyapp"
+app.config['ITEMS_PER_PAGE']    = 10
 setup_jinja2_ext(app)
 
 # Load db variable for cli command database_init()

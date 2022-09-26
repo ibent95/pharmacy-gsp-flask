@@ -44,7 +44,7 @@ def gsp():
         "gsp_init_value": None,
     }
 
-    histories = GSPHistoryModel.query.all()
+    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).all()
 
     data['histories'] = histories
 

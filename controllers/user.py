@@ -15,7 +15,7 @@ def user():
         "title": title,
     }
 
-    users = UserModel.query.all()
+    users = UserModel.query.order_by(UserModel.id.desc()).all()
 
     data['users'] = users
 
