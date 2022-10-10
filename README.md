@@ -15,17 +15,17 @@ Please install these python library:
  2. pip install Flask-WTF
  3. pip install python-dotenv
  4. pip install python-webpack-boilerplate
-10. pip install flask-login
- 5. pip install PyMySQL
- 6. pip install Flask-SQLAlchemy
- 7. pip install SQLAlchemy-serializer
- 8. pip install marshmallow
- 9. pip install fpdf2
+ 5. pip install flask-login
+ 6. pip install PyMySQL
+ 7. pip install Flask-SQLAlchemy
+ 8. pip install SQLAlchemy-serializer
+ 9. pip install marshmallow
+10. pip install fpdf2
 
 [Opsional]
 
-10. pip install sqlalchemy-querybuilder
-11. pip install autopep8
+11. pip install sqlalchemy-querybuilder
+12. pip install autopep8
 
 Don't forget to run MySQL Server and make database `pharmacy_gsp_app`.
 
