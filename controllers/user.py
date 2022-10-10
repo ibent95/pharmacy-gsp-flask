@@ -1,6 +1,6 @@
 import os
 
-from app import app, request, render_template, redirect, flash, url_for
+from app import app, request, render_template, redirect, flash, url_for, login_required
 from configs.database import db
 from forms.user import UserForm
 from models.user import UserModel
@@ -8,6 +8,7 @@ from models.user import UserModel
 
 # User
 @app.route("/user", methods=['GET'])
+@login_required
 def user():
     title = "Pengguna"
     page = request.args.get('page', 1, type=int)
@@ -24,6 +25,7 @@ def user():
 
 @app.route("/user/create", methods=['GET'])
 @app.route("/user/update/<uuid>", methods=['GET'])
+@login_required
 def user_form(uuid = None):
     title = "Formulir master data pengguna"
     data = {
@@ -39,6 +41,7 @@ def user_form(uuid = None):
     return render_template('index.jinja', data=data, os=os)
 
 @app.route("/user/manage", methods=['GET', 'POST'])
+@login_required
 def user_create(uuid = None):
     form = UserForm()
 
@@ -59,6 +62,7 @@ def user_create(uuid = None):
     else:
 
         user = UserModel(request.form['nama_pengguna'], request.form['role'], request.form['username'], request.form['password'])
+        user.set_password(request.form['password'])
 
         db.session.add(user)
 
@@ -67,6 +71,7 @@ def user_create(uuid = None):
     return redirect(url_for('user'))
 
 @app.route("/user/manage/<uuid>", methods=['GET', 'POST'])
+@login_required
 def user_update(uuid = None):
     form = UserForm()
 
@@ -93,12 +98,14 @@ def user_update(uuid = None):
             user.role = request.form['role']
             user.username = request.form['username']
             user.password = request.form['password']
+            user.set_password(request.form['password'])
 
         db.session.commit()
 
     return redirect(url_for('user'))
 
 @app.route("/user/manage/<uuid>/delete", methods=['GET', 'POST'])
+@login_required
 def user_delete(uuid = None):
 
     # Delete

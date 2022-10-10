@@ -1,9 +1,12 @@
+import os
+
 from json import dump
 from operator import and_
 from pprint import pp, pprint
-import os
 
 from app import app, request, platform, flask, render_template, jsonify
+from werkzeug.routing import BaseConverter, ValidationError
+from enumerations.common import GSPCalculationTypeEnum
 
 
 class Common:
@@ -41,3 +44,16 @@ class Common:
 	def listOfDictHelper(objlist):
 		result = [item.setObjectToDict() for item in objlist]
 		return result
+
+
+class RequestTypeConverter(BaseConverter):
+
+	def to_python(self, value):
+		try:
+			request_type = GSPCalculationTypeEnum(value)
+			return request_type
+		except ValueError as err:
+			raise ValidationError()
+
+	def to_url(self, object):
+		return object

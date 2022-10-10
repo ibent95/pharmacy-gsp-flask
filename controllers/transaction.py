@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 from flask_sqlalchemy import SQLAlchemy
-from app import app, request, render_template, redirect, flash, url_for
+from app import app, request, render_template, redirect, flash, url_for, login_required
 from configs.database import db
 from pprint import pprint
 from forms.transaction import TransactionForm
@@ -16,6 +16,7 @@ from models.transaction_items import TransactionItemsModel
 
 # Transaction
 @app.route("/transaction", methods=['GET'])
+@login_required
 def transaction():
     title = "Transaksi"
     page = request.args.get('page', 1, type=int)
@@ -33,6 +34,7 @@ def transaction():
 
 @app.route("/transaction/create", methods=['GET'])
 @app.route("/transaction/update/<uuid>", methods=['GET'])
+@login_required
 def transaction_form(uuid=None):
     title = "Formulir transaksi"
     transactionProductListForm = TransactionProductListForm(prefix='daftar_produk-_-')
@@ -70,6 +72,7 @@ def transaction_form(uuid=None):
     return render_template('index.jinja', data=data, os=os, _transactionProductListFormTemplate=transactionProductListForm)
 
 @app.route("/transaction/manage", methods=['GET', 'POST'])
+@login_required
 def transaction_create(uuid=None):
 
     drugs = [(drug.kode_produk, drug.nama_produk) for drug in DrugModel.query.all()]
@@ -119,6 +122,7 @@ def transaction_create(uuid=None):
     return redirect(url_for('transaction'))
 
 @app.route("/transaction/manage/<uuid>", methods=['GET', 'POST'])
+@login_required
 def transaction_update(uuid=None):
 
     drugs = [(drug.kode_produk, drug.nama_produk) for drug in DrugModel.query.all()]
@@ -205,6 +209,7 @@ def transaction_update(uuid=None):
     return redirect(url_for('transaction'))
 
 @app.route("/transaction/manage/<uuid>/delete", methods=['GET', 'POST'])
+@login_required
 def transaction_delete(uuid=None):
 
     if (uuid):

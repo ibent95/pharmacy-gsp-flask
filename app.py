@@ -1,13 +1,9 @@
-import os
-import platform
-import flask
-import logging
-import logging.config
-import locale
+import os, platform, flask, logging, logging.config, locale
 
 from os import environ
 from pathlib import Path
 from flask import Flask, request, flash, url_for, render_template, redirect, jsonify, make_response
+from flask_login import LoginManager, login_user, logout_user, login_required
 from markupsafe import escape
 from dotenv import load_dotenv
 from datetime import datetime
@@ -34,13 +30,25 @@ app.config['SECRET_KEY']        = "pharmacyapp"
 app.config['ITEMS_PER_PAGE']    = 10
 setup_jinja2_ext(app)
 
+# Login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 # Load db variable for cli command database_init()
 from configs.database import db
 
 from services.common import Common
 
+
 # Load router configurations and importer of controlers
 import configs.route
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models.user import UserModel
+    return UserModel.query.filter_by(id=user_id).first()
+
 
 # Database intialization when first run
 @app.before_first_request

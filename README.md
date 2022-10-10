@@ -15,6 +15,7 @@ Please install these python library:
  2. pip install Flask-WTF
  3. pip install python-dotenv
  4. pip install python-webpack-boilerplate
+10. pip install flask-login
  5. pip install PyMySQL
  6. pip install Flask-SQLAlchemy
  7. pip install SQLAlchemy-serializer

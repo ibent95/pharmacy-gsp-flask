@@ -70,6 +70,7 @@
 					<!-- Form -->
 					<form class="row g-3" action="{{ url_for('drug_update', uuid=data.drug.uuid) if (data.drug.uuid) else url_for('drug_create') }}" method="POST" enctype="multipart/form-data">
 						{{ data.form.csrf_token }}
+
 						<div class="col-2">
 							<label for="product_code" class="form-label">{{ data.form.kode_produk.label }}</label>
 							{{ data.form.kode_produk(class="form-control", id="product_code", value=data.drug.kode_produk) }}
