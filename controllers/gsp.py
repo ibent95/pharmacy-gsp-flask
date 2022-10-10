@@ -1,18 +1,21 @@
 import os, json, time
 
-from app import app, request, render_template, make_response
+from app import app, request, render_template, make_response, login_required
 from configs.database import db
+from enumerations.common import GSPCalculationTypeEnum
 from models.transaction import TransactionModel
 from models.gsp_history import GSPHistoryModel
 from marshmallow import Schema, fields
 from forms.gsp import GSPForm
 from operator import and_
-from services.common import Common
+from services.common import Common, RequestTypeConverter
 from services.number import Number
 from services.gsp import GSP
 from fpdf import FPDF
 from datetime import date, datetime
 
+
+app.url_map.converters.update(request_type=RequestTypeConverter)
 
 ## Schemas
 class ProductSchema(Schema):
@@ -34,6 +37,7 @@ class TransactionSchema(Schema):
 
 # GSP Controllers
 @app.route("/gsp", methods=['GET'])
+@login_required
 def gsp():
     title = "Perhitungan (GSP)"
     page = request.args.get('page', 1, type=int)
@@ -51,8 +55,30 @@ def gsp():
 
     return render_template('index.jinja', data = data, os = os)
 
-@app.route("/gsp-calculation-result", methods=['GET'])
-def gsp_calculation_result():
+@app.route("/gsp/<request_type:calculation_type>", methods=['GET'])
+@login_required
+def gsp_training_testing_data(calculation_type):
+    title = "Perhitungan (GSP)"
+    page = request.args.get('page', 1, type=int)
+    data = {
+        "content": "gsp-contents/gsp.jinja",
+        "title": title,
+        "form": GSPForm(),
+        "histories": [],
+        "gsp_init_value": None,
+        "calculation_type": calculation_type.value,
+    }
+
+    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+
+    data['histories'] = histories
+
+    return render_template('index.jinja', data = data, os = os)
+
+@app.route("/gsp-calculation-result", methods=['GET', 'POST'])
+@app.route("/gsp-calculation-result/<request_type:calculation_type>", methods=['GET'])
+@login_required
+def gsp_calculation_result(calculation_type=None):
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
     data = []
     historyUuid = None
@@ -69,6 +95,8 @@ def gsp_calculation_result():
     minSupport = request.args.get('min_support') if (request.args.get('min_support')) else 10
 
     if (startDate and endDate and minSupport):
+
+        Common.setPPrint('calculation_type', calculation_type.value)
 
         ## 1
         #rule = {
@@ -96,12 +124,42 @@ def gsp_calculation_result():
         #).all()
 
         ## 2
-        transactionsRawData = TransactionModel.query.filter(
-            and_(
-                TransactionModel.tanggal_transaksi >= startDate,
-                TransactionModel.tanggal_transaksi <= endDate
+        if (calculation_type == GSPCalculationTypeEnum.TRAINING):
+
+            rawData = TransactionModel.query.filter(
+                and_(
+                    TransactionModel.tanggal_transaksi >= startDate,
+                    TransactionModel.tanggal_transaksi <= endDate
+                )
             )
-        ).all()
+
+            rawDataLimit = (90 * rawData.count()) / 100
+            rawDataOffset = 0
+
+            transactionsRawData = rawData.limit(rawDataLimit).offset(rawDataOffset).all()
+
+        elif (calculation_type == GSPCalculationTypeEnum.TESTING):
+
+            rawData = TransactionModel.query.filter(
+                and_(
+                    TransactionModel.tanggal_transaksi >= startDate,
+                    TransactionModel.tanggal_transaksi <= endDate
+                )
+            )
+
+            rawDataLimit = (10 * rawData.count()) / 100
+            rawDataOffset = (90 * rawData.count()) / 100
+
+            transactionsRawData = rawData.limit(rawDataLimit).offset(rawDataOffset).all()
+
+        else:
+
+            transactionsRawData = TransactionModel.query.filter(
+                and_(
+                    TransactionModel.tanggal_transaksi >= startDate,
+                    TransactionModel.tanggal_transaksi <= endDate
+                )
+            ).all()
 
         transactionsSerializeData = Common.listOfDictHelper(transactionsRawData)
         transactionsJsonData = json.dumps(transactionsSerializeData, default=str)
@@ -163,6 +221,7 @@ def gsp_calculation_result():
             'end_date': endDate,
             'minimal_support': minSupport,
             #'transaction': transactions,
+            'transaction_count': len(transactions)
             #'data_sets': dataSets
         })
 
@@ -181,6 +240,7 @@ def gsp_calculation_result():
     return render_template('index.jinja', data = data, os = os)
 
 @app.route("/gsp-report/<uuid>", methods=['GET'])
+@login_required
 def gsp_report(uuid=None):
 
     # Initial values

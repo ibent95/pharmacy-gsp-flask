@@ -191,7 +191,9 @@
 						<!-- End result table -->
 
 						<!-- Export -->
-						<button class="btn btn-sm btn-shadow btn-primary" onclick="location.href = `{{ url_for('gsp_report', uuid=data.history_uuid) }}`;">Cetak PDF</button>
+						{% if data.history_uuid %}
+							<button class="btn btn-sm btn-shadow btn-primary" onclick="location.href = `{{ url_for('gsp_report', uuid=data.history_uuid) }}`;">Cetak PDF</button>
+						{% endif %}
 					</div>
 				</div>
 			</div>
