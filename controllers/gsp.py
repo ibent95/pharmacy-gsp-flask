@@ -346,8 +346,9 @@ def gsp_transaction(uuid):
 
         #Common.setPPrint('GSP transaction', transaction['transaksi_item'])
 
-        transactionsDataContainer += "<div class='col col-md-4 col-sm-12 col-xs-12'><div class='table-responsive'>"
-        transactionsDataContainer += "<h5>Transaksi [" + transaction['nomor_transaksi'] + " - " + transaction['nama_pelanggan'] + "] pada " + transaction['tanggal_transaksi'] + " (Total: " + str(len(transaction['transaksi_item'])) + ") </h5>"
+        transactionsDataContainer += "<div class='col col-md-3 col-sm-12 col-xs-12' style='margin-top: 15px;'><div class='table-responsive'>"
+        transactionsDataContainer += "<h5>Transaksi " + str(transactionIndex + 1) + "</h5>"
+        transactionsDataContainer += "<table><tbody><tr><td>No. Transaksi</td><td>:</td><td>" + transaction['nomor_transaksi'] + "</td></tr><tr><td>Nama pelanggan</td><td>:</td><td>" + transaction['nama_pelanggan'] + "</td></tr><tr><td>Tanggal transaksi</td><td>:</td><td>" + str(transaction['tanggal_transaksi']) + "</td></tr><tr><td>Jumlah produk</td><td>:</td><td>" + str(len(transaction['transaksi_item'])) + "</td></tr><tr><td>Daftar produk</td><td>:</td><td></td></tr></tbody></table>"
         transactionsDataContainer += "<table class='table table-secondary table-striped table-condensed'><thead style='display: block;'><tr><th style='width: 1%;'>No</th><th style='width: auto;'>Kode obat</th><th style='width: auto;'>Nama obat</th><th style='width: auto;'>Jumlah</th></tr></thead><tbody style='display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;'>"
 
         for dataSetIndex, data_set in enumerate(transaction['transaksi_item']):
