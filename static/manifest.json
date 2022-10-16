@@ -129,14 +129,22 @@
   "assets/js/pages/google-maps.js": "assets/js/pages/google-maps.js",
   "assets/js/pcoded.min.js": "assets/js/pcoded.min.js",
   "assets/js/plugins/apexcharts.min.js": "assets/js/plugins/apexcharts.min.js",
+  "assets/js/plugins/apexcharts.min.js.LICENSE.txt": "assets/js/plugins/apexcharts.min.js.LICENSE.txt",
   "assets/js/plugins/bootstrap.min.js": "assets/js/plugins/bootstrap.min.js",
+  "assets/js/plugins/bootstrap.min.js.LICENSE.txt": "assets/js/plugins/bootstrap.min.js.LICENSE.txt",
   "assets/js/plugins/feather.min.js": "assets/js/plugins/feather.min.js",
+  "assets/js/plugins/feather.min.js.LICENSE.txt": "assets/js/plugins/feather.min.js.LICENSE.txt",
   "assets/js/plugins/gmaps.min.js": "assets/js/plugins/gmaps.min.js",
   "assets/js/plugins/perfect-scrollbar.min.js": "assets/js/plugins/perfect-scrollbar.min.js",
+  "assets/js/plugins/perfect-scrollbar.min.js.LICENSE.txt": "assets/js/plugins/perfect-scrollbar.min.js.LICENSE.txt",
   "assets/js/plugins/vex.combined.js": "assets/js/plugins/vex.combined.js",
+  "assets/js/plugins/vex.combined.js.LICENSE.txt": "assets/js/plugins/vex.combined.js.LICENSE.txt",
   "assets/js/plugins/vex.combined.min.js": "assets/js/plugins/vex.combined.min.js",
+  "assets/js/plugins/vex.combined.min.js.LICENSE.txt": "assets/js/plugins/vex.combined.min.js.LICENSE.txt",
   "assets/js/plugins/vex.js": "assets/js/plugins/vex.js",
+  "assets/js/plugins/vex.js.LICENSE.txt": "assets/js/plugins/vex.js.LICENSE.txt",
   "assets/js/plugins/vex.min.js": "assets/js/plugins/vex.min.js",
+  "assets/js/plugins/vex.min.js.LICENSE.txt": "assets/js/plugins/vex.min.js.LICENSE.txt",
   "assets/js/vendor-all.min.js": "assets/js/vendor-all.min.js",
   "entrypoints": {
     "app": {
@@ -158,5 +166,7 @@
   "images/picture3.jpg": "images/picture3.jpg",
   "images/sample.jpg": "images/sample.jpg",
   "images/webpack.png": "images/webpack.png",
+  "js/app.js.map": "js/app.js.map",
+  "js/manifest.js.map": "js/manifest.js.map",
   "manifest.js": "js/manifest.js"
 }

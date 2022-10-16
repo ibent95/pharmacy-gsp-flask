@@ -205,7 +205,6 @@ def transaction_update(uuid=None):
             flash('There is no id.')
             return redirect(url_for('drug'))
 
-
     return redirect(url_for('transaction'))
 
 @app.route("/transaction/manage/<uuid>/delete", methods=['GET', 'POST'])

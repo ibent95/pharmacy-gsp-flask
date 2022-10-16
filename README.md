@@ -20,12 +20,13 @@ Please install these python library:
  7. pip install Flask-SQLAlchemy
  8. pip install SQLAlchemy-serializer
  9. pip install marshmallow
-10. pip install fpdf2
+10. pip install flask-paginate
+11. pip install fpdf2
 
 [Opsional]
 
-11. pip install sqlalchemy-querybuilder
-12. pip install autopep8
+12. pip install sqlalchemy-querybuilder
+13. pip install autopep8
 
 Don't forget to run MySQL Server and make database `pharmacy_gsp_app`.
 

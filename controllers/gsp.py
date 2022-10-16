@@ -1,7 +1,10 @@
 import os, json, time
 
-from app import app, request, render_template, make_response, login_required
+from markupsafe import Markup
+
+from app import app, request, url_for, render_template, make_response, login_required, json, Response
 from configs.database import db
+from flask_paginate import Pagination, get_page_args
 from enumerations.common import GSPCalculationTypeEnum
 from models.transaction import TransactionModel
 from models.gsp_history import GSPHistoryModel
@@ -32,7 +35,7 @@ class TransactionSchema(Schema):
     nomor_transaksi = fields.Str()
     tanggal_transaksi = fields.Str()
     nama_pelanggan = fields.Str()
-    transaksi_item = fields.Nested(ProductSchema())
+    transaksi_item = fields.List(fields.Nested("ProductSchema"))
     uuid = fields.Str()
 
 # GSP Controllers
@@ -76,12 +79,16 @@ def gsp_training_testing_data(calculation_type):
     return render_template('index.jinja', data = data, os = os)
 
 @app.route("/gsp-calculation-result", methods=['GET', 'POST'])
-@app.route("/gsp-calculation-result/<request_type:calculation_type>", methods=['GET'])
+@app.route("/gsp-calculation-result/<request_type:calculation_type>", methods=['GET', 'POST'])
 @login_required
 def gsp_calculation_result(calculation_type=None):
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
+    csrfToken = request.args.get('csrf_token')
+    page = request.args.get('page', 1, type=int)
     data = []
-    historyUuid = None
+    historyUuid = historiesPagination = None
+    histories = []
+    page, per_page, offset = get_page_args(page_parameter='page')
 
     transactions = []
     dataSets = []
@@ -161,15 +168,17 @@ def gsp_calculation_result(calculation_type=None):
                 )
             ).all()
 
-        transactionsSerializeData = Common.listOfDictHelper(transactionsRawData)
-        transactionsJsonData = json.dumps(transactionsSerializeData, default=str)
+        #transactionsSerializeData = Common.listOfDictHelper(transactionsRawData)
+        #transactionsJsonData = json.dumps(transactionsSerializeData, default=str)
 
         serializeData = []
         for transactionRawDataIndex, transactionRawData in enumerate(transactionsRawData):
             transaction = TransactionSchema().dump(transactionRawData)
-            transaction["transaksi_item"] = ProductSchema(many=True).dump(transactionRawData.transaksi_item) # => dict
+            #transaction["transaksi_item"] = [ProductSchema().dump(produk) for produk in transactionRawData.transaksi_item] # => dict
 
             serializeData.append(transaction)
+
+        transactionsJsonData = json.dumps(serializeData, default=str)
 
         dataGroup = [[y for y in serializeData if y['tanggal_transaksi'] == x['tanggal_transaksi']] for x in serializeData]
 
@@ -199,13 +208,15 @@ def gsp_calculation_result(calculation_type=None):
                 for frequency_patterns in result:
                     resultJsonData.append(json.dumps([ { "data_set": data_set, "frequency": frequency } for data_set, frequency in frequency_patterns.items()]))
                 #Common.setPPrint('GSP calculation initial result', result)
-                Common.setLogger('info', 'GSP calculation result', result)
+                #Common.setLogger('info', 'GSP calculation result', result)
 
                 gspModel = GSPHistoryModel('Aku', 'Aku', startDate, endDate, minSupport, time.strftime('%Y-%m-%d %H:%M:%S'), transactionsJsonData, resultJsonData)
                 db.session.add(gspModel)
                 db.session.commit()
 
                 historyUuid = gspModel.uuid
+                transactionsHistories = Common.getDataPerPage(json.loads(transactionsJsonData), offset, per_page) ## Change the name to transaction later
+                transactionsHistoriesPagination = Pagination(page=page, total=len(json.loads(transactionsJsonData))) ## Change the name to transaction later
 
         ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
@@ -230,7 +241,10 @@ def gsp_calculation_result(calculation_type=None):
         "title": title,
         "start_date": startDate,
         "end_date": endDate,
-        "transactions": [],
+        #"transactions": transaction,
+        "csrf_token": csrfToken,
+        "transactions": transactionsHistories,
+        "transactions_pagination": transactionsHistoriesPagination,
         "minimal_support": minSupport,
         "normalized_minimal_support": normalizedMinimalSupport,
         "history_uuid": historyUuid,
@@ -314,3 +328,76 @@ def gsp_report(uuid=None):
     response.headers.set('Content-Type', 'application/pdf')
 
     return response
+
+@app.route("/gsp-transactions/<uuid>", methods=['GET'])
+def gsp_transaction(uuid):
+    page = request.args.get('page', 1, type=int)
+    page, per_page, offset = get_page_args(page_parameter='page')
+
+    history = GSPHistoryModel.query.filter_by(uuid=uuid).first()
+    transactions = json.loads(history.transactions)
+
+    # Transactions data
+    transactionsLimitData = Common.getDataPerPage(transactions, offset, per_page)
+
+    # Start handle trabsaction data
+    transactionsDataContainer = ""
+    for transactionIndex, transaction in enumerate(transactionsLimitData):
+
+        #Common.setPPrint('GSP transaction', transaction['transaksi_item'])
+
+        transactionsDataContainer += "<div class='col col-md-4 col-sm-12 col-xs-12'><div class='table-responsive'>"
+        transactionsDataContainer += "<h5>Transaksi [" + transaction['nomor_transaksi'] + " - " + transaction['nama_pelanggan'] + "] pada " + transaction['tanggal_transaksi'] + " (Total: " + str(len(transaction['transaksi_item'])) + ") </h5>"
+        transactionsDataContainer += "<table class='table table-secondary table-striped table-condensed'><thead style='display: block;'><tr><th style='width: 1%;'>No</th><th style='width: auto;'>Kode obat</th><th style='width: auto;'>Nama obat</th><th style='width: auto;'>Jumlah</th></tr></thead><tbody style='display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;'>"
+
+        for dataSetIndex, data_set in enumerate(transaction['transaksi_item']):
+
+            transactionsDataContainer += "<tr><td style='width: 1%;'>" + str(dataSetIndex + 1) + "</td><td style='width: auto;'>"
+            transactionsDataContainer += "<div class='badge bg-light text-dark fw-bold lh-base'>" + data_set['kode_produk'] + "</div></td><td style='width: auto;'>"
+            transactionsDataContainer += "<div class='badge bg-light text-dark fw-bold lh-base'>" + data_set['nama_produk'] + "</div></td><td style='width: auto;'>"
+            transactionsDataContainer += "<div class='badge bg-light text-dark fw-bold lh-base'>" + data_set['jumlah_produk'] + "</div></td></tr>"
+
+        transactionsDataContainer += "</tbody></table></div></div>"
+    # End handle trabsaction data
+
+    # Transactions pagination data
+    transactionsPagination = Pagination(page=page, total=len(transactions))
+
+    # Start handle pagination
+    transactionsPaginationLinks = "<ul class='pagination justify-content-center'>"
+
+    if transactionsPagination.has_prev :
+        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page - 1) + "`)'>&laquo;</button></li>"
+
+    for number in transactionsPagination.pages:
+
+        if (transactionsPagination.page != number) :
+            if (number != None):
+                transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=number) + "`)'>" + str(number) + "</button></li>"
+            else:
+                transactionsPaginationLinks += "<li class='page-item disabled'><span class='page-link'>...</span></li>"
+
+        else :
+            transactionsPaginationLinks += "<li class='page-item active' aria-current='page'><span class='page-link'>" + str(number) + "</span></li>"
+
+    if transactionsPagination.has_next:
+        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page + 1) + "`)'>&raquo;</button></li>"
+
+    transactionsPaginationLinks += "</ul>"
+    # End handle pagination
+
+    data = {
+        "active_page_num": page,
+        "transactions": transactionsLimitData,
+        "transactions_container": transactionsDataContainer,
+        "transactions_pagination_info": transactionsPagination.info,
+        "transactions_pagination_links": transactionsPaginationLinks,
+    }
+
+    return Response(
+        response = json.dumps({
+            "data": data
+        }),
+        status = 201,
+        mimetype = "application/json"
+    )

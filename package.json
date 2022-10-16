@@ -1,7 +1,7 @@
 {
-  "name": "python-webpack-boilerplate",
+  "name": "pharmacy-gsp-flask",
   "version": "1.0.0",
-  "description": "Webpack boilerplate for Django & Flask",
+  "description": "GSP Pharmacy app in Flask",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --config frontend/webpack/webpack.config.prod.js",
     "start": "webpack serve --config frontend/webpack/webpack.config.dev.js",
@@ -9,17 +9,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AccordBox/python-webpack-boilerplate"
+    "url": "https://github.com/ibent95/pharmacy-gsp-flask"
   },
   "keywords": [
     "webpack",
     "startkit",
     "frontend"
   ],
-  "author": "Michael Yin",
+  "author": "Ibnu Rohan Tuharea",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AccordBox/python-webpack-boilerplate/issues"
+    "url": "https://github.com/ibent95/pharmacy-gsp-flask/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
