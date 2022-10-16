@@ -142,7 +142,7 @@
 										{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=data.transactions_pagination.page - 1) }}">
 											<span aria-hidden="true">&laquo;</span>
 										</a>#}
-										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page - 1) }}`)">&laquo;</button>
+										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page - 1, per_page=20) }}`)">&laquo;</button>
 									</li>
 								{% endif %}
 
@@ -152,7 +152,7 @@
 											{% if (number != None) %}
 												<li class="page-item">
 													{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=number) }}">{{ number }}</a>#}
-													<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=number) }}`)">{{ number }}</button>
+													<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=number, per_page=20) }}`)">{{ number }}</button>
 												</li>
 
 											{% else %}
@@ -173,7 +173,7 @@
 										{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=data.transactions_pagination.page + 1) }}">
 											<span aria-hidden="true">&raquo;</span>
 										</a>#}
-										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page + 1) }}`)">&raquo;</button>
+										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page + 1, per_page=20) }}`)">&raquo;</button>
 									</li>
 								{% endif %}
 
