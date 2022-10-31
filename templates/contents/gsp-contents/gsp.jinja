@@ -31,7 +31,7 @@
 					<div class="card-body">
 
 						<!-- Main table filter -->
-						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('gsp_calculation_result', calculation_type=data.calculation_type) }}">
+						<form class="row row-cols-12 justify-content-end gy-4 mb-4" action="{{ url_for('gsp_calculation_result', calculation_type=data.calculation_type, per_page=20) }}" method="POST">
 							{{ data.form.csrf_token }}
 
 							<div class="col-12 col-md-3 col-sm-auto col-xs-auto text-right">
