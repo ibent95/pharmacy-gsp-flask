@@ -63,12 +63,40 @@
 						<!-- Start transaction data -->
 						<div class="row row-cols-12" id="transactions-data">
 							{% for transaction in data.transactions %}
-								<div class="col col-md-4 col-sm-12 col-xs-12">
+								<div class="col col-md-3 col-sm-12 col-xs-12" style="margin-top: 15px;">
 
 									<!-- Start transaction table -->
 									<div class="table-responsive">
-										<h5>{{ "Transaksi [" + transaction.nomor_transaksi + " - " + transaction.nama_pelanggan + "] pada " +
-										transaction.tanggal_transaksi + " (Total: " + ((transaction | length) | string) + ")" }}</h5>
+										<h5>{{ "Transaksi " + (loop.index | string) }}</h5>
+										<table>
+											<tbody>
+												<tr>
+													<td>No. Transaksi</td>
+													<td>:</td>
+													<td>{{ transaction.nomor_transaksi }}</td>
+												</tr>
+												<tr>
+													<td>Nama pelanggan</td>
+													<td>:</td>
+													<td>{{ transaction.nama_pelanggan }}</td>
+												</tr>
+												<tr>
+													<td>Tanggal transaksi</td>
+													<td>:</td>
+													<td>{{ transaction.tanggal_transaksi }}</td>
+												</tr>
+												<tr>
+													<td>Jumlah produk</td>
+													<td>:</td>
+													<td>{{ ((transaction.transaksi_item | length) | string) }}</td>
+												</tr>
+												<tr>
+													<td>Daftar produk</td>
+													<td>:</td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
 
 										<table class="table table-secondary table-striped table-condensed">
 											<thead style="display: block;">
@@ -114,7 +142,7 @@
 										{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=data.transactions_pagination.page - 1) }}">
 											<span aria-hidden="true">&laquo;</span>
 										</a>#}
-										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page - 1) }}`)">&laquo;</button>
+										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page - 1, per_page=20) }}`)">&laquo;</button>
 									</li>
 								{% endif %}
 
@@ -124,7 +152,7 @@
 											{% if (number != None) %}
 												<li class="page-item">
 													{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=number) }}">{{ number }}</a>#}
-													<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=number) }}`)">{{ number }}</button>
+													<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=number, per_page=20) }}`)">{{ number }}</button>
 												</li>
 
 											{% else %}
@@ -145,7 +173,7 @@
 										{#<a class="page-link" href="{{ url_for('gsp_calculation_result', csrf_token=data.csrf_token, page=data.transactions_pagination.page + 1) }}">
 											<span aria-hidden="true">&raquo;</span>
 										</a>#}
-										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page + 1) }}`)">&raquo;</button>
+										<button class="page-link" onclick="getPageData(`{{ url_for('gsp_transaction', uuid=data.history_uuid, page=data.transactions_pagination.page + 1, per_page=20) }}`)">&raquo;</button>
 									</li>
 								{% endif %}
 

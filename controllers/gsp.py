@@ -83,23 +83,24 @@ def gsp_training_testing_data(calculation_type):
 @login_required
 def gsp_calculation_result(calculation_type=None):
     title = "Hasil perhitungan Generalized Sequential Pattern (GSP)"
-    csrfToken = request.args.get('csrf_token')
-    page = request.args.get('page', 1, type=int)
+    csrfToken = request.form['csrf_token']
+    #page = request.args.get('page', 1, type=int)
+    #per_page = request.args.get('per_page', 10, type=int)
     data = []
-    historyUuid = historiesPagination = None
-    histories = []
-    page, per_page, offset = get_page_args(page_parameter='page')
+    historyUuid = transactionsHistoriesPagination = None
+    transactionsHistories = []
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
 
     transactions = []
     dataSets = []
     result = []
 
     # Dates
-    startDate = request.args.get('tanggal_mulai') + " 00:00:00"
-    endDate = request.args.get('tanggal_selesai') + " 23:59:59"
+    startDate = request.form['tanggal_mulai'] + " 00:00:00"
+    endDate = request.form['tanggal_selesai'] + " 23:59:59"
 
     # Minimal support
-    minSupport = request.args.get('min_support') if (request.args.get('min_support')) else 10
+    minSupport = request.form['min_support'] if (request.form['min_support']) else 10
 
     if (startDate and endDate and minSupport):
 
@@ -216,7 +217,7 @@ def gsp_calculation_result(calculation_type=None):
 
                 historyUuid = gspModel.uuid
                 transactionsHistories = Common.getDataPerPage(json.loads(transactionsJsonData), offset, per_page) ## Change the name to transaction later
-                transactionsHistoriesPagination = Pagination(page=page, total=len(json.loads(transactionsJsonData))) ## Change the name to transaction later
+                transactionsHistoriesPagination = Pagination(page=page, per_page=per_page, total=len(json.loads(transactionsJsonData))) ## Change the name to transaction later
 
         ## Set log and console message
         #Common.setPPrint('GSP calculation initial state', {
@@ -331,8 +332,8 @@ def gsp_report(uuid=None):
 
 @app.route("/gsp-transactions/<uuid>", methods=['GET'])
 def gsp_transaction(uuid):
-    page = request.args.get('page', 1, type=int)
-    page, per_page, offset = get_page_args(page_parameter='page')
+    #page = request.args.get('page', 1, type=int)
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
 
     history = GSPHistoryModel.query.filter_by(uuid=uuid).first()
     transactions = json.loads(history.transactions)
@@ -346,8 +347,9 @@ def gsp_transaction(uuid):
 
         #Common.setPPrint('GSP transaction', transaction['transaksi_item'])
 
-        transactionsDataContainer += "<div class='col col-md-4 col-sm-12 col-xs-12'><div class='table-responsive'>"
-        transactionsDataContainer += "<h5>Transaksi [" + transaction['nomor_transaksi'] + " - " + transaction['nama_pelanggan'] + "] pada " + transaction['tanggal_transaksi'] + " (Total: " + str(len(transaction['transaksi_item'])) + ") </h5>"
+        transactionsDataContainer += "<div class='col col-md-3 col-sm-12 col-xs-12' style='margin-top: 15px;'><div class='table-responsive'>"
+        transactionsDataContainer += "<h5>Transaksi " + str(transactionIndex + 1) + "</h5>"
+        transactionsDataContainer += "<table><tbody><tr><td>No. Transaksi</td><td>:</td><td>" + transaction['nomor_transaksi'] + "</td></tr><tr><td>Nama pelanggan</td><td>:</td><td>" + transaction['nama_pelanggan'] + "</td></tr><tr><td>Tanggal transaksi</td><td>:</td><td>" + str(transaction['tanggal_transaksi']) + "</td></tr><tr><td>Jumlah produk</td><td>:</td><td>" + str(len(transaction['transaksi_item'])) + "</td></tr><tr><td>Daftar produk</td><td>:</td><td></td></tr></tbody></table>"
         transactionsDataContainer += "<table class='table table-secondary table-striped table-condensed'><thead style='display: block;'><tr><th style='width: 1%;'>No</th><th style='width: auto;'>Kode obat</th><th style='width: auto;'>Nama obat</th><th style='width: auto;'>Jumlah</th></tr></thead><tbody style='display: block; max-height: 479px !important; overflow-y: auto !important; overflow-x: hidden !important;'>"
 
         for dataSetIndex, data_set in enumerate(transaction['transaksi_item']):
@@ -361,19 +363,19 @@ def gsp_transaction(uuid):
     # End handle trabsaction data
 
     # Transactions pagination data
-    transactionsPagination = Pagination(page=page, total=len(transactions))
+    transactionsPagination = Pagination(page=page, per_page=per_page, total=len(transactions))
 
     # Start handle pagination
     transactionsPaginationLinks = "<ul class='pagination justify-content-center'>"
 
     if transactionsPagination.has_prev :
-        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page - 1) + "`)'>&laquo;</button></li>"
+        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page - 1, per_page=per_page) + "`)'>&laquo;</button></li>"
 
     for number in transactionsPagination.pages:
 
         if (transactionsPagination.page != number) :
             if (number != None):
-                transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=number) + "`)'>" + str(number) + "</button></li>"
+                transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=number, per_page=per_page) + "`)'>" + str(number) + "</button></li>"
             else:
                 transactionsPaginationLinks += "<li class='page-item disabled'><span class='page-link'>...</span></li>"
 
@@ -381,7 +383,7 @@ def gsp_transaction(uuid):
             transactionsPaginationLinks += "<li class='page-item active' aria-current='page'><span class='page-link'>" + str(number) + "</span></li>"
 
     if transactionsPagination.has_next:
-        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page + 1) + "`)'>&raquo;</button></li>"
+        transactionsPaginationLinks += "<li class='page-item'><button class='page-link' onclick='getPageData(`" + url_for('gsp_transaction', uuid=uuid, page=transactionsPagination.page + 1, per_page=per_page) + "`)'>&raquo;</button></li>"
 
     transactionsPaginationLinks += "</ul>"
     # End handle pagination
