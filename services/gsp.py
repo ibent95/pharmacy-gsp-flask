@@ -1,6 +1,10 @@
 import logging
 import multiprocessing as mp
 
+from collections import Counter
+
+from services.common import Common
+
 logging.basicConfig(level=logging.DEBUG)
 
 class GSP:
@@ -54,10 +58,24 @@ class GSP:
 
     def _calc_frequency(self, results, item, window):
         # The number of times the item appears in the transactions
-        frequency = len(
-            [t for t in self.transactions if self._is_slice_in_list(item, t, window)])
+        #frequency = len([t for t in self.transactions if self._is_slice_in_list(item, t, window)])
+        frequencyRawArray = []
+
+        for transaction in self.transactions:
+            if self._is_slice_in_list(item, transaction, window):
+                for element in transaction:
+                    if type(element) == frozenset:
+                        if element == frozenset(item):
+                            frequencyRawArray.append(element)
+                    else:
+                        if item is element:
+                            frequencyRawArray.append(element)
+
+        frequency = len(frequencyRawArray)
+
         if frequency >= self.minsup:
             results[tuple(item)] = frequency
+
         return results
 
     def _support(self, items, window=0):
@@ -124,9 +142,14 @@ class GSP:
     def run_alg(self):
         # Initially, every item in DB is a candidate
         candidates = self._generate_candidates()
+        #print(candidates)
 
         # Scan transactions to collect support count for each candidate
         self.freq_patterns.append(self._support(candidates))
+        Common.setLogger('info', 'GSP calculation test 1', {
+            'candidates': candidates,
+            'freq_patterns': self.freq_patterns,
+        })
 
         # Iterations counter
         k_items = 1
@@ -140,6 +163,7 @@ class GSP:
             # by minimum support
             items = list(set(self.freq_patterns[k_items - 2].keys()))
             candidates = list(self._do_product(items))
+            #candidates = items
 
             # Candidate pruning - eliminates candidates who are not potentially
             # frequent (using support as threshold)

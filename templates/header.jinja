@@ -34,7 +34,6 @@
 		<div class="navbar-content">
 			<ul class="pc-navbar">
 
-
 				{% if current_user.role == 'administrator' %}
 					<!-- Navigation -->
 					<li class="pc-item pc-caption">
@@ -52,7 +51,15 @@
 					</li>
 
 					<!-- Navigation : GSP -->
-					<li class="pc-item pc-hasmenu">
+					<li class="pc-item">
+						<a href="{{ url_for('gsp') }}" class="pc-link ">
+							<span class="pc-micon">
+								<i class="material-icons-two-tone">calculate</i>
+							</span>
+							<span class="pc-mtext">Perhitungan (GSP)</span>
+						</a>
+					</li>
+					{#<li class="pc-item pc-hasmenu">
 						<a href="#!" class="pc-link ">
 							<span class="pc-micon">
 								<i class="material-icons-two-tone">calculate</i>
@@ -72,7 +79,7 @@
 									testing</a>
 							</li>
 						</ul>
-					</li>
+					</li>#}
 
 					<!-- Navigation : OLD GSP -->
 					{#<li class="pc-item">
@@ -137,7 +144,15 @@
 					</li>
 
 					<!-- Navigation : GSP -->
-					<li class="pc-item pc-hasmenu">
+					<li class="pc-item">
+						<a href="{{ url_for('gsp') }}" class="pc-link ">
+							<span class="pc-micon">
+								<i class="material-icons-two-tone">calculate</i>
+							</span>
+							<span class="pc-mtext">Perhitungan (GSP)</span>
+						</a>
+					</li>
+					{#<li class="pc-item pc-hasmenu">
 						<a href="#!" class="pc-link ">
 							<span class="pc-micon">
 								<i class="material-icons-two-tone">calculate</i>
@@ -149,15 +164,13 @@
 						</a>
 						<ul class="pc-submenu">
 							<li class="pc-item">
-								<a class="pc-link" href="{{ url_for('gsp_training_testing_data', calculation_type='training') }}">Data
-									training</a>
+								<a class="pc-link" href="{{ url_for('gsp_training_testing_data', calculation_type='training') }}">Data training</a>
 							</li>
 							<li class="pc-item">
-								<a class="pc-link" href="{{ url_for('gsp_training_testing_data', calculation_type='testing') }}">Data
-									testing</a>
+								<a class="pc-link" href="{{ url_for('gsp_training_testing_data', calculation_type='testing') }}">Data testing</a>
 							</li>
 						</ul>
-					</li>
+					</li>#}
 
 					<!-- Master data -->
 					<li class="pc-item pc-caption">

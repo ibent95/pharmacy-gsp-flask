@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, DateTimeLocalField, IntegerField, PasswordField
+from wtforms import DateField, IntegerField, DecimalField
 from wtforms.validators import InputRequired, NumberRange
 
 
@@ -27,14 +27,14 @@ class GSPForm(FlaskForm):
         default=date(date.today().year, 12, 31)
     )
 
-    min_support = IntegerField(
+    min_support = DecimalField(
         'Minimal support',
         validators=[
             InputRequired(
                 message="Minimal support harus diisi."
             ),
             NumberRange(
-                min=1,
+                min=0,
             )
         ],
         default=15
