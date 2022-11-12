@@ -56,29 +56,43 @@ class GSP:
 
         return False
 
-    def _calc_frequency(self, results, item, window):
+    def _calc_frequency(self, results, item, window, k):
         # The number of times the item appears in the transactions
         #frequency = len([t for t in self.transactions if self._is_slice_in_list(item, t, window)])
+        len_s = len(item)  # so we don't recompute length of s on every iteration
+
+        frequency = 0
+        results = []
+
         frequencyRawArray = []
 
-        for transaction in self.transactions:
-            if self._is_slice_in_list(item, transaction, window):
-                for element in transaction:
-                    if type(element) == frozenset:
-                        if element == frozenset(item):
-                            frequencyRawArray.append(element)
-                    else:
-                        if item is element:
-                            frequencyRawArray.append(element)
+        if k > 1: # if item`s length more than 1
+            frequency = len([t for t in self.transactions if self._is_slice_in_list(item, t, window)])
 
-        frequency = len(frequencyRawArray)
+            if frequency >= 1:
+                results[tuple(item)] = frequency
 
-        if frequency >= self.minsup:
-            results[tuple(item)] = frequency
+        else: # if item`s length below 2
+            for transaction in self.transactions:
+                if self._is_slice_in_list(item, transaction, window):
+                    for idx_l in range(len(transaction) - len_s + 1):
+                        for idx_s in range(len_s):
+
+                            if type(transaction[idx_l + idx_s]) == frozenset:
+                                if item[idx_s] in transaction[idx_l + idx_s]:
+                                    frequencyRawArray.append(item[idx_s])
+                            else:
+                                if item[idx_s] is transaction[idx_l + idx_s]:
+                                    frequencyRawArray.append(item[idx_s])
+
+            frequency = len(frequencyRawArray)
+
+            if frequency >= self.minsup:
+                results[tuple(item)] = frequency
 
         return results
 
-    def _support(self, items, window=0):
+    def _support(self, items, window=0, k=1):
         '''
         The support count (or simply support) for a sequence is defined as
         the fraction of total data-sequences that "contain" this sequence.
@@ -100,7 +114,12 @@ class GSP:
         # pool.join()
         results = {}
         for item in items:
-            results = self._calc_frequency(results, item, window)
+            element = []
+
+            for itemIndex in range(k):
+                element.append(item[itemIndex])
+
+            results = self._calc_frequency(results, tuple(element), window, k)
 
         return dict(results)
 
@@ -139,20 +158,25 @@ class GSP:
 
         return list(set(new_candidates))
 
+    def _duplicateCandidatesCheck(self, candidates):
+
+        sets = set(candidates)
+
+        results = len(sets) != len(candidates)
+
+        return results
+
     def run_alg(self):
+
         # Initially, every item in DB is a candidate
         candidates = self._generate_candidates()
         #print(candidates)
 
-        # Scan transactions to collect support count for each candidate
-        self.freq_patterns.append(self._support(candidates))
-        Common.setLogger('info', 'GSP calculation test 1', {
-            'candidates': candidates,
-            'freq_patterns': self.freq_patterns,
-        })
-
         # Iterations counter
         k_items = 1
+
+        # Scan transactions to collect support count for each candidate
+        self.freq_patterns.append(self._support(candidates, 0, k_items))
 
         # repeat until no frequent sequence or no candidate can be found
         while len(self.freq_patterns[k_items - 1]) and (k_items + 1 <= self.max_size):
@@ -161,13 +185,22 @@ class GSP:
             # Generate candidate sets Ck (set of candidate k-sequences) -
             # generate new candidates from the last "best" candidates filtered
             # by minimum support
+            #items = list(set(self.freq_patterns[k_items - 2].keys()))
             items = list(set(self.freq_patterns[k_items - 2].keys()))
-            candidates = list(self._do_product(items))
+
+            #candidates = list(self._do_product(items))
+            candidates = list(candidate for candidate in self._do_product(items) if self._duplicateCandidatesCheck(list(candidate)) != True)
             #candidates = items
 
             # Candidate pruning - eliminates candidates who are not potentially
             # frequent (using support as threshold)
-            self.freq_patterns.append(self._support(candidates))
+            self.freq_patterns.append(self._support(candidates, 0, k_items))
+
+        Common.setLogger('info', 'GSP calculation test 2', {
+            #'transactions': self.transactions,
+            'freq_patterns': self.freq_patterns,
+            'minsup': self.minsup,
+        })
 
         if len(self.freq_patterns) == 1:
             return self.freq_patterns[-1]
