@@ -62,7 +62,7 @@ class GSP:
         len_s = len(item)  # so we don't recompute length of s on every iteration
 
         frequency = 0
-        results = []
+        results
 
         frequencyRawArray = []
 

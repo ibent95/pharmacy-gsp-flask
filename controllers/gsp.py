@@ -215,7 +215,7 @@ def gsp_calculation_result(calculation_type=None):
         dataSets = list(transactionsGroupData)
 
         ## Normalize minimal support to float
-        normalizedMinimalSupport = Number.percentToFloat(minSupport)
+        normalizedMinimalSupport = Number.percentToFloat(int(minSupport) - 1)
 
         ## GSP calculation
         if (transactions):
