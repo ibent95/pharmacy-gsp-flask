@@ -226,7 +226,7 @@
 
 							<!-- Start results -->
 							{% for frequency_patterns in data.result if frequency_patterns %}
-								<div class="col-lg-3 col-xl-3 col-md-6 col-sm-12 col-xs-12"">
+								<div class="col-lg-4 col-xl-4 col-md-6 col-sm-12 col-xs-12"">
 
 									<div class="table-responsive">
 
@@ -238,23 +238,25 @@
 												<tr>
 													<th style="width: 1%;">No</th>
 													<th style="width: auto;">Pola</th>
-													<th style="width: 23%;">Frekuensi</th>
+													<th style="width: auto;">Frekuensi</th>
+													<th style="width: 23%;">Persentase</th>
 												</tr>
 											</thead>
 											<tbody style="display: block; height: {{ '479px' if ((frequency_patterns.items() | length) > 10) else 'fit-content' }} !important; overflow-y: auto !important; overflow-x: hidden !important;">
 
-												{% for data_set, frequency in (frequency_patterns.items() | sort(attribute=1, reverse=True))  %}
+												{% for key, value in (frequency_patterns.items() | sort(attribute=1, reverse=True)) %}
 													<!-- Start item -->
 													<tr>
 														<td style="width: 1%;">{{ loop.index }}</td>
-														<td class="text-bold" style="width: auto;">{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + (data_set | join('</div>  <div class=\'badge bg-light text-dark fw-bold lh-base\'>')) + '</div>' }}
+														<td class="text-bold" style="width: auto;">{{ '<div class=\'badge bg-light text-dark fw-bold lh-base\'>' + (key | join('</div>  <div class=\'badge bg-light text-dark fw-bold lh-base\'>')) + '</div>' }}
 
 															<!-- Start data set -->
 															{#{% for data in data_set %} {{ data }} {% endfor %}#}
 															<!-- End data set -->
 
 														</td>
-														<td class="text-right" style="width: 23%;">{{ frequency }}</td>
+														<td class="text-right" style="width: 23%;">{{ value }}</td>
+														<td class="text-right" style="width: 23%;">{{ ((value / 244) * 100) }}</td> <!-- frequency -->
 													</tr>
 													<!-- End item -->
 												{% endfor %}

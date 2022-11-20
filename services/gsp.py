@@ -1,5 +1,6 @@
 import logging
 import multiprocessing as mp
+import itertools
 
 from collections import Counter
 
@@ -24,7 +25,7 @@ class GSP:
         self.minsup = len(transactions) * self.minsup
         #print("Minsup: " + str(self.minsup))
 
-    def _is_slice_in_list(self, s, l, w):
+    def _is_slice_in_list(self, s, l, w, k):
         """
         :param s: slice we are looking for
         :param l: list where we are looking
@@ -34,16 +35,21 @@ class GSP:
         assert (w >= 0)
 
         len_s = len(s)  # so we don't recompute length of s on every iteration
-        for idx_l in range(len(l) - len_s + 1):
+        for idx_l in range((len(l) - len_s) + 1):
             is_slice_in_list = True
+
             for idx_s in range(len_s):
+
                 if type(l[idx_l + idx_s]) == frozenset:
-                    if s[idx_s] not in l[idx_l + idx_s]:
+                    newTransactionItemList = list(l[idx_l + idx_s])
+
+                    if newTransactionItemList.count(s[idx_s]) < 1:
                         if w == 0:
                             is_slice_in_list = False
                             break
                         else:
                             w -= 1
+
                 else:
                     if s[idx_s] is not l[idx_l + idx_s]:
                         if w == 0:
@@ -51,10 +57,19 @@ class GSP:
                             break
                         else:
                             w -= 1
+
             if is_slice_in_list:
                 return True
 
         return False
+
+    def _isCandidateInTransaction(self, candidate, transaction):
+        result = []
+
+        for candidateItem in candidate:
+            result.append(transaction.count(candidateItem) > 0)
+
+        return False not in result
 
     def _calc_frequency(self, results, item, window, k):
         # The number of times the item appears in the transactions
@@ -64,23 +79,38 @@ class GSP:
         frequency = 0
         results
 
-        frequencyRawArray = []
-
         if k > 1: # if item`s length more than 1
-            frequency = len([t for t in self.transactions if self._is_slice_in_list(item, t, window)])
+            frequencyRawArray = []
 
-            if frequency >= 1:
-                results[tuple(item)] = frequency
+            for transaction in self.transactions:
+
+                newItemList = list(item)
+                newTransactionList = [next(iter(fset)) for fset in transaction if fset]
+
+                check = self._isCandidateInTransaction(newItemList, newTransactionList) ##
+
+                if check:
+                    frequencyRawArray.append(item)
+
+            frequency = len(frequencyRawArray)
+
+            if frequency > 0:
+                #results[tuple(item)] = frequency
+                results[tuple(item)] = frequency ## [item, frequency, (frequency / len(self.transactions)) * 100]
 
         else: # if item`s length below 2
+
+            frequencyRawArray = []
+
             for transaction in self.transactions:
-                if self._is_slice_in_list(item, transaction, window):
+                if self._is_slice_in_list(item, transaction, window, k):
                     for idx_l in range(len(transaction) - len_s + 1):
                         for idx_s in range(len_s):
 
                             if type(transaction[idx_l + idx_s]) == frozenset:
                                 if item[idx_s] in transaction[idx_l + idx_s]:
                                     frequencyRawArray.append(item[idx_s])
+
                             else:
                                 if item[idx_s] is transaction[idx_l + idx_s]:
                                     frequencyRawArray.append(item[idx_s])
@@ -88,7 +118,8 @@ class GSP:
             frequency = len(frequencyRawArray)
 
             if frequency >= self.minsup:
-                results[tuple(item)] = frequency
+                #results[tuple(item)] = frequency
+                results[tuple(item)] = frequency ## [item, frequency, (frequency / len(self.transactions)) * 100]
 
         return results
 
@@ -189,18 +220,12 @@ class GSP:
             items = list(set(self.freq_patterns[k_items - 2].keys()))
 
             #candidates = list(self._do_product(items))
-            candidates = list(candidate for candidate in self._do_product(items) if self._duplicateCandidatesCheck(list(candidate)) != True)
-            #candidates = items
+            candidates = list(sorted(candidate, reverse=True) for candidate in self._do_product(
+                items) if self._duplicateCandidatesCheck(list(candidate)) != True)
 
             # Candidate pruning - eliminates candidates who are not potentially
             # frequent (using support as threshold)
             self.freq_patterns.append(self._support(candidates, 0, k_items))
-
-        Common.setLogger('info', 'GSP calculation test 2', {
-            #'transactions': self.transactions,
-            'freq_patterns': self.freq_patterns,
-            'minsup': self.minsup,
-        })
 
         if len(self.freq_patterns) == 1:
             return self.freq_patterns[-1]

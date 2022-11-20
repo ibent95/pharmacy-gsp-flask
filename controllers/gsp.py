@@ -237,15 +237,15 @@ def gsp_calculation_result(calculation_type=None):
                 transactionsHistoriesPagination = Pagination(page=page, per_page=per_page, total=len(json.loads(transactionsJsonData))) ## Change the name to transaction later
 
         ## Set log and console message
-        #Common.setPPrint('GSP calculation initial state', {
-        #    'start_date': startDate,
-        #    'end_date': endDate,
-        #    'minimal_support': minSupport,
-        #    #'transaction': transactions,
-        #    'transaction_count': len(transactions),
-        #    'data_sets': dataSets,
-        #    'result': result,
-        #})
+        Common.setPPrint('GSP calculation initial state', {
+            #'start_date': startDate,
+            #'end_date': endDate,
+            'minimal_support': minSupport,
+            #'transaction': transactions,
+            #'transaction_count': len(transactions),
+            #'data_sets': dataSets,
+            'result': result,
+        })
 
         #Common.setLogger('info', 'GSP calculation initial state', {
         #    'start_date': startDate,
