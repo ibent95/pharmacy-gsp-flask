@@ -231,14 +231,14 @@
 									<div class="table-responsive">
 
 										<!-- Start frequency patterns -->
-										<h5>{{ 'Pola frekuensi ' + (loop.index | string) + ' (Total: ' + ((frequency_patterns | length) | string) + ')' }}</h5>
+										<h5>{{ 'Item set ' + (loop.index | string) + ' (Total: ' + ((frequency_patterns | length) | string) + ')' }}</h5>
 
 										<table class="table table-secondary table-striped table-condensed">
 											<thead style="display: block;">
 												<tr>
 													<th style="width: 1%;">No</th>
-													<th style="width: auto;">Pola</th>
-													<th style="width: auto;">Frekuensi</th>
+													<th style="width: auto;">Item set</th>
+													<th style="width: auto;">Jumlah Item</th>
 													<th style="width: 23%;">Persentase</th>
 												</tr>
 											</thead>
@@ -255,8 +255,8 @@
 															<!-- End data set -->
 
 														</td>
-														<td class="text-right" style="width: 23%;">{{ value }}</td>
-														<td class="text-right" style="width: 23%;">{{ ((value / 244) * 100) }}</td> <!-- frequency -->
+														<td class="text-right" style="width: auto;">{{ value }}</td>
+														<td class="text-right" style="width: 40%;">{{ ((value / 244) * 100) | round | int }} %</td> <!-- frequency -->
 													</tr>
 													<!-- End item -->
 												{% endfor %}

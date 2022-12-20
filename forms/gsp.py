@@ -27,7 +27,7 @@ class GSPForm(FlaskForm):
         default=date(date.today().year, 12, 31)
     )
 
-    min_support = DecimalField(
+    min_support = IntegerField(
         'Minimal support',
         validators=[
             InputRequired(
