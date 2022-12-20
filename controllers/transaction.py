@@ -26,7 +26,7 @@ def transaction():
         "transactions": [],
     }
 
-    transactions = TransactionModel.query.order_by(TransactionModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+    transactions = TransactionModel.query.order_by(TransactionModel.id.desc()).paginate(page=page, per_page=app.config["ITEMS_PER_PAGE"], error_out=False)
 
     data['transactions'] = transactions
 

@@ -17,7 +17,7 @@ def user():
         "title": title,
     }
 
-    users = UserModel.query.order_by(UserModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+    users = UserModel.query.order_by(UserModel.id.desc()).paginate(page=page, per_page=app.config["ITEMS_PER_PAGE"], error_out=False)
 
     data['users'] = users
 

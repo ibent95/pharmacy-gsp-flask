@@ -52,7 +52,7 @@ def gsp():
         "gsp_init_value": None,
     }
 
-    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page=page, per_page=app.config["ITEMS_PER_PAGE"], error_out=False)
 
     data['histories'] = histories
 
@@ -72,7 +72,7 @@ def gsp_training_testing_data(calculation_type):
         "calculation_type": calculation_type.value,
     }
 
-    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page, app.config["ITEMS_PER_PAGE"], False)
+    histories = GSPHistoryModel.query.order_by(GSPHistoryModel.id.desc()).paginate(page=page, per_page=app.config["ITEMS_PER_PAGE"], error_out=False)
 
     data['histories'] = histories
 
