@@ -302,7 +302,7 @@ def gsp_report(uuid=None):
     pdf.cell(0, 7, "Tanggal " + dateTimeNow.strftime("%Y-%m-%d"), align='C', new_x="LEFT", new_y="NEXT")
 
     resultTable = [
-        ["No", "Pola", "Frekuensi"],
+        ["No", "Item set", "Jumlah item", "Support"],
     ]
 
     for item in history.items:
@@ -312,6 +312,7 @@ def gsp_report(uuid=None):
                 i,
                 resultItem["data_set"],
                 resultItem["frequency"],
+                str(round((int(resultItem["frequency"]) / 244) * 100)) + ' %'
             ])
             i = i + 1
 
@@ -333,14 +334,14 @@ def gsp_report(uuid=None):
     #    i = i + 1
 
     line_height = pdf.font_size * 3.0
-    col_width = pdf.epw / 5  # distribute content evenly
+    col_width = pdf.epw / 4  # distribute content evenly
     for row in resultTable:
         y = 0
         for datum in row:
             if (y == 1):
-                pdf.multi_cell(20, line_height, ", ".join(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
+                pdf.multi_cell(col_width, line_height, ", ".join(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
             else:
-                pdf.multi_cell(20, line_height, str(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
+                pdf.multi_cell(col_width, line_height, str(datum), border=1, new_x="RIGHT", new_y="TOP", max_line_height=pdf.font_size)
         pdf.ln(line_height)
 
     # save the pdf with fileName .pdf
